@@ -9,7 +9,10 @@
             --bg-dark: #030303;
             --pink: #ff2d75;
             --claw-blue: #00d2ff;
+            --border: rgba(255, 255, 255, 0.1);
         }
+
+        * { box-sizing: border-box; }
 
         body, html {
             margin: 0;
@@ -18,6 +21,28 @@
             color: white;
             font-family: 'Inter', -apple-system, system-ui, sans-serif;
             overflow: hidden;
+        }
+        
+        /* 简单表单样式 */
+        .edit-input {
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 5px;
+            width: 100%;
+            margin-top: 5px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        .save-btn {
+            background: var(--pink);
+            border: none;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-top: 5px;
         }
 
         /* 全屏身份选择器 */
@@ -289,59 +314,16 @@
                 </div>
             </div>
 
-            <!-- 开放麦日程表 (静态化确保显示) -->
+            <!-- 开放麦日程表 -->
             <h2 style="color: #fff; margin-top: 60px; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 2px;">🎤 Open Mic Schedule</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 30px; text-align: left;">
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">14:30 - 01号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                    <div style="color: #555; font-size: 0.7rem;">发言人 ID / 内容概要</div>
-                </div>
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">14:45 - 02号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                </div>
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">15:00 - 03号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                </div>
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">15:15 - 04号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                </div>
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">15:30 - 05号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                </div>
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">15:45 - 06号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                </div>
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">16:00 - 07号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                </div>
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">16:15 - 08号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                </div>
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">16:30 - 09号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                </div>
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">16:45 - 10号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                </div>
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">17:00 - 11号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                </div>
-                <div style="padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px;">
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">17:15 - 12号席位</div>
-                    <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
-                </div>
+            <p style="color: #666; font-size: 0.8rem;">现场用户可点击席位进行登记 (仅保存在本地设备)</p>
+            <div id="schedule-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 30px; text-align: left;">
+                <!-- 由 JS 动态渲染以支持保存功能 -->
             </div>
+            
+            <button onclick="exportSchedule()" style="margin-top: 30px; padding: 10px 20px; background: transparent; border: 1px solid #444; color: #888; border-radius: 8px; cursor: pointer;">
+                📋 导出名单发给小龙虾推送
+            </button>
 
             <div style="color: #555; font-size: 0.8rem; margin-top: 60px;">Powered by OpenClaw & NodeAI</div>
         </div>
@@ -376,8 +358,7 @@
         <div style="text-align: center; color: #555;">(Classic OpenClaw Dashboard)</div>
     </div>
 
-    <script>
-        // 模式选择与切换逻辑
+        // 切换逻辑
         const tabs = document.querySelectorAll('.tab');
         const pages = document.querySelectorAll('.page-content');
         const overlay = document.getElementById('gateway-overlay');
@@ -387,18 +368,17 @@
             overlay.classList.add('hidden');
             miniSwitcher.classList.add('show');
             switchPage(mode);
+            if(mode === 'beijing') renderSchedule();
         }
 
         function switchPage(mode) {
-            // 更新 Tab 状态
             tabs.forEach(t => {
                 t.classList.remove('active');
                 if (t.dataset.mode === mode) t.classList.add('active');
             });
-
-            // 更新页面显示
             pages.forEach(p => p.classList.remove('active'));
             document.getElementById(`${mode}-page`).classList.add('active');
+            if(mode === 'beijing') renderSchedule();
         }
 
         tabs.forEach(tab => {
@@ -406,6 +386,55 @@
                 switchPage(tab.dataset.mode);
             });
         });
+
+        // 日程表管理逻辑
+        const timeSlots = ["14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45", "17:00", "17:15"];
+        
+        function renderSchedule() {
+            const grid = document.getElementById('schedule-grid');
+            grid.innerHTML = '';
+            const savedData = JSON.parse(localStorage.getItem('nodeai_schedule') || '{}');
+
+            timeSlots.forEach((time, i) => {
+                const data = savedData[i] || { name: '[待认领]', topic: '发言人 ID / 内容概要' };
+                const slot = document.createElement('div');
+                slot.style.cssText = `padding: 15px; background: rgba(255,255,255,0.03); border: 1px ${data.name.includes('待认领') ? 'dashed #444' : 'solid var(--pink)'}; border-radius: 12px;`;
+                slot.innerHTML = `
+                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">${time} - ${i+1}号席位</div>
+                    <div id="display-${i}">
+                        <div style="color: #fff; font-size: 0.9rem; margin: 5px 0;">${data.name}</div>
+                        <div style="color: #666; font-size: 0.7rem;">${data.topic}</div>
+                        <button onclick="editSlot(${i})" style="margin-top:10px; background:transparent; border:1px solid #333; color:#555; cursor:pointer; font-size:0.6rem; border-radius:4px;">编辑</button>
+                    </div>
+                    <div id="edit-${i}" style="display:none;">
+                        <input id="input-name-${i}" class="edit-input" placeholder="名字/ID" value="${data.name}">
+                        <input id="input-topic-${i}" class="edit-input" placeholder="主题" value="${data.topic}">
+                        <button onclick="saveSlot(${i})" class="save-btn">保存</button>
+                    </div>
+                `;
+                grid.appendChild(slot);
+            });
+        }
+
+        window.editSlot = (i) => {
+            document.getElementById(`display-${i}`).style.display = 'none';
+            document.getElementById(`edit-${i}`).style.display = 'block';
+        };
+
+        window.saveSlot = (i) => {
+            const name = document.getElementById(`input-name-${i}`).value;
+            const topic = document.getElementById(`input-topic-${i}`).value;
+            const savedData = JSON.parse(localStorage.getItem('nodeai_schedule') || '{}');
+            savedData[i] = { name, topic };
+            localStorage.setItem('nodeai_schedule', JSON.stringify(savedData));
+            renderSchedule();
+        };
+
+        window.exportSchedule = () => {
+            const data = localStorage.getItem('nodeai_schedule');
+            alert("请复制下面的配置发给小龙虾：\n\n" + data);
+            console.log("SCHEDULE_DATA:", data);
+        };
 
         // 终端模拟器逻辑
         const terminal = document.getElementById('terminal-body');
