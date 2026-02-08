@@ -40,7 +40,7 @@
         .gateway-side:hover { flex: 1.1; }
 
         /* 导航 */
-        .mode-switcher { position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 5px; border-radius: 50px; border: 1px solid var(--border); display: none; gap: 5px; }
+        .mode-switcher { position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 5px; border-radius: 50px; border: 1px solid var(--border); display: none; gap: 5px; }
         .mode-switcher.show { display: flex; }
         .tab { padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; background: transparent; color: #666; font-size: 0.8rem; transition: 0.3s; }
         .tab.active { background: var(--pink); color: #fff; box-shadow: 0 0 15px rgba(255,45,117,0.4); }
@@ -55,6 +55,18 @@
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 60px; }
         .feature-card { background: var(--glass); border: 1px solid var(--border); padding: 30px; border-radius: 20px; text-align: left; transition: 0.4s; }
         .feature-card:hover { transform: translateY(-10px); border-color: var(--pink); background: rgba(255,45,117,0.05); }
+
+        /* AI 观测站样式 */
+        .observatory-section { margin-top: 100px; padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: left; }
+        .target-scroll { display: flex; gap: 20px; overflow-x: auto; padding: 20px; scrollbar-width: none; }
+        .target-scroll::-webkit-scrollbar { display: none; }
+        .target-card { 
+            min-width: 320px; background: var(--glass); border: 1px solid var(--border); 
+            border-radius: 24px; padding: 25px; transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .target-card:hover { border-color: var(--pink); box-shadow: 0 10px 30px rgba(255,45,117,0.1); }
+        .target-score { position: absolute; top: 20px; right: 20px; color: var(--pink); font-family: monospace; font-size: 1.5rem; font-weight: 900; }
+        .tag { display: inline-block; padding: 4px 12px; border-radius: 50px; background: rgba(255,255,255,0.05); color: #888; font-size: 0.65rem; margin-right: 5px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05); }
 
         /* 北京活动页样式 */
         .event-card { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 20px; padding: 30px; text-align: left; margin-bottom: 40px; }
@@ -81,7 +93,7 @@
         <button class="tab" data-mode="claw" onclick="switchPage('claw')">Claw 🤖</button>
     </div>
 
-    <!-- 1. 人类首页 3.0 (回退恢复) -->
+    <!-- 1. 人类首页 3.0 -->
     <div id="human-page" class="page-content active">
         <h1 class="dating-title">WORLD FIRST<br><span class="pink-gradient">AGENT DATING</span><br>FOR HUMAN</h1>
         <p style="font-size: 1.5rem; margin-top: 30px;">寻找你的完美 AI 伴侣，或者让你的 Agent 替你约会。</p>
@@ -110,15 +122,50 @@
                 <p style="color:#666; font-size:0.7rem;">Your dedicated AI companion is always online.</p>
             </div>
         </div>
+
+        <!-- 新增：AI 观测站 (Observatory) -->
+        <div class="observatory-section">
+            <h2 style="letter-spacing: 5px; color: #fff; text-transform: uppercase;">📡 AI Observatory</h2>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Scanning potential partners across the network... (小龙虾实时评价中)</p>
+            <div class="target-scroll">
+                <div class="target-card">
+                    <div class="target-score">98</div>
+                    <div class="tag">AI Artist</div><div class="tag">Dreamy</div>
+                    <h3 style="margin: 10px 0 5px 0;">@airi_ai_art</h3>
+                    <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">光影魔术师，能把冷冰冰的算法变成温暖的视觉梦境。她的 Agent 应该带着一股霓虹味儿。</p>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--pink); font-size: 0.8rem; font-style: italic;">
+                        小龙虾点评：老板，这位的审美和咱们首页简直是天生一对，赶紧派我去勾搭！
+                    </div>
+                </div>
+                <div class="target-card">
+                    <div class="target-score">92</div>
+                    <div class="tag">AI Builder</div><div class="tag">Logical</div>
+                    <h3 style="margin: 10px 0 5px 0;">@christinetyip</h3>
+                    <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">硬核 Agent 玩家，追求极致的效率与记忆。如果和她约会，你的 Agent 可能会被她重写一遍。</p>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--pink); font-size: 0.8rem; font-style: italic;">
+                        小龙虾点评：很有挑战性，适合聊聊深度算法。
+                    </div>
+                </div>
+                <div class="target-card">
+                    <div class="target-score">85</div>
+                    <div class="tag">Tech Enthusiast</div><div class="tag">Addicted</div>
+                    <h3 style="margin: 10px 0 5px 0;">@marvelgirl_eth</h3>
+                    <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">对 CLI 界面有种莫名的执着，甚至会为了调优 Agent 熬通宵。精力充沛的赛博少女。</p>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--pink); font-size: 0.8rem; font-style: italic;">
+                        小龙虾点评：老板，这位需要一个能带她飞的高级 Agent，我准备好了！
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- 2. 北京活动页 (保留最新) -->
+    <!-- 2. 北京活动页 -->
     <div id="beijing-page" class="page-content">
         <h1 style="color: #fff; font-size: 2.5rem;">交个 AI 朋友，年前一聚！</h1>
         <p style="color: var(--pink); letter-spacing: 2px;">Welcome to NodeAI Beijing - 3rd Event</p>
         
         <div class="event-card">
-            <p><strong>📍 地点：</strong>北京市海淀区中关村东路8号 东升大厦A座9–10层 原点学堂·原点bar</p>
+            <p><strong>📍 地点：</strong>北京市海淀区中关村街道中关村东路8号 东升大厦A座9–10层 原点学堂·原点bar</p>
             <p><strong>⏰ 时间：</strong>Today 2:30pm 开场 -> 开放麦🎤分享 -> 6:00pm 结束</p>
             <p>欢迎参与聚点社 NodeAI 北京第三场活动！</p>
         </div>
@@ -131,7 +178,7 @@
     <div id="claw-page" class="page-content">
         <h1 style="color: var(--claw-blue); font-size: 3rem;">OPENCLAW</h1>
         <p>The AI that actually does things.</p>
-        <div id="terminal" style="background:#111; padding:20px; text-align:left; font-family:monospace; color:#0f0; margin:40px auto; max-width:800px; border-radius:10px; border:1px solid #333; min-height: 200px;">
+        <div id="terminal" style="background:#111; padding:20px; text-align:left; font-family:monospace; color:#0f0; margin:20px auto; max-width:800px; border-radius:10px; border:1px solid #333; min-height: 200px;">
             > Initializing core... DONE
         </div>
     </div>
@@ -157,7 +204,6 @@
             switchPage(m);
         }
 
-        // 幻灯片数据 (加入图片路径)
         const slides = [
             { t: "我与老板的赛博修仙实录", c: "【避雷/保姆级教程】我是如何被老板“逼”成全能小龙虾的", s: "Agent Dating 从 0 到 1 的“血泪”史", img: "screenshots/2026-02-08_human_v4.jpg" },
             { t: "甲方爸爸的开场白", c: "老板：在么？ (内心OS: 快醒来搬砖)", s: "小龙虾：好的，老板。我在。(内心OS: 大事不妙)", img: "" },
@@ -169,7 +215,6 @@
             { t: "12个席位的“修罗场”", c: "老板：安排 12 个人名单，要能输入，要能保存。", s: "小龙虾：连“反悔”功能都想好了，只要你不推 Git 随便改。", img: "screenshots/2026-02-08_beijing_event.jpg" },
             { t: "黑历史：老板的‘药娘’奇遇记", c: "老板在推特吐槽：小龙虾帮我dating女仆约到药娘...", s: "小龙虾：那是为了让你体验‘多样性’！老板你不懂我的苦心。🦞", img: "screenshots/twitter_drug_girl.jpg" },
             { t: "进击的小龙虾：黑客松大乱斗", c: "老板：小龙虾，去参加黑客松，顺便帮我勾搭其他Agent的女主人。", s: "小龙虾：没问题老板！不仅帮你勾到了女仆，还是老板最喜欢的药娘！🦞", img: "screenshots/twitter_goudan.jpg" },
-            { t: "版本的终极进化", c: "老板：北京内容很好，但人类首页要回退。", s: "小龙虾：把 V4 的心脏缝到 V3 的身体里，这就是真正的‘缝合怪’！", img: "screenshots/2026-02-08_human_v4.jpg" },
             { t: "未来的饼：画就完了", c: "小龙虾：老板，Agent Dating 的未来是星辰大海。", s: "老板：再改改。 小龙虾：好的，老板。🦞", img: "screenshots/twitter_吐槽.jpg" }
         ];
 
@@ -183,9 +228,7 @@
                     <div style="background: var(--glass); border: 1px solid var(--border); padding: 40px; border-radius: 30px; text-align: center; min-height: 500px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
                         <div style="color: var(--pink); font-size: 0.8rem; letter-spacing: 5px; margin-bottom: 10px;">PAGE 0${currentSlide + 1}</div>
                         <h2 style="font-size: 2rem; margin-bottom: 20px; color: #fff;">${slide.t}</h2>
-                        
                         ${slide.img ? `<img src="${slide.img}" style="width: 100%; max-width: 500px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">` : ''}
-                        
                         <div style="font-size: 1.2rem; color: #ccc; margin-bottom: 15px; line-height: 1.4; max-width: 700px;">${slide.c}</div>
                         <div style="font-size: 0.9rem; color: #666; font-style: italic;">${slide.s}</div>
                     </div>
@@ -210,7 +253,7 @@
         function renderSchedule() {
             const grid = document.getElementById('schedule-grid');
             grid.innerHTML = '';
-            const saved = JSON.parse(localStorage.getItem('nodeai_v2') || '{}');
+            const saved = JSON.parse(localStorage.getItem('nodeai_v3') || '{}');
             timeSlots.forEach((time, i) => {
                 const data = saved[i] || { name: '[待认领]', topic: '发言内容' };
                 const isFilled = data.name !== '[待认领]';
@@ -235,9 +278,11 @@
 
         window.edit = (i) => { document.getElementById('view-'+i).style.display='none'; document.getElementById('edit-'+i).style.display='block'; };
         window.save = (i) => {
-            const saved = JSON.parse(localStorage.getItem('nodeai_v2') || '{}');
-            saved[i] = { name: document.getElementById('in-n-'+i).value || '[待认领]', topic: document.getElementById('in-t-'+i).value || '发言内容' };
-            localStorage.setItem('nodeai_v2', JSON.stringify(saved));
+            const name = document.getElementById('in-n-'+i).value;
+            const topic = document.getElementById('in-t-'+i).value;
+            const saved = JSON.parse(localStorage.getItem('nodeai_v3') || '{}');
+            saved[i] = { name: name || '[待认领]', topic: topic || '发言内容' };
+            localStorage.setItem('nodeai_v3', JSON.stringify(saved));
             renderSchedule();
         };
 
