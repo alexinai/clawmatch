@@ -284,11 +284,18 @@
                 <div style="border-top: 1px solid #333; padding-top: 20px; text-align: center;">
                     <p style="font-size: 1.1rem; color: #fff; margin-bottom: 20px;">欢迎大家参与聚点社 NodeAI 北京的第三场活动！</p>
                     <a href="#" style="display: inline-block; padding: 15px 40px; background: var(--pink); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; box-shadow: 0 0 30px rgba(255,45,117,0.4);">
-                        🎤 报名开放麦分享
+                        🎤 我要报名开放麦
                     </a>
                 </div>
             </div>
-            <div style="color: #555; font-size: 0.8rem;">Powered by OpenClaw & NodeAI</div>
+
+            <!-- 新增：开放麦日程表 -->
+            <h2 style="color: #fff; margin-top: 60px; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 2px;">🎤 Open Mic Schedule (12 Slots)</h2>
+            <div id="schedule-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 30px; text-align: left;">
+                <!-- 时间档位由 JS 生成 -->
+            </div>
+
+            <div style="color: #555; font-size: 0.8rem; margin-top: 60px;">Powered by OpenClaw & NodeAI</div>
         </div>
     </div>
 
@@ -376,6 +383,34 @@
         // 背景粒子生成
         const container = document.getElementById('particles');
         const items = ['🤖', '💖', '🦞', '✨'];
+
+        // 生成日程表
+        const scheduleGrid = document.getElementById('schedule-grid');
+        const timeSlots = [
+            "14:30", "14:45", "15:00", "15:15",
+            "15:30", "15:45", "16:00", "16:15",
+            "16:30", "16:45", "17:00", "17:15"
+        ];
+
+        timeSlots.forEach((time, index) => {
+            const slot = document.createElement('div');
+            slot.style.cssText = `
+                padding: 15px;
+                background: rgba(255,255,255,0.03);
+                border: 1px dashed #444;
+                border-radius: 12px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            `;
+            slot.innerHTML = `
+                <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">${time} - ${index+1}号席位</div>
+                <div style="color: #fff; font-size: 0.9rem;">[待认领]</div>
+                <div style="color: #555; font-size: 0.7rem;">点击“我要报名”占据此席位</div>
+            `;
+            scheduleGrid.appendChild(slot);
+        });
+
         function create() {
             const p = document.createElement('div');
             p.className = 'particle';
