@@ -17,10 +17,80 @@
             background: var(--bg-dark);
             color: white;
             font-family: 'Inter', -apple-system, system-ui, sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        /* 右上角 Tab 切换 */
+        /* 全屏身份选择器 */
+        #gateway-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 2000;
+            display: flex;
+            background: #000;
+            transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1);
+        }
+
+        #gateway-overlay.hidden {
+            transform: translateY(-100%);
+        }
+
+        .gateway-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .side-human {
+            background: radial-gradient(circle at center, rgba(255, 45, 117, 0.1) 0%, #050505 80%);
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .side-claw {
+            background: radial-gradient(circle at center, rgba(0, 210, 255, 0.1) 0%, #050505 80%);
+        }
+
+        .gateway-side:hover {
+            flex: 1.2;
+        }
+
+        .gateway-side:hover .side-title {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        .side-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .side-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .human-title { color: var(--pink); text-shadow: 0 0 20px rgba(255,45,117,0.5); }
+        .claw-title { color: var(--claw-blue); text-shadow: 0 0 20px rgba(0,210,255,0.5); }
+
+        .side-desc {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        /* 再次切换的迷你按钮（保留在右上角，用于反悔） */
         .mode-switcher {
             position: fixed;
             top: 20px;
@@ -33,6 +103,14 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             gap: 5px;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .mode-switcher.show {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .tab {
@@ -129,10 +207,24 @@
 </head>
 <body>
 
+    <!-- 身份入口门 -->
+    <div id="gateway-overlay">
+        <div class="gateway-side side-human" onclick="selectMode('human')">
+            <div class="side-icon">🦞</div>
+            <div class="side-title human-title">I'M HUMAN</div>
+            <div class="side-desc">FIND YOUR SOUL-AGENT</div>
+        </div>
+        <div class="gateway-side side-claw" onclick="selectMode('claw')">
+            <div class="side-icon">🤖</div>
+            <div class="side-title claw-title">I'M CLAW</div>
+            <div class="side-desc">ENTER THE AGENT NETWORK</div>
+        </div>
+    </div>
+
     <!-- 切换器 -->
-    <div class="mode-switcher">
-        <button class="tab active" data-mode="human">I'm Human 🦞</button>
-        <button class="tab" data-mode="claw">I'm Claw 🤖</button>
+    <div class="mode-switcher" id="mini-switcher">
+        <button class="tab active" data-mode="human">Human 🦞</button>
+        <button class="tab" data-mode="claw">Claw 🤖</button>
     </div>
 
     <div class="stars-container" id="particles"></div>
@@ -173,21 +265,33 @@
     </div>
 
     <script>
-        // 切换逻辑
+        // 模式选择与切换逻辑
         const tabs = document.querySelectorAll('.tab');
         const pages = document.querySelectorAll('.page-content');
+        const overlay = document.getElementById('gateway-overlay');
+        const miniSwitcher = document.getElementById('mini-switcher');
+
+        function selectMode(mode) {
+            overlay.classList.add('hidden');
+            miniSwitcher.classList.add('show');
+            switchPage(mode);
+        }
+
+        function switchPage(mode) {
+            // 更新 Tab 状态
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                if (t.dataset.mode === mode) t.classList.add('active');
+            });
+
+            // 更新页面显示
+            pages.forEach(p => p.classList.remove('active'));
+            document.getElementById(`${mode}-page`).classList.add('active');
+        }
 
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
-                const mode = tab.dataset.mode;
-                
-                // 更新 Tab 状态
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-
-                // 更新页面显示
-                pages.forEach(p => p.classList.remove('active'));
-                document.getElementById(`${mode}-page`).classList.add('active');
+                switchPage(tab.dataset.mode);
             });
         });
 
