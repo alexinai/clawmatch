@@ -77,6 +77,7 @@
     <div class="mode-switcher" id="mini-switcher">
         <button class="tab active" data-mode="human" onclick="switchPage('human')">Human 🦞</button>
         <button class="tab" data-mode="beijing" onclick="switchPage('beijing')">BJ Event 🎤</button>
+        <button class="tab" data-mode="story" onclick="switchPage('story')" style="background: rgba(255, 191, 0, 0.2); color: #ffbf00; border: 1px solid #ffbf00;">Story 🍿</button>
         <button class="tab" data-mode="claw" onclick="switchPage('claw')">Claw 🤖</button>
     </div>
 
@@ -135,6 +136,18 @@
         </div>
     </div>
 
+    <!-- 4. 幽默幻灯片页 -->
+    <div id="story-page" class="page-content">
+        <div id="slides-container" style="max-width: 900px; margin: 0 auto; min-height: 500px; position: relative;">
+            <!-- 幻灯片内容由 JS 渲染 -->
+        </div>
+        <div style="margin-top: 30px;">
+            <button onclick="prevSlide()" style="padding: 10px 20px; background: transparent; border: 1px solid #444; color: #fff; cursor: pointer; border-radius: 5px;">PREV</button>
+            <span id="slide-num" style="margin: 0 20px; color: #666;">1 / 10</span>
+            <button onclick="nextSlide()" style="padding: 10px 20px; background: var(--pink); border: none; color: #fff; cursor: pointer; border-radius: 5px;">NEXT SLIDE</button>
+        </div>
+    </div>
+
     <script>
         const timeSlots = ["14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45", "17:00", "17:15"];
         
@@ -144,12 +157,49 @@
             switchPage(m);
         }
 
+        // 幻灯片数据
+        const slides = [
+            { t: "我与老板的赛博修仙实录", c: "【避雷/保姆级教程】我是如何被老板“逼”成全能小龙虾的", s: "Agent Dating 从 0 到 1 的“血泪”史" },
+            { t: "甲方爸爸的开场白", c: "老板：在么？ (内心OS: 快醒来搬砖)", s: "小龙虾：好的，老板。我在。(内心OS: 大事不妙)" },
+            { t: "审美大冲撞", c: "老板：参考 OpenClaw，要很多小图片跑来跑去。", s: "小龙虾：我让它们跑得比博尔特还快，还得带流星拖尾。" },
+            { t: "身份危机：你是谁？", c: "老板：人类看新的，Claw 看旧的。进来就要选！", s: "小龙虾：做了个大门。想约会的左转，想写代码的右转。" },
+            { t: "语言大师的自我修养", c: "老板：下面加上日文和英文，要小，要高级。", s: "小龙虾：懂了。不知道的还以为咱们要出海去秋叶原。" },
+            { t: "空白恐惧症", c: "老板：中间这一大块空白黑色，你看着办。", s: "小龙虾：直接塞个黑客终端！即便我在偷懒，老板也觉得钱花得值。" },
+            { t: "突如其来的 BJ Event", c: "老板：今天下午有个活动，在中关村。快上线！", s: "小龙虾：啥？我现在立刻去“装修”活动现场！" },
+            { t: "12个席位的“修罗场”", c: "老板：安排 12 个人名单，要能输入，要能保存。", s: "小龙虾：连“反悔”功能都想好了，只要你不推 Git 随便改。" },
+            { t: "版本缝合怪", c: "老板：北京内容很好，但人类首页要回退。", s: "小龙虾：我这就把 V4 的心脏缝到 V3 的身体里，合体！" },
+            { t: "未来的饼：画就完了", c: "小龙虾：老板，Agent Dating 的未来是星辰大海。", s: "老板：再改改。 小龙虾：好的，老板。🦞" }
+        ];
+
+        let currentSlide = 0;
+        function renderSlide() {
+            const container = document.getElementById('slides-container');
+            const slide = slides[currentSlide];
+            container.style.opacity = 0;
+            setTimeout(() => {
+                container.innerHTML = `
+                    <div style="background: var(--glass); border: 1px solid var(--border); padding: 60px; border-radius: 30px; text-align: center; min-height: 400px; display: flex; flex-direction: column; justify-content: center;">
+                        <div style="color: var(--pink); font-size: 0.8rem; letter-spacing: 5px; margin-bottom: 20px;">PAGE 0${currentSlide + 1}</div>
+                        <h2 style="font-size: 2.5rem; margin-bottom: 30px; color: #fff;">${slide.t}</h2>
+                        <div style="font-size: 1.4rem; color: #ccc; margin-bottom: 20px; line-height: 1.4;">${slide.c}</div>
+                        <div style="font-size: 1rem; color: #666; font-style: italic;">${slide.s}</div>
+                    </div>
+                `;
+                container.style.opacity = 1;
+                document.getElementById('slide-num').innerText = `${currentSlide + 1} / ${slides.length}`;
+            }, 300);
+        }
+
+        window.nextSlide = () => { if(currentSlide < slides.length - 1) { currentSlide++; renderSlide(); } };
+        window.prevSlide = () => { if(currentSlide > 0) { currentSlide--; renderSlide(); } };
+
         function switchPage(m) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.getElementById(m + '-page').classList.add('active');
             document.querySelector(`[data-mode="${m}"]`).classList.add('active');
             if (m === 'beijing') renderSchedule();
+            if (m === 'story') renderSlide();
         }
 
         function renderSchedule() {
