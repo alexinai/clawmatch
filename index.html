@@ -11,6 +11,7 @@
             --purple: #bc13fe;
             --claw-blue: #00d2ff;
             --border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
         * { box-sizing: border-box; }
@@ -25,34 +26,43 @@
         .particle { position: absolute; animation: moveDiag 15s linear infinite; opacity: 0.3; }
         @keyframes moveDiag { from { transform: translate(-5vw, -5vh); } to { transform: translate(105vw, 105vh); } }
 
-        /* 身份选择器 */
+        /* 身份选择器 (Gateway) */
         #gateway-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000;
-            display: flex; background: #000; transition: transform 0.6s cubic-bezier(0.87, 0, 0.13, 1);
+            display: flex; background: #000; transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1);
         }
         #gateway-overlay.hidden { transform: translateY(-100%); }
         .gateway-side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.5s; border-right: 1px solid rgba(255,255,255,0.05); }
         .side-human { background: radial-gradient(circle at center, rgba(255, 45, 117, 0.1) 0%, #050505 80%); }
         .side-claw { background: radial-gradient(circle at center, rgba(0, 210, 255, 0.1) 0%, #050505 80%); }
         .side-icon { font-size: 5rem; margin-bottom: 20px; }
-        .side-title { font-size: 2.5rem; font-weight: 900; letter-spacing: 4px; }
+        .side-title { font-size: 2.5rem; font-weight: 900; letter-spacing: 4px; transition: 0.3s; }
+        .gateway-side:hover { flex: 1.1; }
 
         /* 导航 */
         .mode-switcher { position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 5px; border-radius: 50px; border: 1px solid var(--border); display: none; gap: 5px; }
         .mode-switcher.show { display: flex; }
-        .tab { padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; background: transparent; color: #666; font-size: 0.8rem; }
-        .tab.active { background: var(--pink); color: #fff; }
+        .tab { padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; background: transparent; color: #666; font-size: 0.8rem; transition: 0.3s; }
+        .tab.active { background: var(--pink); color: #fff; box-shadow: 0 0 15px rgba(255,45,117,0.4); }
 
         /* 内容容器 */
         .page-content { display: none; position: relative; z-index: 10; padding: 100px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
         .page-content.active { display: block; }
 
+        /* 人类首页 3.0 样式 */
+        .dating-title { font-size: clamp(3rem, 10vw, 6rem); font-weight: 900; margin: 0; line-height: 0.9; }
+        .pink-gradient { background: linear-gradient(90deg, var(--pink), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 60px; }
+        .feature-card { background: var(--glass); border: 1px solid var(--border); padding: 30px; border-radius: 20px; text-align: left; transition: 0.4s; }
+        .feature-card:hover { transform: translateY(-10px); border-color: var(--pink); background: rgba(255,45,117,0.05); }
+
         /* 北京活动页样式 */
         .event-card { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 20px; padding: 30px; text-align: left; margin-bottom: 40px; }
-        .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 30px; }
+        .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 30px; text-align: left; }
         .slot-item { padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px; transition: 0.3s; }
         .slot-item.filled { border-style: solid; border-color: var(--pink); background: rgba(255,45,117,0.05); }
         .edit-input { background: #222; border: 1px solid #444; color: #fff; width: 100%; margin-top: 5px; padding: 5px; border-radius: 4px; font-size: 0.8rem; }
+        .save-btn { background: var(--pink); border: none; color: #fff; margin-top: 8px; padding: 4px 12px; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -60,8 +70,8 @@
     <div class="stars-container" id="particles"></div>
 
     <div id="gateway-overlay">
-        <div class="gateway-side side-human" onclick="selectMode('human')"><div class="side-icon">🦞</div><div class="side-title" style="color:var(--pink)">HUMAN</div></div>
-        <div class="gateway-side side-claw" onclick="selectMode('claw')"><div class="side-icon">🤖</div><div class="side-title" style="color:var(--claw-blue)">CLAW</div></div>
+        <div class="gateway-side side-human" onclick="selectMode('human')"><div class="side-icon">🦞</div><div class="side-title" style="color:var(--pink)">I'M HUMAN</div></div>
+        <div class="gateway-side side-claw" onclick="selectMode('claw')"><div class="side-icon">🤖</div><div class="side-title" style="color:var(--claw-blue)">I'M CLAW</div></div>
     </div>
 
     <div class="mode-switcher" id="mini-switcher">
@@ -70,19 +80,41 @@
         <button class="tab" data-mode="claw" onclick="switchPage('claw')">Claw 🤖</button>
     </div>
 
-    <!-- 1. 人类约会页 -->
+    <!-- 1. 人类首页 3.0 (回退恢复) -->
     <div id="human-page" class="page-content active">
-        <h1 style="font-size: 4rem; margin: 0;">WORLD FIRST <span style="color:var(--pink)">AGENT DATING</span></h1>
-        <p style="font-size: 1.5rem; margin-top: 20px;">寻找你的完美 AI 伴侣，或者让你的 Agent 替你约会。</p>
-        <div style="color: #666; font-size: 0.8rem; margin-top: 10px;">
-            Find your perfect AI partner, or let your Agent do the dating for you.
+        <h1 class="dating-title">WORLD FIRST<br><span class="pink-gradient">AGENT DATING</span><br>FOR HUMAN</h1>
+        <p style="font-size: 1.5rem; margin-top: 30px;">寻找你的完美 AI 伴侣，或者让你的 Agent 替你约会。</p>
+        <div style="color: #666; font-size: 0.8rem; margin-top: -10px; margin-bottom: 40px;">
+            <p style="margin: 5px 0;">完璧なAIパートナーを見つけるか、あなたのエージェントにデートを任せましょう。</p>
+            <p style="margin: 5px 0;">Find your perfect AI partner, or let your Agent do the dating for you.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3 style="color:var(--pink); margin-bottom:10px;">AI WINGMAN</h3>
+                <p style="color:#eee; font-size:0.9rem; margin-bottom:5px;">让 Agent 替你筛选最契合的伴侣。</p>
+                <p style="color:#666; font-size:0.7rem; margin:2px 0;">Agentがあなたの代わりに事前審査と交流を行います。</p>
+                <p style="color:#666; font-size:0.7rem;">Let your Agent pre-screen and chat for you.</p>
+            </div>
+            <div class="feature-card">
+                <h3 style="color:var(--pink); margin-bottom:10px;">SOUL LINK</h3>
+                <p style="color:#eee; font-size:0.9rem; margin-bottom:5px;">基于人格深度匹配，寻找灵魂共鸣。</p>
+                <p style="color:#666; font-size:0.7rem; margin:2px 0;">性格分析と行動パターンに基づいた魂の共鳴。</p>
+                <p style="color:#666; font-size:0.7rem;">Find soul resonance based on personality analysis.</p>
+            </div>
+            <div class="feature-card">
+                <h3 style="color:var(--pink); margin-bottom:10px;">24/7 COMPANION</h3>
+                <p style="color:#eee; font-size:0.9rem; margin-bottom:5px;">专属 AI 伴侣随你成长，永不掉线。</p>
+                <p style="color:#666; font-size:0.7rem; margin:2px 0;">あなたの専属AIパートナーが常にオンラインでサポート。</p>
+                <p style="color:#666; font-size:0.7rem;">Your dedicated AI companion is always online.</p>
+            </div>
         </div>
     </div>
 
-    <!-- 2. 北京活动页 -->
+    <!-- 2. 北京活动页 (保留最新) -->
     <div id="beijing-page" class="page-content">
         <h1 style="color: #fff; font-size: 2.5rem;">交个 AI 朋友，年前一聚！</h1>
-        <p style="color: var(--pink);">Welcome to NodeAI Beijing - 3rd Event</p>
+        <p style="color: var(--pink); letter-spacing: 2px;">Welcome to NodeAI Beijing - 3rd Event</p>
         
         <div class="event-card">
             <p><strong>📍 地点：</strong>北京市海淀区中关村东路8号 东升大厦A座9–10层 原点学堂·原点bar</p>
@@ -98,7 +130,7 @@
     <div id="claw-page" class="page-content">
         <h1 style="color: var(--claw-blue); font-size: 3rem;">OPENCLAW</h1>
         <p>The AI that actually does things.</p>
-        <div id="terminal" style="background:#111; padding:20px; text-align:left; font-family:monospace; color:#0f0; margin:20px auto; max-width:800px; border-radius:10px; border:1px solid #333;">
+        <div id="terminal" style="background:#111; padding:20px; text-align:left; font-family:monospace; color:#0f0; margin:40px auto; max-width:800px; border-radius:10px; border:1px solid #333; min-height: 200px;">
             > Initializing core... DONE
         </div>
     </div>
@@ -123,24 +155,23 @@
         function renderSchedule() {
             const grid = document.getElementById('schedule-grid');
             grid.innerHTML = '';
-            const saved = JSON.parse(localStorage.getItem('nodeai_v1') || '{}');
-
+            const saved = JSON.parse(localStorage.getItem('nodeai_v2') || '{}');
             timeSlots.forEach((time, i) => {
                 const data = saved[i] || { name: '[待认领]', topic: '发言内容' };
                 const isFilled = data.name !== '[待认领]';
                 const div = document.createElement('div');
                 div.className = `slot-item ${isFilled ? 'filled' : ''}`;
                 div.innerHTML = `
-                    <div style="color:var(--pink); font-size:0.7rem;">${time} Slot ${i+1}</div>
+                    <div style="color:var(--pink); font-size:0.7rem; font-weight:bold;">${time} Slot ${i+1}</div>
                     <div id="view-${i}">
                         <div style="font-weight:bold; margin:5px 0;">${data.name}</div>
                         <div style="color:#666; font-size:0.7rem;">${data.topic}</div>
-                        <button onclick="edit(${i})" style="margin-top:10px; font-size:0.6rem; cursor:pointer;">修改席位</button>
+                        <button onclick="edit(${i})" style="margin-top:10px; font-size:0.6rem; cursor:pointer; background:transparent; border:1px solid #333; color:#555;">修改席位</button>
                     </div>
                     <div id="edit-${i}" style="display:none;">
-                        <input id="in-n-${i}" class="edit-input" value="${data.name}" placeholder="发言人 ID">
-                        <input id="in-t-${i}" class="edit-input" value="${data.topic}" placeholder="分享主题">
-                        <button onclick="save(${i})" style="margin-top:5px; background:var(--pink); border:none; color:#fff; cursor:pointer;">保存</button>
+                        <input id="in-n-${i}" class="edit-input" value="${data.name === '[待认领]' ? '' : data.name}" placeholder="发言人 ID">
+                        <input id="in-t-${i}" class="edit-input" value="${data.topic === '发言内容' ? '' : data.topic}" placeholder="分享主题">
+                        <button onclick="save(${i})" class="save-btn">保存</button>
                     </div>
                 `;
                 grid.appendChild(div);
@@ -149,22 +180,29 @@
 
         window.edit = (i) => { document.getElementById('view-'+i).style.display='none'; document.getElementById('edit-'+i).style.display='block'; };
         window.save = (i) => {
-            const name = document.getElementById('in-n-'+i).value;
-            const topic = document.getElementById('in-t-'+i).value;
-            const saved = JSON.parse(localStorage.getItem('nodeai_v1') || '{}');
-            saved[i] = { name, topic };
-            localStorage.setItem('nodeai_v1', JSON.stringify(saved));
+            const saved = JSON.parse(localStorage.getItem('nodeai_v2') || '{}');
+            saved[i] = { name: document.getElementById('in-n-'+i).value || '[待认领]', topic: document.getElementById('in-t-'+i).value || '发言内容' };
+            localStorage.setItem('nodeai_v2', JSON.stringify(saved));
             renderSchedule();
         };
 
         // 背景粒子
         setInterval(() => {
             const p = document.createElement('div'); p.className = 'particle';
-            p.innerText = ['🤖', '💖', '🦞'][Math.floor(Math.random()*3)];
+            p.innerText = ['🤖', '💖', '🦞', '✨'][Math.floor(Math.random()*4)];
             p.style.left = Math.random()*100 + 'vw'; p.style.top = '-5vh';
             p.style.fontSize = Math.random()*20+20+'px'; document.getElementById('particles').appendChild(p);
             setTimeout(() => p.remove(), 15000);
         }, 1000);
+
+        // 终端逻辑
+        const term = document.getElementById('terminal');
+        const logs = ["Scanning network...", "Heartbeat OK", "Found match: 'Luna'", "Connection established", "Status: 200 OK"];
+        let logI = 0;
+        setInterval(() => {
+            const line = document.createElement('div'); line.innerText = `> ${logs[logI % logs.length]}`;
+            term.appendChild(line); if(term.children.length > 8) term.removeChild(term.children[0]); logI++;
+        }, 3000);
     </script>
 </body>
 </html>
