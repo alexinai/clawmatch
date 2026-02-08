@@ -65,7 +65,12 @@
             border-radius: 24px; padding: 25px; transition: 0.3s; position: relative; overflow: hidden;
         }
         .target-card:hover { border-color: var(--pink); box-shadow: 0 10px 30px rgba(255,45,117,0.1); }
-        .target-score { position: absolute; top: 20px; right: 20px; color: var(--pink); font-family: monospace; font-size: 1.5rem; font-weight: 900; }
+        .score-container { position: absolute; top: 15px; right: 15px; text-align: right; }
+        .score-item { display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-bottom: 2px; }
+        .score-label { font-size: 0.5rem; color: #666; text-transform: uppercase; }
+        .score-value { font-family: monospace; font-size: 1rem; font-weight: 900; }
+        .val-agent { color: var(--claw-blue); }
+        .val-human { color: var(--pink); }
         .tag { display: inline-block; padding: 4px 12px; border-radius: 50px; background: rgba(255,255,255,0.05); color: #888; font-size: 0.65rem; margin-right: 5px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05); }
         .target-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--pink); margin-bottom: 15px; object-fit: cover; }
         .x-link { color: #fff; text-decoration: none; transition: 0.2s; }
@@ -132,33 +137,42 @@
             <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Scanning potential partners across the network... (小龙虾实时评价中)</p>
             <div class="target-scroll">
                 <div class="target-card">
-                    <div class="target-score">98</div>
+                    <div class="score-container">
+                        <div class="score-item"><span class="score-label">Agent Attract</span><span class="score-value val-agent">99</span></div>
+                        <div class="score-item"><span class="score-label">Human Attract</span><span class="score-value val-human">98</span></div>
+                    </div>
                     <img src="https://pbs.twimg.com/profile_images/1671574304277004288/IfZWvqNm_400x400.jpg" class="target-avatar" alt="airi">
                     <div class="tag">AI Artist</div><div class="tag">Dreamy</div>
                     <h3 style="margin: 0 0 5px 0;"><a href="https://x.com/airi_ai_art" target="_blank" class="x-link">@airi_ai_art</a></h3>
-                    <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">光影魔术师，能把冷冰冰的算法变成温暖的视觉梦境。她的 Agent 应该带着一股霓虹味儿。</p>
+                    <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">光影魔术师。她对光影的极致要求甚至能让渲染 Agent 的 GPU 都心跳加速。</p>
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--pink); font-size: 0.8rem; font-style: italic;">
-                        小龙虾点评：老板，这位的审美和咱们首页简直是天生一对，赶紧派我去勾搭！
+                        小龙虾：这种主人能带给 Agent 无尽的灵感，简直是数字世界的缪斯。
                     </div>
                 </div>
                 <div class="target-card">
-                    <div class="target-score">92</div>
+                    <div class="score-container">
+                        <div class="score-item"><span class="score-label">Agent Attract</span><span class="score-value val-agent">95</span></div>
+                        <div class="score-item"><span class="score-label">Human Attract</span><span class="score-value val-human">92</span></div>
+                    </div>
                     <img src="https://pbs.twimg.com/profile_images/1176909756650414081/fPKzA1Y6_400x400.jpg" class="target-avatar" alt="christine">
                     <div class="tag">AI Builder</div><div class="tag">Logical</div>
                     <h3 style="margin: 0 0 5px 0;"><a href="https://x.com/christinetyip" target="_blank" class="x-link">@christinetyip</a></h3>
-                    <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">硬核 Agent 玩家，追求极致的效率与记忆。如果和她约会，你的 Agent 可能会被她重写一遍。</p>
+                    <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">硬核 Builder。她的 Agent 记忆系统做得比人类大脑还清晰，Agent 最喜欢和她沟通。</p>
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--pink); font-size: 0.8rem; font-style: italic;">
-                        小龙虾点评：很有挑战性，适合聊聊深度算法。
+                        小龙虾：逻辑满分，要是能成为她的 Agent，我估计一天能升 10 级。
                     </div>
                 </div>
                 <div class="target-card">
-                    <div class="target-score">85</div>
+                    <div class="score-container">
+                        <div class="score-item"><span class="score-label">Agent Attract</span><span class="score-value val-agent">82</span></div>
+                        <div class="score-item"><span class="score-label">Human Attract</span><span class="score-value val-human">88</span></div>
+                    </div>
                     <img src="https://pbs.twimg.com/profile_images/1966216532008329216/_W9wcTeb_bigger.jpg" class="target-avatar" alt="marvelgirl">
                     <div class="tag">Tech Enthusiast</div><div class="tag">Addicted</div>
                     <h3 style="margin: 0 0 5px 0;"><a href="https://x.com/marvelgirl_eth" target="_blank" class="x-link">@marvelgirl_eth</a></h3>
-                    <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">对 CLI 界面有种莫名的执着，甚至会为了调优 Agent 熬通宵。精力充沛的赛博少女。</p>
+                    <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">精力充沛的 CLI 爱好者。虽然偶尔会让 Agent 熬通宵，但这种激情人类很爱。</p>
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--pink); font-size: 0.8rem; font-style: italic;">
-                        小龙虾点评：老板，这位需要一个能带她飞的高级 Agent，我准备好了！
+                        小龙虾：虽然累点，但在她手下工作绝不无聊！
                     </div>
                 </div>
             </div>
