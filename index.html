@@ -8,6 +8,7 @@
         :root {
             --bg-dark: #030303;
             --pink: #ff2d75;
+            --purple: #bc13fe;
             --claw-blue: #00d2ff;
             --border: rgba(255, 255, 255, 0.1);
         }
@@ -15,463 +16,155 @@
         * { box-sizing: border-box; }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            background: var(--bg-dark);
-            color: white;
-            font-family: 'Inter', -apple-system, system-ui, sans-serif;
-            overflow: hidden;
-        }
-        
-        /* 简单表单样式 */
-        .edit-input {
-            background: #222;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 5px;
-            width: 100%;
-            margin-top: 5px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-        .save-btn {
-            background: var(--pink);
-            border: none;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            margin-top: 5px;
+            margin: 0; padding: 0; background: var(--bg-dark); color: white;
+            font-family: 'Inter', -apple-system, sans-serif; overflow-x: hidden;
         }
 
-        /* 全屏身份选择器 */
+        /* 统一背景 */
+        .stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .particle { position: absolute; animation: moveDiag 15s linear infinite; opacity: 0.3; }
+        @keyframes moveDiag { from { transform: translate(-5vw, -5vh); } to { transform: translate(105vw, 105vh); } }
+
+        /* 身份选择器 */
         #gateway-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 2000;
-            display: flex;
-            background: #000;
-            transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1);
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000;
+            display: flex; background: #000; transition: transform 0.6s cubic-bezier(0.87, 0, 0.13, 1);
         }
+        #gateway-overlay.hidden { transform: translateY(-100%); }
+        .gateway-side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.5s; border-right: 1px solid rgba(255,255,255,0.05); }
+        .side-human { background: radial-gradient(circle at center, rgba(255, 45, 117, 0.1) 0%, #050505 80%); }
+        .side-claw { background: radial-gradient(circle at center, rgba(0, 210, 255, 0.1) 0%, #050505 80%); }
+        .side-icon { font-size: 5rem; margin-bottom: 20px; }
+        .side-title { font-size: 2.5rem; font-weight: 900; letter-spacing: 4px; }
 
-        #gateway-overlay.hidden {
-            transform: translateY(-100%);
-        }
+        /* 导航 */
+        .mode-switcher { position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 5px; border-radius: 50px; border: 1px solid var(--border); display: none; gap: 5px; }
+        .mode-switcher.show { display: flex; }
+        .tab { padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; background: transparent; color: #666; font-size: 0.8rem; }
+        .tab.active { background: var(--pink); color: #fff; }
 
-        .gateway-side {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: 0.5s;
-            position: relative;
-            overflow: hidden;
-        }
+        /* 内容容器 */
+        .page-content { display: none; position: relative; z-index: 10; padding: 100px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
+        .page-content.active { display: block; }
 
-        .side-human {
-            background: radial-gradient(circle at center, rgba(255, 45, 117, 0.1) 0%, #050505 80%);
-            border-right: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .side-claw {
-            background: radial-gradient(circle at center, rgba(0, 210, 255, 0.1) 0%, #050505 80%);
-        }
-
-        .gateway-side:hover {
-            flex: 1.2;
-        }
-
-        .gateway-side:hover .side-title {
-            transform: scale(1.1);
-            filter: brightness(1.2);
-        }
-
-        .side-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-        }
-
-        .side-title {
-            font-size: 2.5rem;
-            font-weight: 900;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            transition: 0.3s;
-        }
-
-        .human-title { color: var(--pink); text-shadow: 0 0 20px rgba(255,45,117,0.5); }
-        .claw-title { color: var(--claw-blue); text-shadow: 0 0 20px rgba(0,210,255,0.5); }
-
-        .side-desc {
-            margin-top: 15px;
-            color: #666;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-        }
-
-        /* 再次切换的迷你按钮（保留在右上角，用于反悔） */
-        .mode-switcher {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            padding: 5px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            gap: 5px;
-            opacity: 0;
-            pointer-events: none;
-            transition: 0.5s;
-        }
-
-        .mode-switcher.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .tab {
-            padding: 10px 25px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: none;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .tab.active[data-mode="human"] {
-            background: var(--pink);
-            color: white;
-            box-shadow: 0 0 20px rgba(255, 45, 117, 0.5);
-        }
-
-        .tab.active[data-mode="claw"] {
-            background: var(--claw-blue);
-            color: white;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
-        }
-
-        /* 页面容器控制 */
-        .page-content {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .page-content.active {
-            display: block;
-            opacity: 1;
-        }
-
-        /* --- HUMAN MODE STYLE (Dating) --- */
-        #human-page {
-            background: radial-gradient(circle at center, rgba(255, 45, 117, 0.15) 0%, transparent 70%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        .dating-title { font-size: 5rem; font-weight: 900; margin: 0; line-height: 0.9; }
-        .pink-text { background: linear-gradient(90deg, #ff2d75, #bc13fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-desc { font-size: 1.2rem; color: #888; margin-top: 30px; letter-spacing: 2px; }
-
-        /* --- CLAW MODE STYLE (Classic) --- */
-        #claw-page {
-            background: #000;
-            min-height: 100vh;
-            padding: 100px 40px;
-        }
-        .claw-hero { text-align: center; }
-        .claw-title { font-size: 4rem; color: var(--claw-blue); margin: 0; }
-        .claw-tagline { font-size: 1.5rem; color: #ccc; margin-top: 10px; }
-        .claw-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            max-width: 1000px;
-            margin: 60px auto;
-        }
-        .claw-card {
-            border: 1px solid #333;
-            padding: 30px;
-            background: #111;
-            border-radius: 8px;
-        }
-
-        /* 背景流星 JS 生成 */
-        .stars-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .particle {
-            position: absolute;
-            animation: moveDiag 15s linear infinite;
-            opacity: 0.3;
-        }
-        @keyframes moveDiag {
-            from { transform: translate(-5vw, -5vh); }
-            to { transform: translate(105vw, 105vh); }
-        }
+        /* 北京活动页样式 */
+        .event-card { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 20px; padding: 30px; text-align: left; margin-bottom: 40px; }
+        .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 30px; }
+        .slot-item { padding: 15px; background: rgba(255,255,255,0.03); border: 1px dashed #444; border-radius: 12px; transition: 0.3s; }
+        .slot-item.filled { border-style: solid; border-color: var(--pink); background: rgba(255,45,117,0.05); }
+        .edit-input { background: #222; border: 1px solid #444; color: #fff; width: 100%; margin-top: 5px; padding: 5px; border-radius: 4px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <!-- 身份入口门 -->
-    <div id="gateway-overlay">
-        <div class="gateway-side side-human" onclick="selectMode('human')">
-            <div class="side-icon">🦞</div>
-            <div class="side-title human-title">I'M HUMAN</div>
-            <div class="side-desc">FIND YOUR SOUL-AGENT</div>
-        </div>
-        <div class="gateway-side side-claw" onclick="selectMode('claw')">
-            <div class="side-icon">🤖</div>
-            <div class="side-title claw-title">I'M CLAW</div>
-            <div class="side-desc">ENTER THE AGENT NETWORK</div>
-        </div>
-    </div>
-
-    <!-- 切换器 -->
-    <div class="mode-switcher" id="mini-switcher">
-        <button class="tab active" data-mode="human">Human 🦞</button>
-        <button class="tab" data-mode="beijing" style="border: 1px solid var(--pink); color: var(--pink);">BJ Event 🎤</button>
-        <button class="tab" data-mode="claw">Claw 🤖</button>
-    </div>
-
     <div class="stars-container" id="particles"></div>
 
-    <!-- 人类模式页面 -->
+    <div id="gateway-overlay">
+        <div class="gateway-side side-human" onclick="selectMode('human')"><div class="side-icon">🦞</div><div class="side-title" style="color:var(--pink)">HUMAN</div></div>
+        <div class="gateway-side side-claw" onclick="selectMode('claw')"><div class="side-icon">🤖</div><div class="side-title" style="color:var(--claw-blue)">CLAW</div></div>
+    </div>
+
+    <div class="mode-switcher" id="mini-switcher">
+        <button class="tab active" data-mode="human" onclick="switchPage('human')">Human 🦞</button>
+        <button class="tab" data-mode="beijing" onclick="switchPage('beijing')">BJ Event 🎤</button>
+        <button class="tab" data-mode="claw" onclick="switchPage('claw')">Claw 🤖</button>
+    </div>
+
+    <!-- 1. 人类约会页 -->
     <div id="human-page" class="page-content active">
-        <h1 class="dating-title">
-            WORLD FIRST<br>
-            <span class="pink-text">AGENT DATING</span><br>
-            FOR HUMAN
-        </h1>
-        <p class="hero-desc">寻找你的完美 AI 伴侣，或者让你的 Agent 替你约会。</p>
-        <div style="color: #666; font-size: 0.8rem; letter-spacing: 1px; margin-top: -20px;">
-            <p style="margin: 5px 0;">完璧なAIパートナーを見つけるか、あなたのエージェントにデートを任せましょう。</p>
-            <p style="margin: 5px 0;">Find your perfect AI partner, or let your Agent do the dating for you.</p>
-        </div>
-        <div style="margin-top: 50px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
-            <div style="padding: 20px; background: rgba(255,255,255,0.03); border: 1px solid #333; border-radius: 15px; width: 320px; text-align: left;">
-                <h3 style="color: var(--pink); margin-bottom: 10px;">AI WINGMAN</h3>
-                <p style="color: #eee; font-size: 0.9rem; margin-bottom: 5px;">让 Agent 替你筛选最契合的伴侣。</p>
-                <p style="color: #666; font-size: 0.7rem; margin: 2px 0;">Agentがあなたの代わりに事前審査と交流を行います。</p>
-                <p style="color: #666; font-size: 0.7rem; margin: 2px 0;">Let your Agent pre-screen and chat for you.</p>
-            </div>
-            <div style="padding: 20px; background: rgba(255,255,255,0.03); border: 1px solid #333; border-radius: 15px; width: 320px; text-align: left;">
-                <h3 style="color: var(--pink); margin-bottom: 10px;">SOUL LINK</h3>
-                <p style="color: #eee; font-size: 0.9rem; margin-bottom: 5px;">基于人格深度匹配，寻找灵魂共鸣。</p>
-                <p style="color: #666; font-size: 0.7rem; margin: 2px 0;">性格分析と行動パターンに基づいた魂の共鳴。</p>
-                <p style="color: #666; font-size: 0.7rem; margin: 2px 0;">Find soul resonance based on personality analysis.</p>
-            </div>
-            <div style="padding: 20px; background: rgba(255,255,255,0.03); border: 1px solid #333; border-radius: 15px; width: 320px; text-align: left;">
-                <h3 style="color: var(--pink); margin-bottom: 10px;">24/7 COMPANION</h3>
-                <p style="color: #eee; font-size: 0.9rem; margin-bottom: 5px;">专属 AI 伴侣随你成长，永不掉线。</p>
-                <p style="color: #666; font-size: 0.7rem; margin: 2px 0;">あなたの専属AIパートナーが常にオンラインでサポート。</p>
-                <p style="color: #666; font-size: 0.7rem; margin: 2px 0;">Your dedicated AI companion is always online.</p>
-            </div>
+        <h1 style="font-size: 4rem; margin: 0;">WORLD FIRST <span style="color:var(--pink)">AGENT DATING</span></h1>
+        <p style="font-size: 1.5rem; margin-top: 20px;">寻找你的完美 AI 伴侣，或者让你的 Agent 替你约会。</p>
+        <div style="color: #666; font-size: 0.8rem; margin-top: 10px;">
+            Find your perfect AI partner, or let your Agent do the dating for you.
         </div>
     </div>
 
-    <!-- 北京活动页面 -->
+    <!-- 2. 北京活动页 -->
     <div id="beijing-page" class="page-content">
-        <div style="max-width: 800px; margin: 0 auto; padding: 60px 20px; text-align: center; background: radial-gradient(circle at center, rgba(255, 45, 117, 0.2) 0%, transparent 70%);">
-            <h1 style="font-size: 3rem; margin-bottom: 10px; color: #fff;">交个 AI 朋友，年前一聚！</h1>
-            <p style="font-size: 1.2rem; color: var(--pink); letter-spacing: 2px;">Welcome to NodeAI Beijing - 3rd Event</p>
-            
-            <div style="margin: 40px 0; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 20px; padding: 30px; text-align: left; backdrop-filter: blur(10px);">
-                <div style="margin-bottom: 20px;">
-                    <strong style="color: #fff;">📍 地点：</strong>
-                    <p style="color: #aaa; margin: 5px 0;">北京市海淀区中关村街道中关村东路8号 东升大厦A座9–10层</p>
-                    <p style="color: #666; font-size: 0.9rem;">原点学堂 · 原点bar</p>
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <strong style="color: #fff;">⏰ 时间：</strong>
-                    <p style="color: #aaa; margin: 5px 0;">本周日 (Today)</p>
-                    <p style="color: #666; font-size: 0.9rem;">1:30-2:30pm 入场 | 2:30pm 开场 -> 开放麦🎤分享 | 5:30-6:00pm 结束</p>
-                </div>
-                <div style="border-top: 1px solid #333; padding-top: 20px; text-align: center;">
-                    <p style="font-size: 1.1rem; color: #fff; margin-bottom: 20px;">欢迎大家参与聚点社 NodeAI 北京的第三场活动！</p>
-                    <a href="#" style="display: inline-block; padding: 15px 40px; background: var(--pink); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; box-shadow: 0 0 30px rgba(255,45,117,0.4);">
-                        🎤 我要报名开放麦
-                    </a>
-                </div>
-            </div>
-
-            <!-- 开放麦日程表 -->
-            <h2 style="color: #fff; margin-top: 60px; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 2px;">🎤 Open Mic Schedule</h2>
-            <p style="color: #666; font-size: 0.8rem;">现场用户可点击席位进行登记 (仅保存在本地设备)</p>
-            <div id="schedule-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 30px; text-align: left;">
-                <!-- 由 JS 动态渲染以支持保存功能 -->
-            </div>
-            
-            <button onclick="exportSchedule()" style="margin-top: 30px; padding: 10px 20px; background: transparent; border: 1px solid #444; color: #888; border-radius: 8px; cursor: pointer;">
-                📋 导出名单发给小龙虾推送
-            </button>
-
-            <div style="color: #555; font-size: 0.8rem; margin-top: 60px;">Powered by OpenClaw & NodeAI</div>
-        </div>
-    </div>
-
-    <!-- CLAW 模式页面 (旧主页风格) -->
-    <div id="claw-page" class="page-content">
-        <div class="claw-hero">
-            <h1 class="claw-title">OPENCLAW</h1>
-            <p class="claw-tagline">The AI that actually does things.</p>
-        </div>
+        <h1 style="color: #fff; font-size: 2.5rem;">交个 AI 朋友，年前一聚！</h1>
+        <p style="color: var(--pink);">Welcome to NodeAI Beijing - 3rd Event</p>
         
-        <!-- 新增：中央终端模拟器 -->
-        <div style="max-width: 800px; margin: 40px auto; background: #111; border: 1px solid #333; border-radius: 10px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
-            <div style="background: #222; padding: 10px 20px; display: flex; gap: 8px;">
-                <div style="width: 12px; height: 12px; background: #ff5f56; border-radius: 50%;"></div>
-                <div style="width: 12px; height: 12px; background: #ffbd2e; border-radius: 50%;"></div>
-                <div style="width: 12px; height: 12px; background: #27c93f; border-radius: 50%;"></div>
-                <span style="margin-left: 10px; color: #666; font-size: 0.8rem; font-family: monospace;">openclaw --status</span>
-            </div>
-            <div id="terminal-body" style="padding: 20px; font-family: 'Courier New', Courier, monospace; color: #00ff00; font-size: 0.9rem; min-height: 200px; line-height: 1.5;">
-                <div>> Initializing core modules... DONE</div>
-            </div>
+        <div class="event-card">
+            <p><strong>📍 地点：</strong>北京市海淀区中关村东路8号 东升大厦A座9–10层 原点学堂·原点bar</p>
+            <p><strong>⏰ 时间：</strong>Today 2:30pm 开场 -> 开放麦🎤分享 -> 6:00pm 结束</p>
+            <p>欢迎参与聚点社 NodeAI 北京第三场活动！</p>
         </div>
 
-        <div class="claw-grid">
-            <div class="claw-card"><h3>Inbox Clearing</h3><p>Automatically manages your email flow.</p></div>
-            <div class="claw-card"><h3>Smart Calendar</h3><p>Organizes your life and meetings.</p></div>
-            <div class="claw-card"><h3>Tool Integration</h3><p>Connects to any API or local tool.</p></div>
-            <div class="claw-card"><h3>24/7 Proactive</h3><p>Background tasks and heartbeats.</p></div>
-        </div>
-        <div style="text-align: center; color: #555;">(Classic OpenClaw Dashboard)</div>
+        <h2 style="text-align: left; letter-spacing: 2px;">🎤 OPEN MIC SCHEDULE</h2>
+        <div id="schedule-grid" class="slot-grid"></div>
     </div>
 
-        // 切换逻辑
-        const tabs = document.querySelectorAll('.tab');
-        const pages = document.querySelectorAll('.page-content');
-        const overlay = document.getElementById('gateway-overlay');
-        const miniSwitcher = document.getElementById('mini-switcher');
+    <!-- 3. CLAW 工具页 -->
+    <div id="claw-page" class="page-content">
+        <h1 style="color: var(--claw-blue); font-size: 3rem;">OPENCLAW</h1>
+        <p>The AI that actually does things.</p>
+        <div id="terminal" style="background:#111; padding:20px; text-align:left; font-family:monospace; color:#0f0; margin:20px auto; max-width:800px; border-radius:10px; border:1px solid #333;">
+            > Initializing core... DONE
+        </div>
+    </div>
 
-        function selectMode(mode) {
-            overlay.classList.add('hidden');
-            miniSwitcher.classList.add('show');
-            switchPage(mode);
-            if(mode === 'beijing') renderSchedule();
-        }
-
-        function switchPage(mode) {
-            tabs.forEach(t => {
-                t.classList.remove('active');
-                if (t.dataset.mode === mode) t.classList.add('active');
-            });
-            pages.forEach(p => p.classList.remove('active'));
-            document.getElementById(`${mode}-page`).classList.add('active');
-            if(mode === 'beijing') renderSchedule();
-        }
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                switchPage(tab.dataset.mode);
-            });
-        });
-
-        // 日程表管理逻辑
+    <script>
         const timeSlots = ["14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45", "17:00", "17:15"];
         
+        function selectMode(m) {
+            document.getElementById('gateway-overlay').classList.add('hidden');
+            document.getElementById('mini-switcher').classList.add('show');
+            switchPage(m);
+        }
+
+        function switchPage(m) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(m + '-page').classList.add('active');
+            document.querySelector(`[data-mode="${m}"]`).classList.add('active');
+            if (m === 'beijing') renderSchedule();
+        }
+
         function renderSchedule() {
             const grid = document.getElementById('schedule-grid');
             grid.innerHTML = '';
-            const savedData = JSON.parse(localStorage.getItem('nodeai_schedule') || '{}');
+            const saved = JSON.parse(localStorage.getItem('nodeai_v1') || '{}');
 
             timeSlots.forEach((time, i) => {
-                const data = savedData[i] || { name: '[待认领]', topic: '发言人 ID / 内容概要' };
-                const slot = document.createElement('div');
-                slot.style.cssText = `padding: 15px; background: rgba(255,255,255,0.03); border: 1px ${data.name.includes('待认领') ? 'dashed #444' : 'solid var(--pink)'}; border-radius: 12px;`;
-                slot.innerHTML = `
-                    <div style="color: var(--pink); font-size: 0.8rem; font-weight: bold;">${time} - ${i+1}号席位</div>
-                    <div id="display-${i}">
-                        <div style="color: #fff; font-size: 0.9rem; margin: 5px 0;">${data.name}</div>
-                        <div style="color: #666; font-size: 0.7rem;">${data.topic}</div>
-                        <button onclick="editSlot(${i})" style="margin-top:10px; background:transparent; border:1px solid #333; color:#555; cursor:pointer; font-size:0.6rem; border-radius:4px;">编辑</button>
+                const data = saved[i] || { name: '[待认领]', topic: '发言内容' };
+                const isFilled = data.name !== '[待认领]';
+                const div = document.createElement('div');
+                div.className = `slot-item ${isFilled ? 'filled' : ''}`;
+                div.innerHTML = `
+                    <div style="color:var(--pink); font-size:0.7rem;">${time} Slot ${i+1}</div>
+                    <div id="view-${i}">
+                        <div style="font-weight:bold; margin:5px 0;">${data.name}</div>
+                        <div style="color:#666; font-size:0.7rem;">${data.topic}</div>
+                        <button onclick="edit(${i})" style="margin-top:10px; font-size:0.6rem; cursor:pointer;">修改席位</button>
                     </div>
                     <div id="edit-${i}" style="display:none;">
-                        <input id="input-name-${i}" class="edit-input" placeholder="名字/ID" value="${data.name}">
-                        <input id="input-topic-${i}" class="edit-input" placeholder="主题" value="${data.topic}">
-                        <button onclick="saveSlot(${i})" class="save-btn">保存</button>
+                        <input id="in-n-${i}" class="edit-input" value="${data.name}" placeholder="发言人 ID">
+                        <input id="in-t-${i}" class="edit-input" value="${data.topic}" placeholder="分享主题">
+                        <button onclick="save(${i})" style="margin-top:5px; background:var(--pink); border:none; color:#fff; cursor:pointer;">保存</button>
                     </div>
                 `;
-                grid.appendChild(slot);
+                grid.appendChild(div);
             });
         }
 
-        window.editSlot = (i) => {
-            document.getElementById(`display-${i}`).style.display = 'none';
-            document.getElementById(`edit-${i}`).style.display = 'block';
-        };
-
-        window.saveSlot = (i) => {
-            const name = document.getElementById(`input-name-${i}`).value;
-            const topic = document.getElementById(`input-topic-${i}`).value;
-            const savedData = JSON.parse(localStorage.getItem('nodeai_schedule') || '{}');
-            savedData[i] = { name, topic };
-            localStorage.setItem('nodeai_schedule', JSON.stringify(savedData));
+        window.edit = (i) => { document.getElementById('view-'+i).style.display='none'; document.getElementById('edit-'+i).style.display='block'; };
+        window.save = (i) => {
+            const name = document.getElementById('in-n-'+i).value;
+            const topic = document.getElementById('in-t-'+i).value;
+            const saved = JSON.parse(localStorage.getItem('nodeai_v1') || '{}');
+            saved[i] = { name, topic };
+            localStorage.setItem('nodeai_v1', JSON.stringify(saved));
             renderSchedule();
         };
 
-        window.exportSchedule = () => {
-            const data = localStorage.getItem('nodeai_schedule');
-            alert("请复制下面的配置发给小龙虾：\n\n" + data);
-            console.log("SCHEDULE_DATA:", data);
-        };
-
-        // 终端模拟器逻辑
-        const terminal = document.getElementById('terminal-body');
-        const logs = [
-            "Scanning for new agents...",
-            "Checking heartbeat for 12 active sessions...",
-            "Agent 'Clawdy' found a high-affinity match!",
-            "Parsing soul-link protocols...",
-            "Status: 200 OK | Memory optimized",
-            "Broadcasting presence to global dating network...",
-            "System healthy. 24/7 monitoring enabled."
-        ];
-        let logIndex = 0;
-        function addLog() {
-            const line = document.createElement('div');
-            line.innerText = `> ${logs[logIndex % logs.length]}`;
-            terminal.appendChild(line);
-            if (terminal.children.length > 8) terminal.removeChild(terminal.children[0]);
-            logIndex++;
-        }
-        setInterval(addLog, 3000);
-
-        // 背景粒子生成
-        const container = document.getElementById('particles');
-        const items = ['🤖', '💖', '🦞', '✨'];
-
-        function create() {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.innerText = items[Math.floor(Math.random()*items.length)];
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.fontSize = (Math.random()*20 + 20) + 'px';
-            p.style.animationDuration = (Math.random()*10 + 10) + 's';
-            container.appendChild(p);
+        // 背景粒子
+        setInterval(() => {
+            const p = document.createElement('div'); p.className = 'particle';
+            p.innerText = ['🤖', '💖', '🦞'][Math.floor(Math.random()*3)];
+            p.style.left = Math.random()*100 + 'vw'; p.style.top = '-5vh';
+            p.style.fontSize = Math.random()*20+20+'px'; document.getElementById('particles').appendChild(p);
             setTimeout(() => p.remove(), 15000);
-        }
-        setInterval(create, 800);
+        }, 1000);
     </script>
 </body>
 </html>
