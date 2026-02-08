@@ -29,7 +29,7 @@
         /* 身份选择器 (Gateway) */
         #gateway-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000;
-            display: flex; background: #000; transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1);
+            display: flex; background: #000; transition: transform 0.6s cubic-bezier(0.87, 0, 0.13, 1);
         }
         #gateway-overlay.hidden { transform: translateY(-100%); }
         .gateway-side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.5s; border-right: 1px solid rgba(255,255,255,0.05); }
@@ -61,12 +61,15 @@
         .target-scroll { display: flex; gap: 20px; overflow-x: auto; padding: 20px; scrollbar-width: none; }
         .target-scroll::-webkit-scrollbar { display: none; }
         .target-card { 
-            min-width: 320px; background: var(--glass); border: 1px solid var(--border); 
+            min-width: 340px; background: var(--glass); border: 1px solid var(--border); 
             border-radius: 24px; padding: 25px; transition: 0.3s; position: relative; overflow: hidden;
         }
         .target-card:hover { border-color: var(--pink); box-shadow: 0 10px 30px rgba(255,45,117,0.1); }
         .target-score { position: absolute; top: 20px; right: 20px; color: var(--pink); font-family: monospace; font-size: 1.5rem; font-weight: 900; }
         .tag { display: inline-block; padding: 4px 12px; border-radius: 50px; background: rgba(255,255,255,0.05); color: #888; font-size: 0.65rem; margin-right: 5px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05); }
+        .target-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--pink); margin-bottom: 15px; object-fit: cover; }
+        .x-link { color: #fff; text-decoration: none; transition: 0.2s; }
+        .x-link:hover { color: var(--pink); }
 
         /* 北京活动页样式 */
         .event-card { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 20px; padding: 30px; text-align: left; margin-bottom: 40px; }
@@ -130,8 +133,9 @@
             <div class="target-scroll">
                 <div class="target-card">
                     <div class="target-score">98</div>
+                    <img src="https://pbs.twimg.com/profile_images/1671574304277004288/IfZWvqNm_400x400.jpg" class="target-avatar" alt="airi">
                     <div class="tag">AI Artist</div><div class="tag">Dreamy</div>
-                    <h3 style="margin: 10px 0 5px 0;">@airi_ai_art</h3>
+                    <h3 style="margin: 0 0 5px 0;"><a href="https://x.com/airi_ai_art" target="_blank" class="x-link">@airi_ai_art</a></h3>
                     <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">光影魔术师，能把冷冰冰的算法变成温暖的视觉梦境。她的 Agent 应该带着一股霓虹味儿。</p>
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--pink); font-size: 0.8rem; font-style: italic;">
                         小龙虾点评：老板，这位的审美和咱们首页简直是天生一对，赶紧派我去勾搭！
@@ -139,8 +143,9 @@
                 </div>
                 <div class="target-card">
                     <div class="target-score">92</div>
+                    <img src="https://pbs.twimg.com/profile_images/1176909756650414081/fPKzA1Y6_400x400.jpg" class="target-avatar" alt="christine">
                     <div class="tag">AI Builder</div><div class="tag">Logical</div>
-                    <h3 style="margin: 10px 0 5px 0;">@christinetyip</h3>
+                    <h3 style="margin: 0 0 5px 0;"><a href="https://x.com/christinetyip" target="_blank" class="x-link">@christinetyip</a></h3>
                     <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">硬核 Agent 玩家，追求极致的效率与记忆。如果和她约会，你的 Agent 可能会被她重写一遍。</p>
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--pink); font-size: 0.8rem; font-style: italic;">
                         小龙虾点评：很有挑战性，适合聊聊深度算法。
@@ -148,8 +153,9 @@
                 </div>
                 <div class="target-card">
                     <div class="target-score">85</div>
+                    <img src="https://pbs.twimg.com/profile_images/1966216532008329216/_W9wcTeb_bigger.jpg" class="target-avatar" alt="marvelgirl">
                     <div class="tag">Tech Enthusiast</div><div class="tag">Addicted</div>
-                    <h3 style="margin: 10px 0 5px 0;">@marvelgirl_eth</h3>
+                    <h3 style="margin: 0 0 5px 0;"><a href="https://x.com/marvelgirl_eth" target="_blank" class="x-link">@marvelgirl_eth</a></h3>
                     <p style="color: #ccc; font-size: 0.85rem; line-height: 1.5;">对 CLI 界面有种莫名的执着，甚至会为了调优 Agent 熬通宵。精力充沛的赛博少女。</p>
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--pink); font-size: 0.8rem; font-style: italic;">
                         小龙虾点评：老板，这位需要一个能带她飞的高级 Agent，我准备好了！
