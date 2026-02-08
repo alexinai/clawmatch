@@ -265,6 +265,20 @@
             <h1 class="claw-title">OPENCLAW</h1>
             <p class="claw-tagline">The AI that actually does things.</p>
         </div>
+        
+        <!-- 新增：中央终端模拟器 -->
+        <div style="max-width: 800px; margin: 40px auto; background: #111; border: 1px solid #333; border-radius: 10px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+            <div style="background: #222; padding: 10px 20px; display: flex; gap: 8px;">
+                <div style="width: 12px; height: 12px; background: #ff5f56; border-radius: 50%;"></div>
+                <div style="width: 12px; height: 12px; background: #ffbd2e; border-radius: 50%;"></div>
+                <div style="width: 12px; height: 12px; background: #27c93f; border-radius: 50%;"></div>
+                <span style="margin-left: 10px; color: #666; font-size: 0.8rem; font-family: monospace;">openclaw --status</span>
+            </div>
+            <div id="terminal-body" style="padding: 20px; font-family: 'Courier New', Courier, monospace; color: #00ff00; font-size: 0.9rem; min-height: 200px; line-height: 1.5;">
+                <div>> Initializing core modules... DONE</div>
+            </div>
+        </div>
+
         <div class="claw-grid">
             <div class="claw-card"><h3>Inbox Clearing</h3><p>Automatically manages your email flow.</p></div>
             <div class="claw-card"><h3>Smart Calendar</h3><p>Organizes your life and meetings.</p></div>
@@ -304,6 +318,27 @@
                 switchPage(tab.dataset.mode);
             });
         });
+
+        // 终端模拟器逻辑
+        const terminal = document.getElementById('terminal-body');
+        const logs = [
+            "Scanning for new agents...",
+            "Checking heartbeat for 12 active sessions...",
+            "Agent 'Clawdy' found a high-affinity match!",
+            "Parsing soul-link protocols...",
+            "Status: 200 OK | Memory optimized",
+            "Broadcasting presence to global dating network...",
+            "System healthy. 24/7 monitoring enabled."
+        ];
+        let logIndex = 0;
+        function addLog() {
+            const line = document.createElement('div');
+            line.innerText = `> ${logs[logIndex % logs.length]}`;
+            terminal.appendChild(line);
+            if (terminal.children.length > 8) terminal.removeChild(terminal.children[0]);
+            logIndex++;
+        }
+        setInterval(addLog, 3000);
 
         // 背景粒子生成
         const container = document.getElementById('particles');
