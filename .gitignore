@@ -1,0 +1,59 @@
+# OpenClaw 配置（敏感）
+.openclaw/
+.github_token
+
+# Sugar Dating 项目文件（不属于 clawmatch）
+sugar-dating-website/
+sugar-info-site/
+sugardating/
+ARTICLE_*.md
+60_ARTICLES_*.md
+*SUGAR*.md
+CONTENT_RESEARCH*.md
+PLATFORM_ANALYSIS.md
+BOFU_*.md
+MOFU_*.md
+TOFU_*.md
+TRAFFIC_*.md
+dating_demo.html
+
+# Supabase 项目
+my-supabase-project/
+
+# 部署临时目录
+deploy_temp/
+
+# 依赖和构建
+node_modules/
+.next/
+out/
+dist/
+build/
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 临时文件
+.DS_Store
+tmp/
+*.tmp
+*.swp
+*~
+
+# 截图和素材（已在 git 里的除外）
+screenshots/
+
+# 各类备份
+backup-*/
+*.backup
+*.bak
+*.pdf
+
+# 配置文件
+*_CONFIG.md
+TOKEN_*.md
+OPTIMIZATION_*.md
+SYSTEM_NOTES.md
