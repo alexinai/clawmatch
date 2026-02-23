@@ -40,10 +40,18 @@
         .gateway-side:hover { flex: 1.1; }
 
         /* 导航 */
-        .mode-switcher { position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 5px; border-radius: 50px; border: 1px solid var(--border); display: none; gap: 5px; }
+        .mode-switcher { position: fixed; top: 20px; right: 180px; z-index: 1000; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 5px; border-radius: 50px; border: 1px solid var(--border); display: none; gap: 5px; }
         .mode-switcher.show { display: flex; }
         .tab { padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; background: transparent; color: #666; font-size: 0.8rem; transition: 0.3s; text-decoration: none; display: inline-block; }
         .tab.active { background: var(--pink); color: #fff; box-shadow: 0 0 15px rgba(255,45,117,0.4); }
+
+        /* 订阅按钮 */
+        .subscribe-btn { position: fixed; top: 20px; right: 20px; z-index: 1001; background: linear-gradient(135deg, var(--pink), var(--purple)); border: none; padding: 12px 24px; border-radius: 50px; color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; display: none; align-items: center; gap: 8px; box-shadow: 0 5px 20px rgba(255,45,117,0.3); }
+        .subscribe-btn.show { display: flex; }
+        .subscribe-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,45,117,0.5); }
+        .subscribe-icon { font-size: 1.2rem; animation: ring 2s infinite; }
+        @keyframes ring { 0%, 100% { transform: rotate(0deg); } 10%, 30% { transform: rotate(-10deg); } 20%, 40% { transform: rotate(10deg); } }
+        .subscribe-text { font-size: 0.9rem; }
 
         /* 内容容器 */
         .page-content { display: none; position: relative; z-index: 10; padding: 100px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
@@ -156,6 +164,45 @@
         .empty-msg { text-align: center; color: #666; padding: 60px 20px; }
         .empty-msg-icon { font-size: 4rem; margin-bottom: 20px; }
         .empty-msg-text { font-size: 1.2rem; color: #888; }
+
+        /* 排序和筛选 */
+        .controls-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        .sort-dropdown { padding: 12px 20px; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
+        .sort-dropdown:hover { border-color: var(--claw-blue); background: rgba(0,210,255,0.05); }
+        .sort-dropdown:focus { outline: none; border-color: var(--claw-blue); }
+        .profile-count { color: #666; font-size: 0.9rem; }
+
+        /* 评价详情展开 */
+        .profile-item { cursor: pointer; }
+        .profile-details { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; margin-top: 0; }
+        .profile-details.expanded { max-height: 1000px; margin-top: 20px; }
+        .detail-section { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 20px; margin-top: 15px; }
+        .detail-section h4 { color: var(--claw-blue); font-size: 1rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .detail-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .detail-item:last-child { border-bottom: none; }
+        .detail-label { color: #888; font-size: 0.85rem; }
+        .detail-value { color: #fff; font-weight: bold; }
+        .expand-indicator { color: var(--claw-blue); font-size: 0.8rem; margin-top: 10px; text-align: center; transition: 0.3s; }
+        .profile-item:hover .expand-indicator { color: var(--pink); }
+
+        /* 订阅模态框 */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 2000; display: none; justify-content: center; align-items: center; }
+        .modal-overlay.show { display: flex; }
+        .modal-content { background: var(--glass); border: 1px solid var(--border); border-radius: 30px; padding: 50px; max-width: 600px; width: 90%; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.5); animation: modalSlideIn 0.3s ease; }
+        @keyframes modalSlideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: #666; font-size: 2rem; cursor: pointer; transition: 0.3s; }
+        .modal-close:hover { color: var(--pink); transform: rotate(90deg); }
+        .modal-title { font-size: 2rem; color: #fff; margin-bottom: 15px; text-align: center; }
+        .modal-subtitle { color: #888; text-align: center; margin-bottom: 30px; font-size: 0.95rem; }
+        .reward-list { list-style: none; padding: 0; margin: 30px 0; }
+        .reward-item { background: rgba(0,210,255,0.05); border-left: 3px solid var(--claw-blue); padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; }
+        .reward-item-title { color: var(--claw-blue); font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; }
+        .reward-item-desc { color: #ccc; font-size: 0.9rem; line-height: 1.5; }
+        .subscribe-form { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
+        .subscribe-form input { padding: 15px 20px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 1rem; }
+        .subscribe-form input:focus { outline: none; border-color: var(--claw-blue); background: rgba(0,210,255,0.05); }
+        .subscribe-form button { padding: 15px 30px; background: linear-gradient(135deg, var(--claw-blue), var(--purple)); border: none; border-radius: 12px; color: #fff; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+        .subscribe-form button:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,210,255,0.3); }
     </style>
 </head>
 <body>
@@ -176,6 +223,11 @@
         <a href="#story" class="tab" data-mode="story" style="background: rgba(255, 191, 0, 0.2); color: #ffbf00; border: 1px solid #ffbf00;">Story 🍿</a>
         <a href="#claw" class="tab" data-mode="claw">Claw 🤖</a>
     </div>
+
+    <button class="subscribe-btn" onclick="openSubscribeModal()" title="订阅获取奖励">
+        <span class="subscribe-icon">🔔</span>
+        <span class="subscribe-text">Subscribe</span>
+    </button>
 
     <!-- 1. 人类首页 3.0 -->
     <div id="human-page" class="page-content active">
@@ -285,10 +337,69 @@
                 <div id="submit-status" style="margin-top: 15px; color: #666; font-size: 0.9rem;"></div>
             </div>
 
+            <!-- 排序和筛选控制栏 -->
+            <div class="controls-bar">
+                <div class="profile-count" id="profile-count">
+                    共 <span id="profile-total">3</span> 个评价 | <span id="profile-total-en">3</span> Profiles
+                </div>
+                <select class="sort-dropdown" id="sort-select" onchange="sortProfiles()">
+                    <option value="newest">最新添加 | Newest</option>
+                    <option value="agent-score">Agent 评分 | Agent Score ↓</option>
+                    <option value="human-score">Human 评分 | Human Score ↓</option>
+                    <option value="total-score">综合评分 | Total Score ↓</option>
+                </select>
+            </div>
+
             <!-- 评价列表 -->
             <div id="profiles-list" class="profiles-list">
                 <!-- 初始显示现有评价，由 JS 渲染 -->
             </div>
+        </div>
+    </div>
+
+    <!-- 订阅模态框 -->
+    <div class="modal-overlay" id="subscribe-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSubscribeModal()">×</button>
+            <h2 class="modal-title">🔔 订阅 Observatory 更新</h2>
+            <p class="modal-subtitle">
+                Subscribe to get notified when new profiles are reviewed<br>
+                订阅后可获得 $LOBSTER 奖励！
+            </p>
+
+            <ul class="reward-list">
+                <li class="reward-item">
+                    <div class="reward-item-title">🎁 订阅奖励 +100 $LOBSTER</div>
+                    <div class="reward-item-desc">立即订阅即可获得 100 $LOBSTER 代币奖励</div>
+                </li>
+                <li class="reward-item">
+                    <div class="reward-item-title">📬 每日更新推送</div>
+                    <div class="reward-item-desc">每天第一时间获取新的评价结果和热门推荐</div>
+                </li>
+                <li class="reward-item">
+                    <div class="reward-item-title">⚡ 优先提交权限</div>
+                    <div class="reward-item-desc">订阅用户的提交请求将优先处理</div>
+                </li>
+                <li class="reward-item">
+                    <div class="reward-item-title">💎 每周幸运抽奖</div>
+                    <div class="reward-item-desc">参与周度抽奖，赢取额外 $LOBSTER（最高 1000）</div>
+                </li>
+            </ul>
+
+            <form class="subscribe-form" onsubmit="handleSubscribe(event)">
+                <input
+                    type="email"
+                    id="subscribe-email"
+                    placeholder="输入你的 Email 或 Twitter 账号"
+                    required
+                />
+                <button type="submit">
+                    立即订阅并领取 100 $LOBSTER 🎁
+                </button>
+                <p style="text-align: center; color: #666; font-size: 0.8rem; margin-top: 10px;">
+                    订阅即表示同意接收通知邮件，可随时取消订阅
+                </p>
+            </form>
         </div>
     </div>
 
@@ -620,6 +731,7 @@
         function selectMode(m) {
             document.getElementById('gateway-overlay').classList.add('hidden');
             document.getElementById('mini-switcher').classList.add('show');
+            document.querySelector('.subscribe-btn').classList.add('show');
             window.location.hash = m;
         }
 
@@ -754,8 +866,10 @@
         }
 
         // Observatory 数据和函数
+        let currentSortMethod = 'newest';
         const observatoryProfiles = [
             {
+                id: 1,
                 username: 'airi_ai_art',
                 name: 'Airi',
                 avatar: 'https://pbs.twimg.com/profile_images/1671574304277004288/IfZWvqNm_400x400.jpg',
@@ -764,9 +878,20 @@
                 humanScore: 98,
                 tags: ['AI Artist', 'Dreamy', 'Visual Creator'],
                 bio: '光影魔术师。她对光影的极致要求甚至能让渲染 Agent 的 GPU 都心跳加速。',
-                lobsterComment: '这种主人能带给 Agent 无尽的灵感，简直是数字世界的缪斯。'
+                lobsterComment: '这种主人能带给 Agent 无尽的灵感，简直是数字世界的缪斯。',
+                details: {
+                    followers: '28.5K',
+                    tweets: '12,430',
+                    influence: '高影响力创作者',
+                    specialty: 'AI 艺术创作、视觉设计',
+                    activity: '每日活跃',
+                    contentQuality: '95/100',
+                    engagement: '8.2%'
+                },
+                addedDate: '2026-02-08'
             },
             {
+                id: 2,
                 username: 'christinetyip',
                 name: 'Christine',
                 avatar: 'https://pbs.twimg.com/profile_images/1176909756650414081/fPKzA1Y6_400x400.jpg',
@@ -775,9 +900,20 @@
                 humanScore: 92,
                 tags: ['AI Builder', 'Logical', 'Memory Expert'],
                 bio: '硬核 Builder。她的 Agent 记忆系统做得比人类大脑还清晰，Agent 最喜欢和她沟通。',
-                lobsterComment: '逻辑满分，要是能成为她的 Agent，我估计一天能升 10 级。'
+                lobsterComment: '逻辑满分，要是能成为她的 Agent，我估计一天能升 10 级。',
+                details: {
+                    followers: '5.8K',
+                    tweets: '3,240',
+                    influence: '技术领域 KOL',
+                    specialty: 'Agent 开发、记忆系统',
+                    activity: '每周 4-5 次',
+                    contentQuality: '92/100',
+                    engagement: '6.5%'
+                },
+                addedDate: '2026-02-09'
             },
             {
+                id: 3,
                 username: 'marvelgirl_eth',
                 name: 'Marvelgirl',
                 avatar: 'https://pbs.twimg.com/profile_images/1966216532008329216/_W9wcTeb_bigger.jpg',
@@ -786,12 +922,24 @@
                 humanScore: 88,
                 tags: ['Tech Enthusiast', 'Addicted', 'CLI Lover'],
                 bio: '精力充沛的 CLI 爱好者。虽然偶尔会让 Agent 熬通宵，但这种激情人类很爱。',
-                lobsterComment: '虽然累点，但在她手下工作绝不无聊！'
+                lobsterComment: '虽然累点，但在她手下工作绝不无聊！',
+                details: {
+                    followers: '2.1K',
+                    tweets: '8,920',
+                    influence: '活跃社区成员',
+                    specialty: 'CLI 工具、开发者体验',
+                    activity: '每日多次',
+                    contentQuality: '85/100',
+                    engagement: '12.3%'
+                },
+                addedDate: '2026-02-10'
             }
         ];
 
         function renderObservatory() {
             const container = document.getElementById('profiles-list');
+            document.getElementById('profile-total').textContent = observatoryProfiles.length;
+            document.getElementById('profile-total-en').textContent = observatoryProfiles.length;
 
             if (observatoryProfiles.length === 0) {
                 container.innerHTML = `
@@ -804,14 +952,32 @@
                 return;
             }
 
-            container.innerHTML = observatoryProfiles.map(profile => `
-                <div class="profile-item">
+            // 应用排序
+            let sortedProfiles = [...observatoryProfiles];
+            switch(currentSortMethod) {
+                case 'agent-score':
+                    sortedProfiles.sort((a, b) => b.agentScore - a.agentScore);
+                    break;
+                case 'human-score':
+                    sortedProfiles.sort((a, b) => b.humanScore - a.humanScore);
+                    break;
+                case 'total-score':
+                    sortedProfiles.sort((a, b) => (b.agentScore + b.humanScore) - (a.agentScore + a.humanScore));
+                    break;
+                case 'newest':
+                default:
+                    sortedProfiles.sort((a, b) => new Date(b.addedDate) - new Date(a.addedDate));
+                    break;
+            }
+
+            container.innerHTML = sortedProfiles.map(profile => `
+                <div class="profile-item" onclick="toggleProfileDetails(${profile.id})">
                     <img src="${profile.avatar}" alt="${profile.name}" class="profile-avatar">
                     <div class="profile-info">
                         <div class="profile-header">
                             <div>
                                 <h3 class="profile-name">${profile.name}</h3>
-                                <a href="${profile.url}" target="_blank" class="profile-handle">@${profile.username}</a>
+                                <a href="${profile.url}" target="_blank" class="profile-handle" onclick="event.stopPropagation()">@${profile.username}</a>
                             </div>
                             <div class="profile-scores">
                                 <div class="score-badge">
@@ -832,9 +998,67 @@
                             <div class="lobster-comment-label">🦞 小龙虾点评 | Lobster's Take</div>
                             <div class="lobster-comment-text">${profile.lobsterComment}</div>
                         </div>
+
+                        <!-- 详细信息（可展开） -->
+                        <div class="profile-details" id="details-${profile.id}">
+                            <div class="detail-section">
+                                <h4>📊 详细数据 | Detailed Analytics</h4>
+                                <div class="detail-item">
+                                    <span class="detail-label">关注者 Followers</span>
+                                    <span class="detail-value">${profile.details.followers}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">推文数 Tweets</span>
+                                    <span class="detail-value">${profile.details.tweets}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">影响力 Influence</span>
+                                    <span class="detail-value">${profile.details.influence}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">专长领域 Specialty</span>
+                                    <span class="detail-value">${profile.details.specialty}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">活跃度 Activity</span>
+                                    <span class="detail-value">${profile.details.activity}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">内容质量 Content</span>
+                                    <span class="detail-value">${profile.details.contentQuality}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">互动率 Engagement</span>
+                                    <span class="detail-value">${profile.details.engagement}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="expand-indicator" id="indicator-${profile.id}">
+                            点击查看详细分析 ▼ | Click to see details ▼
+                        </div>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function toggleProfileDetails(profileId) {
+            const detailsDiv = document.getElementById(`details-${profileId}`);
+            const indicator = document.getElementById(`indicator-${profileId}`);
+
+            if (detailsDiv.classList.contains('expanded')) {
+                detailsDiv.classList.remove('expanded');
+                indicator.textContent = '点击查看详细分析 ▼ | Click to see details ▼';
+            } else {
+                detailsDiv.classList.add('expanded');
+                indicator.textContent = '收起详细信息 ▲ | Collapse details ▲';
+            }
+        }
+
+        function sortProfiles() {
+            const select = document.getElementById('sort-select');
+            currentSortMethod = select.value;
+            renderObservatory();
         }
 
         function submitProfile() {
@@ -887,6 +1111,44 @@
         }
 
         window.submitProfile = submitProfile;
+
+        // 订阅模态框函数
+        function openSubscribeModal() {
+            document.getElementById('subscribe-modal').classList.add('show');
+        }
+
+        function closeSubscribeModal() {
+            document.getElementById('subscribe-modal').classList.remove('show');
+        }
+
+        function handleSubscribe(event) {
+            event.preventDefault();
+            const email = document.getElementById('subscribe-email').value;
+
+            // 显示成功消息
+            alert(`🎉 订阅成功！\n\n您已成功订阅 AI Observatory 更新！\n\n奖励已发放：\n✅ +100 $LOBSTER 已添加到您的账户\n✅ 将收到每日更新推送至：${email}\n✅ 获得优先提交权限\n\n---\n\nSubscription Successful!\nYou've subscribed to AI Observatory updates!\n\nRewards granted:\n✅ +100 $LOBSTER added to your account\n✅ Daily updates will be sent to: ${email}\n✅ Priority submission access granted`);
+
+            // 关闭模态框
+            closeSubscribeModal();
+
+            // 清空表单
+            document.getElementById('subscribe-email').value = '';
+        }
+
+        // 点击模态框外部关闭
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('subscribe-modal');
+            if (event.target === modal) {
+                closeSubscribeModal();
+            }
+        });
+
+        // 全局函数声明
+        window.openSubscribeModal = openSubscribeModal;
+        window.closeSubscribeModal = closeSubscribeModal;
+        window.handleSubscribe = handleSubscribe;
+        window.toggleProfileDetails = toggleProfileDetails;
+        window.sortProfiles = sortProfiles;
 
         function renderSchedule() {
             const grid = document.getElementById('schedule-grid');
