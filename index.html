@@ -308,6 +308,9 @@
         .login-info { background: rgba(102,126,234,0.05); border-left: 3px solid #667eea; padding: 15px; margin: 20px 0; border-radius: 8px; color: #ccc; font-size: 0.9rem; line-height: 1.6; }
         .login-info-title { color: #667eea; font-weight: bold; margin-bottom: 8px; }
     </style>
+
+    <!-- Supabase JavaScript SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -1190,6 +1193,20 @@
 
             // 重新渲染博客
             renderBlog();
+        }
+
+        // ========== Supabase 配置和初始化 ==========
+        const SUPABASE_URL = 'https://wnvkcikcrjlgeptfhidg.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudmtjaWtjcmpsZ2VwdGZoaWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDI4MTQsImV4cCI6MjA1NTAxODgxNH0.placeholder' // 需要从 Supabase Dashboard 获取
+
+        // 初始化 Supabase 客户端
+        let supabase = null;
+        try {
+            const { createClient } = supabase;
+            supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log('✅ Supabase 初始化成功');
+        } catch (error) {
+            console.warn('⚠️ Supabase 初始化失败，使用本地模拟数据', error);
         }
 
         // Observatory 数据和函数
