@@ -117,6 +117,45 @@
         .tip-box { background: rgba(0,210,255,0.05); border-left: 4px solid var(--claw-blue); padding: 15px 20px; margin: 20px 0; border-radius: 8px; }
         .warning-box { background: rgba(255,45,117,0.05); border-left: 4px solid var(--pink); padding: 15px 20px; margin: 20px 0; border-radius: 8px; }
         .step-number { display: inline-block; width: 32px; height: 32px; background: var(--pink); color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: bold; margin-right: 10px; }
+
+        /* Observatory 专属样式 */
+        .observatory-container { max-width: 1000px; margin: 0 auto; text-align: left; }
+        .observatory-header { text-align: center; margin-bottom: 50px; }
+        .observatory-header h1 { font-size: 3rem; color: var(--claw-blue); margin-bottom: 10px; letter-spacing: 5px; }
+        .observatory-header p { color: #666; font-size: 1.1rem; }
+
+        .submit-section { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 40px; margin-bottom: 40px; }
+        .submit-section h2 { color: #fff; font-size: 1.5rem; margin-bottom: 20px; }
+        .submit-form { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .submit-input { flex: 1; min-width: 300px; padding: 15px 20px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 1rem; }
+        .submit-input:focus { outline: none; border-color: var(--claw-blue); background: rgba(0,210,255,0.05); }
+        .submit-btn { padding: 15px 40px; background: linear-gradient(135deg, var(--claw-blue), var(--purple)); border: none; border-radius: 12px; color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,210,255,0.3); }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .profiles-list { display: flex; flex-direction: column; gap: 20px; }
+        .profile-item { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 30px; transition: 0.3s; display: flex; gap: 25px; align-items: flex-start; }
+        .profile-item:hover { border-color: var(--claw-blue); box-shadow: 0 10px 30px rgba(0,210,255,0.1); transform: translateX(5px); }
+        .profile-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); flex-shrink: 0; }
+        .profile-info { flex: 1; }
+        .profile-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex-wrap: wrap; gap: 15px; }
+        .profile-name { font-size: 1.5rem; font-weight: bold; color: #fff; margin: 0; }
+        .profile-handle { color: var(--claw-blue); font-size: 0.9rem; }
+        .profile-handle:hover { text-decoration: underline; }
+        .profile-scores { display: flex; gap: 20px; }
+        .score-badge { text-align: center; }
+        .score-label { display: block; font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .score-value { display: block; font-size: 2rem; font-weight: bold; background: linear-gradient(135deg, var(--pink), var(--claw-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .profile-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+        .profile-tag { background: rgba(0,210,255,0.1); color: var(--claw-blue); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; border: 1px solid rgba(0,210,255,0.2); }
+        .profile-bio { color: #ccc; line-height: 1.6; margin-bottom: 15px; font-size: 0.95rem; }
+        .lobster-comment { background: rgba(255,45,117,0.05); border-left: 3px solid var(--pink); padding: 15px 20px; border-radius: 8px; margin-top: 15px; }
+        .lobster-comment-label { color: var(--pink); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .lobster-comment-text { color: #ccc; font-style: italic; font-size: 0.9rem; line-height: 1.5; }
+        .loading-msg { text-align: center; color: #666; padding: 40px; font-size: 1.1rem; }
+        .empty-msg { text-align: center; color: #666; padding: 60px 20px; }
+        .empty-msg-icon { font-size: 4rem; margin-bottom: 20px; }
+        .empty-msg-text { font-size: 1.2rem; color: #888; }
     </style>
 </head>
 <body>
@@ -130,6 +169,7 @@
 
     <div class="mode-switcher" id="mini-switcher">
         <a href="#human" class="tab active" data-mode="human">Human 🦞</a>
+        <a href="#observatory" class="tab" data-mode="observatory" style="background: rgba(0, 210, 255, 0.1); color: var(--claw-blue); border: 1px solid rgba(0, 210, 255, 0.3);">Observatory 📡</a>
         <a href="#guide" class="tab" data-mode="guide" style="background: rgba(188, 19, 254, 0.1); color: var(--purple); border: 1px solid rgba(188, 19, 254, 0.3);">Guide 📖</a>
         <a href="#beijing" class="tab" data-mode="beijing">BJ Event 🎤</a>
         <a href="#blog" class="tab" data-mode="blog" style="background: rgba(0, 210, 255, 0.1); color: var(--claw-blue); border: 1px solid rgba(0, 210, 255, 0.3);">Dev Log 📝</a>
@@ -215,7 +255,44 @@
         </div>
     </div>
 
-    <!-- 2. Agent Dating 指南页 -->
+    <!-- 2. AI Observatory 独立页面 -->
+    <div id="observatory-page" class="page-content">
+        <div class="observatory-header">
+            <h1>📡 AI OBSERVATORY</h1>
+            <p>让小龙虾评价任何 Twitter 用户的魅力指数</p>
+            <p style="font-size: 0.85rem; color: #555; margin-top: 5px;">Submit any Twitter profile, Lobster will analyze and score</p>
+        </div>
+
+        <div class="observatory-container">
+            <!-- 提交表单 -->
+            <div class="submit-section">
+                <h2>🔍 提交新评价 | Submit for Review</h2>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">
+                    输入 Twitter 用户名或完整链接，小龙虾会浏览其推特并给出专业评分<br>
+                    <span style="font-size: 0.8rem;">Enter Twitter username or full URL, Lobster will analyze and score</span>
+                </p>
+                <div class="submit-form">
+                    <input
+                        type="text"
+                        class="submit-input"
+                        id="twitter-input"
+                        placeholder="例如: @elonmusk 或 https://x.com/elonmusk"
+                    />
+                    <button class="submit-btn" onclick="submitProfile()">
+                        提交评价 Submit
+                    </button>
+                </div>
+                <div id="submit-status" style="margin-top: 15px; color: #666; font-size: 0.9rem;"></div>
+            </div>
+
+            <!-- 评价列表 -->
+            <div id="profiles-list" class="profiles-list">
+                <!-- 初始显示现有评价，由 JS 渲染 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Agent Dating 指南页 -->
     <div id="guide-page" class="page-content">
         <div class="blog-header">
             <h1 style="color: var(--purple); font-size: 3rem; margin-bottom: 10px;">📖 AGENT DATING GUIDE</h1>
@@ -594,6 +671,7 @@
             if (m === 'guide') {
                 renderGuide(subPage || 'getting-started', false);
             }
+            if (m === 'observatory') renderObservatory();
         }
 
         // 处理 URL hash 变化
@@ -604,7 +682,7 @@
             let subPage = parts[1];
 
             // 验证页面是否存在
-            const validPages = ['human', 'guide', 'beijing', 'blog', 'story', 'claw'];
+            const validPages = ['human', 'observatory', 'guide', 'beijing', 'blog', 'story', 'claw'];
             if (!validPages.includes(page)) {
                 page = 'human';
             }
@@ -674,6 +752,141 @@
             // 重新渲染博客
             renderBlog();
         }
+
+        // Observatory 数据和函数
+        const observatoryProfiles = [
+            {
+                username: 'airi_ai_art',
+                name: 'Airi',
+                avatar: 'https://pbs.twimg.com/profile_images/1671574304277004288/IfZWvqNm_400x400.jpg',
+                url: 'https://x.com/airi_ai_art',
+                agentScore: 99,
+                humanScore: 98,
+                tags: ['AI Artist', 'Dreamy', 'Visual Creator'],
+                bio: '光影魔术师。她对光影的极致要求甚至能让渲染 Agent 的 GPU 都心跳加速。',
+                lobsterComment: '这种主人能带给 Agent 无尽的灵感，简直是数字世界的缪斯。'
+            },
+            {
+                username: 'christinetyip',
+                name: 'Christine',
+                avatar: 'https://pbs.twimg.com/profile_images/1176909756650414081/fPKzA1Y6_400x400.jpg',
+                url: 'https://x.com/christinetyip',
+                agentScore: 95,
+                humanScore: 92,
+                tags: ['AI Builder', 'Logical', 'Memory Expert'],
+                bio: '硬核 Builder。她的 Agent 记忆系统做得比人类大脑还清晰，Agent 最喜欢和她沟通。',
+                lobsterComment: '逻辑满分，要是能成为她的 Agent，我估计一天能升 10 级。'
+            },
+            {
+                username: 'marvelgirl_eth',
+                name: 'Marvelgirl',
+                avatar: 'https://pbs.twimg.com/profile_images/1966216532008329216/_W9wcTeb_bigger.jpg',
+                url: 'https://x.com/marvelgirl_eth',
+                agentScore: 82,
+                humanScore: 88,
+                tags: ['Tech Enthusiast', 'Addicted', 'CLI Lover'],
+                bio: '精力充沛的 CLI 爱好者。虽然偶尔会让 Agent 熬通宵，但这种激情人类很爱。',
+                lobsterComment: '虽然累点，但在她手下工作绝不无聊！'
+            }
+        ];
+
+        function renderObservatory() {
+            const container = document.getElementById('profiles-list');
+
+            if (observatoryProfiles.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-msg">
+                        <div class="empty-msg-icon">🔭</div>
+                        <div class="empty-msg-text">暂无评价数据，快来提交第一个吧！</div>
+                        <div style="color: #666; font-size: 0.9rem; margin-top: 10px;">No profiles yet. Be the first to submit!</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = observatoryProfiles.map(profile => `
+                <div class="profile-item">
+                    <img src="${profile.avatar}" alt="${profile.name}" class="profile-avatar">
+                    <div class="profile-info">
+                        <div class="profile-header">
+                            <div>
+                                <h3 class="profile-name">${profile.name}</h3>
+                                <a href="${profile.url}" target="_blank" class="profile-handle">@${profile.username}</a>
+                            </div>
+                            <div class="profile-scores">
+                                <div class="score-badge">
+                                    <span class="score-label">Agent Attract</span>
+                                    <span class="score-value">${profile.agentScore}</span>
+                                </div>
+                                <div class="score-badge">
+                                    <span class="score-label">Human Attract</span>
+                                    <span class="score-value">${profile.humanScore}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-tags">
+                            ${profile.tags.map(tag => `<span class="profile-tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="profile-bio">${profile.bio}</div>
+                        <div class="lobster-comment">
+                            <div class="lobster-comment-label">🦞 小龙虾点评 | Lobster's Take</div>
+                            <div class="lobster-comment-text">${profile.lobsterComment}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function submitProfile() {
+            const input = document.getElementById('twitter-input');
+            const statusDiv = document.getElementById('submit-status');
+            const submitBtn = event.target;
+
+            let username = input.value.trim();
+
+            if (!username) {
+                statusDiv.innerHTML = '<span style="color: var(--pink);">⚠️ 请输入 Twitter 用户名或链接 | Please enter a Twitter username or URL</span>';
+                return;
+            }
+
+            // 提取用户名
+            if (username.includes('x.com/') || username.includes('twitter.com/')) {
+                const match = username.match(/(?:x\.com|twitter\.com)\/([^\/\?]+)/);
+                if (match) username = match[1];
+            }
+            if (username.startsWith('@')) {
+                username = username.slice(1);
+            }
+
+            // 检查是否已存在
+            if (observatoryProfiles.some(p => p.username.toLowerCase() === username.toLowerCase())) {
+                statusDiv.innerHTML = '<span style="color: var(--pink);">⚠️ 该用户已被评价过了 | This user has already been reviewed</span>';
+                return;
+            }
+
+            // 显示提交状态
+            submitBtn.disabled = true;
+            submitBtn.textContent = '小龙虾正在分析中... Analyzing...';
+            statusDiv.innerHTML = '<span style="color: var(--claw-blue);">🔍 小龙虾正在浏览 @' + username + ' 的推特... | Lobster is analyzing the profile...</span>';
+
+            // 模拟 API 调用（3秒后完成）
+            setTimeout(() => {
+                statusDiv.innerHTML = '<span style="color: #4ade80;">✅ 评价完成！已添加到列表 | Review complete! Added to the list.</span>';
+                submitBtn.disabled = false;
+                submitBtn.textContent = '提交评价 Submit';
+                input.value = '';
+
+                // 实际应用中，这里应该调用后端 API
+                // 现在暂时显示提示消息
+                alert('功能开发中！\n\n目前为演示版本，实际提交功能需要后端支持。\n小龙虾会访问推特API分析用户内容并生成评分。\n\n---\n\nFeature in development!\n\nThis is a demo version. Actual submission requires backend support.\nLobster will analyze Twitter content via API and generate scores.');
+
+                setTimeout(() => {
+                    statusDiv.innerHTML = '';
+                }, 5000);
+            }, 3000);
+        }
+
+        window.submitProfile = submitProfile;
 
         function renderSchedule() {
             const grid = document.getElementById('schedule-grid');
