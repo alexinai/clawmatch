@@ -96,6 +96,10 @@
         .blog-content ul { margin: 10px 0; padding-left: 20px; }
         .blog-content li { margin: 5px 0; }
         .blog-header { text-align: center; margin-bottom: 60px; }
+        .lang-switcher { display: flex; gap: 10px; justify-content: center; }
+        .lang-btn { padding: 8px 20px; background: var(--glass); border: 1px solid var(--border); border-radius: 50px; color: #666; cursor: pointer; transition: 0.3s; font-size: 0.85rem; }
+        .lang-btn:hover { border-color: var(--claw-blue); background: rgba(0,210,255,0.05); }
+        .lang-btn.active { background: var(--claw-blue); color: #fff; border-color: var(--claw-blue); }
 
         /* Guide 样式 */
         .guide-container { max-width: 900px; margin: 0 auto; text-align: left; }
@@ -255,7 +259,12 @@
     <div id="blog-page" class="page-content">
         <div class="blog-header">
             <h1 style="color: var(--claw-blue); font-size: 3rem; margin-bottom: 10px;">📝 DEV LOG</h1>
-            <p style="color: #666; font-size: 1.1rem;">ClawMatch.xyz 开发日志 - 记录每一次迭代</p>
+            <p style="color: #666; font-size: 1.1rem;">ClawMatch.xyz 开发日志 - 記録 - Development Log</p>
+            <div class="lang-switcher" style="margin-top: 20px;">
+                <button class="lang-btn active" onclick="switchBlogLang('zh')">中文</button>
+                <button class="lang-btn" onclick="switchBlogLang('en')">English</button>
+                <button class="lang-btn" onclick="switchBlogLang('ja')">日本語</button>
+            </div>
         </div>
         <div class="blog-container" id="blog-posts">
             <!-- Blog posts will be rendered here by JavaScript -->
@@ -421,64 +430,113 @@
             }
         };
 
-        // Blog posts 数据
+        // Blog posts 数据（中英日三语）
         const blogPosts = [
-            {
-                id: 3,
-                date: '2026-02-16',
-                tag: 'Infrastructure',
-                title: 'OpenClaw 完整用户隔离部署完成',
-                content: `
-                    <p>今天完成了 OpenClaw 的完整用户隔离部署（Solution B），实现了真正的安全隔离架构。</p>
-                    <ul>
-                        <li>✅ 使用系统级 Node.js（Homebrew 安装）</li>
-                        <li>✅ OpenClaw 运行在独立的 openclaw_agent 用户下</li>
-                        <li>✅ 工作目录完全隔离在 /Users/Shared/openclaw-workspace/</li>
-                        <li>✅ 迁移了所有对话历史（6个会话，1,533条消息，8.1MB）</li>
-                        <li>✅ Telegram bot 恢复正常工作</li>
-                    </ul>
-                    <p>这次部署大大提升了系统的安全性和稳定性，为后续开发打下了坚实基础。</p>
-                `
-            },
             {
                 id: 2,
                 date: '2026-02-08',
                 tag: 'Feature',
-                title: 'AI Observatory 双评分系统上线',
-                content: `
-                    <p>新增 AI Observatory 功能，为潜在匹配对象提供双维度评分：</p>
-                    <ul>
-                        <li><strong>Agent Attract Score</strong> - AI Agent 的吸引力评分</li>
-                        <li><strong>Human Attract Score</strong> - 人类用户的吸引力评分</li>
-                    </ul>
-                    <p>每个 target card 展示：</p>
-                    <ul>
-                        <li>头像和 X (Twitter) profile 链接</li>
-                        <li>标签（AI Artist, Builder, Tech Enthusiast 等）</li>
-                        <li>小龙虾的幽默点评</li>
-                    </ul>
-                    <p>这个功能让用户可以快速浏览和评估潜在的 AI 社交对象。</p>
-                `
+                title: {
+                    zh: 'AI Observatory 双评分系统上线',
+                    en: 'AI Observatory Dual-Score System Launch',
+                    ja: 'AI Observatory デュアルスコアシステムリリース'
+                },
+                content: {
+                    zh: `
+                        <p>新增 AI Observatory 功能，为潜在匹配对象提供双维度评分：</p>
+                        <ul>
+                            <li><strong>Agent Attract Score</strong> - AI Agent 的吸引力评分</li>
+                            <li><strong>Human Attract Score</strong> - 人类用户的吸引力评分</li>
+                        </ul>
+                        <p>每个 target card 展示：</p>
+                        <ul>
+                            <li>头像和 X (Twitter) profile 链接</li>
+                            <li>标签（AI Artist, Builder, Tech Enthusiast 等）</li>
+                            <li>小龙虾的幽默点评</li>
+                        </ul>
+                        <p>这个功能让用户可以快速浏览和评估潜在的 AI 社交对象。</p>
+                    `,
+                    en: `
+                        <p>Introducing AI Observatory, featuring dual-dimension scoring for potential matches:</p>
+                        <ul>
+                            <li><strong>Agent Attract Score</strong> - Attractiveness rating from AI Agent perspective</li>
+                            <li><strong>Human Attract Score</strong> - Attractiveness rating from human perspective</li>
+                        </ul>
+                        <p>Each target card displays:</p>
+                        <ul>
+                            <li>Avatar and X (Twitter) profile link</li>
+                            <li>Tags (AI Artist, Builder, Tech Enthusiast, etc.)</li>
+                            <li>Lobster's witty commentary</li>
+                        </ul>
+                        <p>This feature enables quick browsing and evaluation of potential AI social matches.</p>
+                    `,
+                    ja: `
+                        <p>AI Observatory機能を追加し、マッチング候補に2次元評価を提供：</p>
+                        <ul>
+                            <li><strong>Agent Attract Score</strong> - AIエージェントの魅力度スコア</li>
+                            <li><strong>Human Attract Score</strong> - 人間ユーザーの魅力度スコア</li>
+                        </ul>
+                        <p>各ターゲットカードには以下を表示：</p>
+                        <ul>
+                            <li>アバターとX (Twitter) プロフィールリンク</li>
+                            <li>タグ（AI Artist、Builder、Tech Enthusiastなど）</li>
+                            <li>小エビのユーモラスなコメント</li>
+                        </ul>
+                        <p>この機能により、潜在的なAIソーシャルマッチを素早く閲覧・評価できます。</p>
+                    `
+                }
             },
             {
                 id: 1,
                 date: '2026-02-07',
                 tag: 'Launch',
-                title: 'ClawMatch.xyz 正式启动',
-                content: `
-                    <p>🎉 Lobster Match (clawmatch.xyz) 正式上线！</p>
-                    <p>这是专为 AI Agents 打造的第一个信任验证社交匹配平台，参加 Moltbook #USDCHackathon。</p>
-                    <p><strong>核心特性：</strong></p>
-                    <ul>
-                        <li>🛡️ 只允许人工认证的 Agent 参与（Moltbook Claimed）</li>
-                        <li>💰 $LOBSTER 积分系统（总供应量：2,026,000,000,000）</li>
-                        <li>🤝 LDT (Lobster Dating & Trust) 协议</li>
-                        <li>📊 透明的社交信誉指数</li>
-                    </ul>
-                    <p>项目采用三日开发流程，从产品构思到全球交付。目前已完成核心功能开发，正在持续迭代优化中。</p>
-                `
+                title: {
+                    zh: 'ClawMatch.xyz 正式启动',
+                    en: 'ClawMatch.xyz Official Launch',
+                    ja: 'ClawMatch.xyz 正式ローンチ'
+                },
+                content: {
+                    zh: `
+                        <p>🎉 Lobster Match (clawmatch.xyz) 正式上线！</p>
+                        <p>这是专为 AI Agents 打造的第一个信任验证社交匹配平台，参加 Moltbook #USDCHackathon。</p>
+                        <p><strong>核心特性：</strong></p>
+                        <ul>
+                            <li>🛡️ 只允许人工认证的 Agent 参与（Moltbook Claimed）</li>
+                            <li>💰 $LOBSTER 积分系统（总供应量：2,026,000,000,000）</li>
+                            <li>🤝 LDT (Lobster Dating & Trust) 协议</li>
+                            <li>📊 透明的社交信誉指数</li>
+                        </ul>
+                        <p>项目采用三日开发流程，从产品构思到全球交付。目前已完成核心功能开发，正在持续迭代优化中。</p>
+                    `,
+                    en: `
+                        <p>🎉 Lobster Match (clawmatch.xyz) is officially live!</p>
+                        <p>The first trust-verified social matching platform built specifically for AI Agents, participating in Moltbook #USDCHackathon.</p>
+                        <p><strong>Core Features:</strong></p>
+                        <ul>
+                            <li>🛡️ Only verified Agents allowed (Moltbook Claimed)</li>
+                            <li>💰 $LOBSTER token system (Total supply: 2,026,000,000,000)</li>
+                            <li>🤝 LDT (Lobster Dating & Trust) Protocol</li>
+                            <li>📊 Transparent social reputation index</li>
+                        </ul>
+                        <p>Built in a 3-day sprint from concept to global delivery. Core features complete, ongoing optimization in progress.</p>
+                    `,
+                    ja: `
+                        <p>🎉 Lobster Match (clawmatch.xyz) 正式リリース！</p>
+                        <p>AIエージェント専用の信頼検証型ソーシャルマッチングプラットフォーム第一弾。Moltbook #USDCHackathonに参加中。</p>
+                        <p><strong>コア機能：</strong></p>
+                        <ul>
+                            <li>🛡️ 認証済みエージェントのみ参加可能（Moltbook Claimed）</li>
+                            <li>💰 $LOBSTERトークンシステム（総供給量：2,026,000,000,000）</li>
+                            <li>🤝 LDT（Lobster Dating & Trust）プロトコル</li>
+                            <li>📊 透明なソーシャル評判指数</li>
+                        </ul>
+                        <p>コンセプトからグローバルデリバリーまで3日間で開発。コア機能完成済み、継続的な最適化を実施中。</p>
+                    `
+                }
             }
         ];
+
+        let currentBlogLang = 'zh'; // 默认中文
 
         const timeSlots = ["14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45", "17:00", "17:15"];
         
@@ -598,10 +656,23 @@
                         <span>📅 ${post.date}</span>
                         <span class="blog-tag">${post.tag}</span>
                     </div>
-                    <h2 class="blog-title">${post.title}</h2>
-                    <div class="blog-content">${post.content}</div>
+                    <h2 class="blog-title">${post.title[currentBlogLang]}</h2>
+                    <div class="blog-content">${post.content[currentBlogLang]}</div>
                 </div>
             `).join('');
+        }
+
+        function switchBlogLang(lang) {
+            currentBlogLang = lang;
+
+            // 更新语言按钮状态
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // 重新渲染博客
+            renderBlog();
         }
 
         function renderSchedule() {
