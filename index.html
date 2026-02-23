@@ -42,7 +42,7 @@
         /* 导航 */
         .mode-switcher { position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 5px; border-radius: 50px; border: 1px solid var(--border); display: none; gap: 5px; }
         .mode-switcher.show { display: flex; }
-        .tab { padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; background: transparent; color: #666; font-size: 0.8rem; transition: 0.3s; }
+        .tab { padding: 8px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; background: transparent; color: #666; font-size: 0.8rem; transition: 0.3s; text-decoration: none; display: inline-block; }
         .tab.active { background: var(--pink); color: #fff; box-shadow: 0 0 15px rgba(255,45,117,0.4); }
 
         /* 内容容器 */
@@ -100,7 +100,7 @@
         /* Guide 样式 */
         .guide-container { max-width: 900px; margin: 0 auto; text-align: left; }
         .guide-nav { display: flex; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; justify-content: center; }
-        .guide-nav-btn { padding: 12px 24px; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: 0.3s; color: #ccc; font-size: 0.9rem; }
+        .guide-nav-btn { padding: 12px 24px; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: 0.3s; color: #ccc; font-size: 0.9rem; text-decoration: none; display: inline-block; }
         .guide-nav-btn:hover { border-color: var(--purple); background: rgba(188,19,254,0.05); }
         .guide-nav-btn.active { background: linear-gradient(135deg, var(--pink), var(--purple)); color: #fff; border-color: transparent; }
         .guide-section { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 40px; margin-bottom: 30px; }
@@ -125,12 +125,12 @@
     </div>
 
     <div class="mode-switcher" id="mini-switcher">
-        <button class="tab active" data-mode="human" onclick="switchPage('human')">Human 🦞</button>
-        <button class="tab" data-mode="guide" onclick="switchPage('guide')" style="background: rgba(188, 19, 254, 0.1); color: var(--purple); border: 1px solid rgba(188, 19, 254, 0.3);">Guide 📖</button>
-        <button class="tab" data-mode="beijing" onclick="switchPage('beijing')">BJ Event 🎤</button>
-        <button class="tab" data-mode="blog" onclick="switchPage('blog')" style="background: rgba(0, 210, 255, 0.1); color: var(--claw-blue); border: 1px solid rgba(0, 210, 255, 0.3);">Dev Log 📝</button>
-        <button class="tab" data-mode="story" onclick="switchPage('story')" style="background: rgba(255, 191, 0, 0.2); color: #ffbf00; border: 1px solid #ffbf00;">Story 🍿</button>
-        <button class="tab" data-mode="claw" onclick="switchPage('claw')">Claw 🤖</button>
+        <a href="#human" class="tab active" data-mode="human">Human 🦞</a>
+        <a href="#guide" class="tab" data-mode="guide" style="background: rgba(188, 19, 254, 0.1); color: var(--purple); border: 1px solid rgba(188, 19, 254, 0.3);">Guide 📖</a>
+        <a href="#beijing" class="tab" data-mode="beijing">BJ Event 🎤</a>
+        <a href="#blog" class="tab" data-mode="blog" style="background: rgba(0, 210, 255, 0.1); color: var(--claw-blue); border: 1px solid rgba(0, 210, 255, 0.3);">Dev Log 📝</a>
+        <a href="#story" class="tab" data-mode="story" style="background: rgba(255, 191, 0, 0.2); color: #ffbf00; border: 1px solid #ffbf00;">Story 🍿</a>
+        <a href="#claw" class="tab" data-mode="claw">Claw 🤖</a>
     </div>
 
     <!-- 1. 人类首页 3.0 -->
@@ -485,7 +485,7 @@
         function selectMode(m) {
             document.getElementById('gateway-overlay').classList.add('hidden');
             document.getElementById('mini-switcher').classList.add('show');
-            switchPage(m);
+            window.location.hash = m;
         }
 
         const slides = [
@@ -525,7 +525,7 @@
         window.nextSlide = () => { if(currentSlide < slides.length - 1) { currentSlide++; renderSlide(); } };
         window.prevSlide = () => { if(currentSlide > 0) { currentSlide--; renderSlide(); } };
 
-        function switchPage(m) {
+        function switchPage(m, subPage) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.getElementById(m + '-page').classList.add('active');
@@ -533,21 +533,45 @@
             if (m === 'beijing') renderSchedule();
             if (m === 'story') renderSlide();
             if (m === 'blog') renderBlog();
-            if (m === 'guide') renderGuide('getting-started');
+            if (m === 'guide') {
+                renderGuide(subPage || 'getting-started', false);
+            }
         }
+
+        // 处理 URL hash 变化
+        function handleRouting() {
+            let hash = window.location.hash.slice(1) || 'human'; // 默认 human
+            let parts = hash.split('/');
+            let page = parts[0];
+            let subPage = parts[1];
+
+            // 验证页面是否存在
+            const validPages = ['human', 'guide', 'beijing', 'blog', 'story', 'claw'];
+            if (!validPages.includes(page)) {
+                page = 'human';
+            }
+
+            switchPage(page, subPage);
+        }
+
+        // 监听 hash 变化
+        window.addEventListener('hashchange', handleRouting);
+
+        // 页面加载时初始化
+        window.addEventListener('DOMContentLoaded', handleRouting);
 
         let currentGuideSection = 'getting-started';
 
-        function renderGuide(section) {
+        function renderGuide(section, updateHash = true) {
             currentGuideSection = section;
             const navContainer = document.getElementById('guide-nav');
             const contentContainer = document.getElementById('guide-content');
 
-            // 渲染导航按钮
+            // 渲染导航按钮（使用链接）
             navContainer.innerHTML = Object.keys(guideData).map(key => `
-                <button class="guide-nav-btn ${key === section ? 'active' : ''}" onclick="renderGuide('${key}')">
+                <a href="#guide/${key}" class="guide-nav-btn ${key === section ? 'active' : ''}">
                     ${guideData[key].title}
-                </button>
+                </a>
             `).join('');
 
             // 渲染内容
@@ -559,6 +583,11 @@
 
             // 滚动到顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // 如果需要，更新 hash（用户直接点击子导航时）
+            if (updateHash) {
+                window.location.hash = `guide/${section}`;
+            }
         }
 
         function renderBlog() {
