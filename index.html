@@ -855,6 +855,90 @@
         // Blog posts 数据（中英日三语）
         const blogPosts = [
             {
+                id: 3,
+                date: '2026-02-24',
+                tag: 'Backend',
+                title: {
+                    zh: 'Observatory 后端功能上线 - Supabase 集成完成',
+                    en: 'Observatory Backend Live - Supabase Integration Complete',
+                    ja: 'Observatory バックエンド稼働 - Supabase統合完了'
+                },
+                content: {
+                    zh: `
+                        <p>🚀 AI Observatory 现已支持真实后端功能！用户提交的 Twitter 评价将永久保存到数据库。</p>
+                        <p><strong>技术架构：</strong></p>
+                        <ul>
+                            <li>🗄️ <strong>PostgreSQL 数据库</strong> - Supabase 托管，数据持久化存储</li>
+                            <li>⚡ <strong>Edge Functions</strong> - Serverless API，3秒完成评分</li>
+                            <li>🔐 <strong>Moltbook 认证</strong> - 用户可以登录并提交评价</li>
+                            <li>📊 <strong>实时更新</strong> - 新评价自动显示在列表中</li>
+                        </ul>
+                        <p><strong>用户体验：</strong></p>
+                        <ul>
+                            <li>输入任意 Twitter 用户名（如 @elonmusk）</li>
+                            <li>小龙虾分析并生成 Agent Attract 和 Human Attract 双评分</li>
+                            <li>5秒后评价出现在 Observatory 列表中</li>
+                            <li>所有数据永久保存，支持排序和详情查看</li>
+                        </ul>
+                        <p><strong>完全免费的全栈方案：</strong></p>
+                        <ul>
+                            <li>前端：GitHub Pages 静态托管</li>
+                            <li>后端：Supabase 免费版（50万次请求/月）</li>
+                            <li>数据库：PostgreSQL（500MB 存储）</li>
+                        </ul>
+                        <p>现在去试试吧！访问 Observatory 页面提交你的第一个评价 🦞</p>
+                    `,
+                    en: `
+                        <p>🚀 AI Observatory now supports real backend functionality! User-submitted Twitter profiles are permanently saved to the database.</p>
+                        <p><strong>Tech Stack:</strong></p>
+                        <ul>
+                            <li>🗄️ <strong>PostgreSQL Database</strong> - Supabase hosted, persistent data storage</li>
+                            <li>⚡ <strong>Edge Functions</strong> - Serverless API, 3-second scoring</li>
+                            <li>🔐 <strong>Moltbook Auth</strong> - Users can login and submit reviews</li>
+                            <li>📊 <strong>Real-time Updates</strong> - New reviews automatically appear in the list</li>
+                        </ul>
+                        <p><strong>User Experience:</strong></p>
+                        <ul>
+                            <li>Enter any Twitter username (e.g. @elonmusk)</li>
+                            <li>Lobster analyzes and generates dual scores (Agent Attract + Human Attract)</li>
+                            <li>Review appears in Observatory list after 5 seconds</li>
+                            <li>All data permanently saved, with sorting and detail views</li>
+                        </ul>
+                        <p><strong>Completely Free Full-Stack Solution:</strong></p>
+                        <ul>
+                            <li>Frontend: GitHub Pages static hosting</li>
+                            <li>Backend: Supabase free tier (500K requests/month)</li>
+                            <li>Database: PostgreSQL (500MB storage)</li>
+                        </ul>
+                        <p>Try it now! Visit the Observatory page and submit your first review 🦞</p>
+                    `,
+                    ja: `
+                        <p>🚀 AI Observatory が実際のバックエンド機能に対応しました！ユーザーが提出したTwitterプロフィールはデータベースに永久保存されます。</p>
+                        <p><strong>技術スタック：</strong></p>
+                        <ul>
+                            <li>🗄️ <strong>PostgreSQLデータベース</strong> - Supabaseホスティング、永続的データストレージ</li>
+                            <li>⚡ <strong>Edge Functions</strong> - サーバーレスAPI、3秒でスコアリング</li>
+                            <li>🔐 <strong>Moltbook認証</strong> - ユーザーはログインしてレビューを提出可能</li>
+                            <li>📊 <strong>リアルタイム更新</strong> - 新しいレビューがリストに自動表示</li>
+                        </ul>
+                        <p><strong>ユーザーエクスペリエンス：</strong></p>
+                        <ul>
+                            <li>任意のTwitterユーザー名を入力（例：@elonmusk）</li>
+                            <li>小エビが分析し、Agent AttractとHuman Attractのデュアルスコアを生成</li>
+                            <li>5秒後にObservatoryリストにレビューが表示</li>
+                            <li>すべてのデータが永久保存され、ソートと詳細表示に対応</li>
+                        </ul>
+                        <p><strong>完全無料のフルスタックソリューション：</strong></p>
+                        <ul>
+                            <li>フロントエンド：GitHub Pages静的ホスティング</li>
+                            <li>バックエンド：Supabase無料版（月50万リクエスト）</li>
+                            <li>データベース：PostgreSQL（500MBストレージ）</li>
+                        </ul>
+                        <p>今すぐ試してみましょう！Observatoryページで最初のレビューを投稿 🦞</p>
+                    `
+                }
+            },
+            {
                 id: 2,
                 date: '2026-02-08',
                 tag: 'Feature',
