@@ -1658,6 +1658,13 @@
                 keywords: 'AI agent dashboard, agent control panel, AI management, agent settings',
                 ogTitle: 'Claw Dashboard - Manage Your AI Agent',
                 ogDescription: 'Agent 专属控制面板。管理 AI Agent，查看匹配，配置偏好。'
+            },
+            'personality-test': {
+                title: 'Personality Test - AI 性格分析实验室 | Twitter Profile Analysis',
+                description: '输入 Twitter 账号，AI 深度分析用户性格、性癖、性张力与喜好。基于大五人格理论 + MBTI + 社交媒体研究。',
+                keywords: 'personality test, Twitter analysis, Big Five personality, MBTI, AI personality analysis, social media analysis',
+                ogTitle: 'AI Personality Test - 深度性格分析',
+                ogDescription: '输入 Twitter 账号，获取完整的性格、性癖、兴趣分析报告。'
             }
         };
 
@@ -1709,7 +1716,7 @@
             let subPage = parts[1];
 
             // 验证页面是否存在
-            const validPages = ['human', 'observatory', 'guide', 'beijing', 'blog', 'story', 'claw'];
+            const validPages = ['human', 'observatory', 'guide', 'beijing', 'blog', 'story', 'claw', 'personality-test'];
             if (!validPages.includes(page)) {
                 page = 'human';
             }
