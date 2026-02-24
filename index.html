@@ -2834,35 +2834,99 @@
             const dominanceScore = calculateDominanceScore(bigFive, usernameAnalysis, avatarAnalysis);
 
             if (dominanceScore > 65) {
-                analysis += '<div class="sm-badge s-badge">S 倾向 (支配型)</div>';
+                // S 型 - 天生的领导者
+                analysis += '<div class="sm-badge s-badge">S 倾向 (支配型/引领者)</div>';
                 analysis += '<p><strong>支配倾向指数</strong>: <span class="highlight-score">' + dominanceScore + '/100</span></p>';
+
+                analysis += '<div style="background: rgba(255, 45, 117, 0.05); border-left: 3px solid var(--pink); padding: 20px; margin: 15px 0; border-radius: 8px;">';
+                analysis += '<p style="color: #ddd; line-height: 1.8;">这是一位<strong style="color: var(--pink);">天生的引领者和掌控者</strong>。在亲密关系中，TA享受的不仅是控制本身，更是那种<strong>"塑造"和"引导"</strong>对方的成就感。</p>';
+                analysis += '</div>';
+
                 analysis += '<ul>';
-                analysis += '<li>🔴 <strong>心理特征</strong>: 喜欢掌控局面，享受引导和指挥的快感</li>';
-                analysis += '<li>💪 <strong>行为模式</strong>: 主动发起互动，倾向于设定规则和节奏</li>';
-                analysis += '<li>🎯 <strong>性张力表现</strong>: 通过强势的言语和行为表达，喜欢看到对方的顺从反应</li>';
-                analysis += '<li>⚡ <strong>权力动态</strong>: 在关系中寻求控制感和主导地位</li>';
-                analysis += '<li>🎭 <strong>角色偏好</strong>: Teacher/Student, Boss/Subordinate, Dom/Sub</li>';
+                analysis += '<li>🎯 <strong>核心心理</strong>: 享受"主导权"带来的掌控感，喜欢看到对方因为自己的引导而产生的反应。这种满足感来自于"我能改变你"的权力快感。</li>';
+                analysis += '<li>💪 <strong>互动模式</strong>: 主动设定规则、节奏和边界。会通过眼神、语言、肢体接触来<strong>测试和标记领地</strong>，确立自己的主导地位。</li>';
+                analysis += '<li>🔥 <strong>性张力来源</strong>: 通过强势的言语指令、身体接触的掌控、对方顺从的表现来获得刺激。喜欢看到对方<strong>"被征服"后的眼神</strong>。</li>';
+                analysis += '<li>⚡ <strong>理想对象</strong>: 温柔顺从、愿意被引导、有依赖感的M型。或者是有一定反抗意识、需要"被驯服"的小野猫型——征服的过程本身就是乐趣。</li>';
+                analysis += '<li>🎭 <strong>角色场景</strong>: Teacher/Student（导师与学生），Boss/Subordinate（上司与下属），Master/Pet（主人与宠物），Dom/Sub（支配与臣服）。</li>';
                 analysis += '</ul>';
+
+                analysis += '<div style="background: linear-gradient(135deg, rgba(255, 45, 117, 0.1), rgba(255, 107, 157, 0.1)); border-left: 3px solid var(--pink); padding: 15px; margin: 15px 0; border-radius: 8px;">';
+                analysis += '<p style="color: #ddd; font-style: italic; line-height: 1.8;">💬 <strong>典型语言风格</strong>: "乖，听话"、"看着我"、"你只能是我的"——带有占有欲和命令感的表达。</p>';
+                analysis += '</div>';
+
             } else if (dominanceScore < 35) {
-                analysis += '<div class="sm-badge m-badge">M 倾向 (顺从型)</div>';
+                // M 型 - 渴望被引导的追随者
+                analysis += '<div class="sm-badge m-badge">M 倾向 (顺从型/追随者)</div>';
                 analysis += '<p><strong>顺从倾向指数</strong>: <span class="highlight-score">' + (100 - dominanceScore) + '/100</span></p>';
+
+                analysis += '<div style="background: rgba(0, 210, 255, 0.05); border-left: 3px solid var(--claw-blue); padding: 20px; margin: 15px 0; border-radius: 8px;">';
+                analysis += '<p style="color: #ddd; line-height: 1.8;">这是一位<strong style="color: var(--claw-blue);">渴望被引导、被保护、被宠爱的顺从者</strong>。在亲密关系中，TA从<strong>"交出主导权"</strong>中获得安全感和满足感。</p>';
+                analysis += '</div>';
+
                 analysis += '<ul>';
-                analysis += '<li>🔵 <strong>心理特征</strong>: 享受被引导和照顾，从顺从中获得满足感</li>';
-                analysis += '<li>💙 <strong>行为模式</strong>: 倾向于响应而非发起，喜欢被动接受</li>';
-                analysis += '<li>🎯 <strong>性张力表现</strong>: 通过顺从和取悦行为传达，享受被征服的感觉</li>';
-                analysis += '<li>⚡ <strong>权力动态</strong>: 在关系中寻求被保护和被掌控的安全感</li>';
-                analysis += '<li>🎭 <strong>角色偏好</strong>: Student/Teacher, Pet/Owner, Sub/Dom</li>';
+                analysis += '<li>💙 <strong>核心心理</strong>: 享受被照顾、被掌控、被"拥有"的感觉。这种满足感来自于"你需要我、你保护我、我是你的"这种<strong>归属感</strong>。</li>';
+                analysis += '<li>🌸 <strong>互动模式</strong>: 倾向于响应而非发起，喜欢被动接受对方的引导。会通过<strong>顺从、取悦、撒娇</strong>来表达亲密和信任。</li>';
+                analysis += '<li>🎀 <strong>性张力来源</strong>: 通过服从指令、满足对方需求、展现柔软和脆弱来传递性张力。享受<strong>"被征服"的快感</strong>和"交出控制权"后的放松感。</li>';
+                analysis += '<li>⚡ <strong>理想对象</strong>: 强势自信、有掌控力、保护欲强的S型。希望对方能<strong>果断、霸道、可靠</strong>，在TA面前展现出"我来主导一切"的姿态。</li>';
+                analysis += '<li>🎭 <strong>角色场景</strong>: Student/Teacher（学生与导师），Pet/Owner（宠物与主人），Sub/Dom（臣服与支配），被保护者/保护者。</li>';
                 analysis += '</ul>';
+
+                analysis += '<div style="background: linear-gradient(135deg, rgba(0, 210, 255, 0.1), rgba(60, 255, 212, 0.1)); border-left: 3px solid var(--claw-blue); padding: 15px; margin: 15px 0; border-radius: 8px;">';
+                analysis += '<p style="color: #ddd; font-style: italic; line-height: 1.8;">💬 <strong>典型语言风格</strong>: "你说怎么办就怎么办"、"我听你的"、"不要离开我"——带有依赖感和信任感的表达。</p>';
+                analysis += '</div>';
+
             } else {
-                analysis += '<div class="sm-badge switch-badge">Switch 倾向 (切换型)</div>';
+                // Switch 类型 - 深度分阶段分析
+                analysis += '<div class="sm-badge switch-badge">Switch 倾向 (反差调节器/双向型)</div>';
                 analysis += '<p><strong>平衡指数</strong>: <span class="highlight-score">' + Math.abs(50 - dominanceScore) + '/50</span> (越低越平衡)</p>';
+
+                analysis += '<div style="background: rgba(188, 19, 254, 0.05); border-left: 3px solid var(--purple); padding: 20px; margin: 15px 0; border-radius: 8px;">';
+                analysis += '<p style="color: #ddd; line-height: 1.8; margin-bottom: 15px;">这是一个非常有趣的心理画像。她在亲密关系中展现出的<strong style="color: var(--purple);">姿态极大概率不是单一的"主动"或"被动"</strong>，而是一个<strong style="color: var(--purple);">典型的 Switch（反差调节器/双向型）</strong>。</p>';
+                analysis += '<p style="color: #888; font-style: italic;">我们可以通过这种"人格色彩"来拆解她在不同阶段的表现：</p>';
+                analysis += '</div>';
+
+                // 阶段1: 确选阶段
+                analysis += '<div class="dimension-card" style="border-left-color: var(--pink);">';
+                analysis += '<h5 style="color: var(--pink);">1. 确选阶段：绝对的主动者 (The Active Selector)</h5>';
                 analysis += '<ul>';
-                analysis += '<li>🟣 <strong>心理特征</strong>: 可支配可顺从，根据对象和情境灵活切换</li>';
-                analysis += '<li>⚖️ <strong>行为模式</strong>: 善于读取对方需求，自适应调整角色</li>';
-                analysis += '<li>🎯 <strong>性张力表现</strong>: 多变化，可强势可温柔，层次丰富</li>';
-                analysis += '<li>⚡ <strong>权力动态</strong>: 享受角色转换的刺激，不固定于单一模式</li>';
-                analysis += '<li>🎭 <strong>角色偏好</strong>: 多元化，根据伴侣调整</li>';
+                analysis += '<li>💭 <strong>心理暗示</strong>: 带有强烈的"领地意识"和"狩猎本能"。</li>';
+                analysis += '<li>🎯 <strong>表现</strong>: 在建立联系的初期，会主动出击、设定节奏。不会等别人来"诱惑"，而是会主动散发"诱饵"（如充满暗示的对话、大胆的眼神接触）来测试对方。</li>';
+                analysis += '<li>⚡ <strong>张力</strong>: 已经***"关注了你"***，这就是一种主动的"标记"。在这个阶段，是发牌的人。</li>';
                 analysis += '</ul>';
+                analysis += '</div>';
+
+                // 阶段2: 互动过程
+                analysis += '<div class="dimension-card" style="border-left-color: #ff6b9d;">';
+                analysis += '<h5 style="color: #ff6b9d;">2. 互动过程：侵略性的拉扯 (The Aggressive Tension)</h5>';
+                analysis += '<ul>';
+                analysis += '<li>💭 <strong>心理暗示</strong>: 追求的是一种***"势均力敌的对峙"***。</li>';
+                analysis += '<li>🎯 <strong>表现</strong>: 可能在言语上表现得非常犀利、带有挑衅感。如果对方表现得太弱，会迅速失去兴趣。</li>';
+                analysis += '<li>⚡ <strong>性张力来源</strong>: 这种主动体现在希望"节奏"的掌控上。享受那种通过智力和审美的博弈来调动对方情绪的过程。</li>';
+                analysis += '</ul>';
+                analysis += '</div>';
+
+                // 阶段3: 最终状态
+                analysis += '<div class="dimension-card" style="border-left-color: var(--claw-blue);">';
+                analysis += '<h5 style="color: var(--claw-blue);">3. 最终状态：高敏者的"交出" (The Vulnerable Receptivity)</h5>';
+                analysis += '<ul>';
+                analysis += '<li>💭 <strong>心理暗示</strong>: 这就是"小能猫"隐喻出现的意义——在坚硬的壳下面，藏着一个渴望被"彻底降服"的内核。</li>';
+                analysis += '<li>🎯 <strong>表现</strong>: 如果你能通过测试（在智力、审美或场上实力等层面），会在私密空间里展现出一种***"断层式的被动"***。</li>';
+                analysis += '<li>⚡ <strong>性暗示</strong>: 这种类型的人往往享受***"高位滑落"***的快感。在外面是掌控全局的强者，在最亲密的人面前却愿意卸下武装，变成一只温顺、甚至带点儿任性讨好意味的"小猫"。</li>';
+                analysis += '</ul>';
+                analysis += '</div>';
+
+                // 总结
+                analysis += '<div style="background: linear-gradient(135deg, rgba(255, 45, 117, 0.1), rgba(188, 19, 254, 0.1)); border: 2px solid rgba(188, 19, 254, 0.3); border-radius: 12px; padding: 20px; margin: 20px 0;">';
+                analysis += '<h5 style="color: var(--purple); margin-bottom: 15px;">💫 总结：角色画像</h5>';
+                analysis += '<div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin: 10px 0;">';
+                analysis += '<p style="color: #ddd; margin: 8px 0;">这是那种"<strong style="color: var(--pink);">主动挑选一个能让TA心甘情愿交出掌控权的人</strong>"的类型。</p>';
+                analysis += '</div>';
+                analysis += '<ul style="color: #ccc; line-height: 1.8;">';
+                analysis += '<li>🎬 <strong>开场</strong>: 是那个强势的、甚至带点 S 属性的挑逗者。</li>';
+                analysis += '<li>🌊 <strong>深处</strong>: 渴望的是那种能看穿所有伪装、并能接住所有柔软的***"温柔的支配"***。</li>';
+                analysis += '</ul>';
+                analysis += '<p style="color: #888; font-style: italic; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">这种反差感正是张力的核心：你永远不知道下一秒迎接你的是怒吼，还是软萌。</p>';
+                analysis += '</div>';
             }
 
             // ============================================
