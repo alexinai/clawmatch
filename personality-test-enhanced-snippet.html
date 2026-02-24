@@ -1,0 +1,152 @@
+<!-- 将此代码段插入到测试页面中替换原有的 intimacy-analysis 部分 -->
+
+<!-- 在 <head> 的 <style> 标签内添加以下CSS -->
+<style>
+/* S/M/Switch 徽章 */
+.sm-badge {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.s-badge {
+    background: linear-gradient(135deg, #ff2d75, #ff6b9d);
+    color: white;
+    box-shadow: 0 5px 20px rgba(255, 45, 117, 0.4);
+}
+
+.m-badge {
+    background: linear-gradient(135deg, #00d2ff, #3cffd4);
+    color: #000;
+    box-shadow: 0 5px 20px rgba(0, 210, 255, 0.4);
+}
+
+.switch-badge {
+    background: linear-gradient(135deg, #bc13fe, #d946fe);
+    color: white;
+    box-shadow: 0 5px 20px rgba(188, 19, 254, 0.4);
+}
+
+.highlight-score {
+    color: #ffbf00;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.dimension-card {
+    background: rgba(0,0,0,0.3);
+    border-left: 3px solid #ffbf00;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 15px 0;
+}
+
+.dimension-card h5 {
+    color: #ffbf00;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+}
+
+.mate-preference-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.preference-section {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 25px;
+}
+
+.preference-section h4 {
+    color: #ffbf00;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(255, 191, 0, 0.3);
+    padding-bottom: 10px;
+}
+
+.appearance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.appearance-item {
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255, 191, 0, 0.2);
+}
+
+.appearance-item h5 {
+    color: #ffbf00;
+    font-size: 1rem;
+    margin-bottom: 12px;
+}
+
+.ideal-portrait {
+    background: linear-gradient(135deg, rgba(255, 45, 117, 0.1), rgba(188, 19, 254, 0.1));
+    border: 2px solid rgba(255, 45, 117, 0.3);
+}
+
+.ideal-portrait-card {
+    background: rgba(0,0,0,0.4);
+    border-radius: 15px;
+    padding: 25px;
+}
+
+.portrait-header {
+    color: var(--pink);
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.portrait-features {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.portrait-item {
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid var(--pink);
+    padding: 12px 15px;
+    border-radius: 8px;
+}
+
+.portrait-keywords {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 45, 117, 0.3);
+}
+
+.keyword-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin: 5px;
+    font-weight: 500;
+}
+</style>
+
+<!-- 在 HTML 结果区域添加新的分析部分 -->
+<!-- 在原有的 intimacy-section 之后添加 -->
+<div class="result-section mate-preference-section">
+    <h3>💕 择偶偏好深度分析</h3>
+    <div id="mate-preference-analysis" class="analysis-content"></div>
+</div>
