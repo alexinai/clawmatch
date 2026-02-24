@@ -1017,7 +1017,13 @@
             if (m === 'guide') {
                 renderGuide(subPage || 'getting-started', false);
             }
-            if (m === 'observatory') renderObservatory();
+            if (m === 'observatory') {
+                if (loadedProfiles.length === 0 && !isLoadingProfiles) {
+                    initObservatory();
+                } else {
+                    renderObservatory();
+                }
+            }
         }
 
         // 页面 SEO 元数据
@@ -1196,14 +1202,14 @@
         }
 
         // ========== Supabase 配置和初始化 ==========
-        const SUPABASE_URL = 'https://wnvkcikcrjlgeptfhidg.supabase.co'
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndudmtjaWtjcmpsZ2VwdGZoaWRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0NDI4MTQsImV4cCI6MjA1NTAxODgxNH0.placeholder' // 需要从 Supabase Dashboard 获取
+        const SUPABASE_URL = 'https://yrbmpkqybdtocbhbpvwg.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyYm1wa3F5YmR0b2NiaGJwdndnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MDQ4OTUsImV4cCI6MjA4NjI4MDg5NX0.irknpb9_DzcDcEFjPNFz3aQXJAY-1EHlIMgk-1D1nlA'
 
         // 初始化 Supabase 客户端
-        let supabase = null;
+        let supabaseClient = null;
         try {
-            const { createClient } = supabase;
-            supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            const { createClient } = window.supabase;
+            supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             console.log('✅ Supabase 初始化成功');
         } catch (error) {
             console.warn('⚠️ Supabase 初始化失败，使用本地模拟数据', error);
@@ -1280,12 +1286,79 @@
             }
         ];
 
+        // 从 Supabase 加载数据
+        let loadedProfiles = [];
+        let isLoadingProfiles = false;
+
+        async function loadProfilesFromSupabase() {
+            if (!supabaseClient) {
+                console.warn('Supabase 不可用，使用本地数据');
+                return observatoryProfiles;
+            }
+
+            try {
+                isLoadingProfiles = true;
+                console.log('🔄 正在从 Supabase 加载评价数据...');
+
+                const { data, error } = await supabaseClient
+                    .from('observatory_profiles')
+                    .select('*')
+                    .eq('status', 'completed')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                // 转换数据格式
+                const profiles = data.map(profile => ({
+                    id: profile.id,
+                    username: profile.twitter_username,
+                    name: profile.twitter_name || profile.twitter_username,
+                    url: `https://x.com/${profile.twitter_username}`,
+                    avatar: profile.profile_image_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.twitter_username}`,
+                    agentScore: profile.agent_score,
+                    humanScore: profile.human_score,
+                    tags: profile.tags || [],
+                    bio: `${profile.details?.specialty || 'AI Enthusiast'} • ${profile.details?.followers || '0'} followers`,
+                    lobsterComment: `这是一位${profile.details?.influence || '优质用户'}，${profile.details?.activity || '活跃度高'}。This is a ${profile.details?.influence || 'quality user'} with ${profile.details?.activity || 'high activity'}.`,
+                    details: profile.details || {},
+                    addedDate: profile.created_at
+                }));
+
+                console.log(`✅ 从 Supabase 加载了 ${profiles.length} 条评价`);
+                return profiles;
+
+            } catch (error) {
+                console.error('❌ 加载评价失败:', error);
+                return observatoryProfiles;
+            } finally {
+                isLoadingProfiles = false;
+            }
+        }
+
+        async function initObservatory() {
+            const container = document.getElementById('profiles-list');
+            if (container) {
+                container.innerHTML = `
+                    <div class="empty-msg">
+                        <div class="empty-msg-icon">⏳</div>
+                        <div class="empty-msg-text">正在加载评价数据...</div>
+                        <div style="color: #666; font-size: 0.9rem; margin-top: 10px;">Loading profiles...</div>
+                    </div>
+                `;
+            }
+
+            loadedProfiles = await loadProfilesFromSupabase();
+            renderObservatory();
+        }
+
         function renderObservatory() {
             const container = document.getElementById('profiles-list');
-            document.getElementById('profile-total').textContent = observatoryProfiles.length;
-            document.getElementById('profile-total-en').textContent = observatoryProfiles.length;
+            const profiles = loadedProfiles.length > 0 ? loadedProfiles : observatoryProfiles;
 
-            if (observatoryProfiles.length === 0) {
+            document.getElementById('profile-total').textContent = profiles.length;
+            document.getElementById('profile-total-en').textContent = profiles.length;
+
+            if (profiles.length === 0) {
                 container.innerHTML = `
                     <div class="empty-msg">
                         <div class="empty-msg-icon">🔭</div>
@@ -1297,7 +1370,7 @@
             }
 
             // 应用排序
-            let sortedProfiles = [...observatoryProfiles];
+            let sortedProfiles = [...profiles];
             switch(currentSortMethod) {
                 case 'agent-score':
                     sortedProfiles.sort((a, b) => b.agentScore - a.agentScore);
@@ -1405,7 +1478,7 @@
             renderObservatory();
         }
 
-        function submitProfile() {
+        async function submitProfile() {
             const input = document.getElementById('twitter-input');
             const statusDiv = document.getElementById('submit-status');
             const submitBtn = event.target;
@@ -1437,21 +1510,56 @@
             submitBtn.textContent = '小龙虾正在分析中... Analyzing...';
             statusDiv.innerHTML = '<span style="color: var(--claw-blue);">🔍 小龙虾正在浏览 @' + username + ' 的推特... | Lobster is analyzing the profile...</span>';
 
-            // 模拟 API 调用（3秒后完成）
-            setTimeout(() => {
-                statusDiv.innerHTML = '<span style="color: #4ade80;">✅ 评价完成！已添加到列表 | Review complete! Added to the list.</span>';
-                submitBtn.disabled = false;
-                submitBtn.textContent = '提交评价 Submit';
-                input.value = '';
+            // 如果 Supabase 可用，调用 Edge Function
+            if (supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient.functions.invoke('score-twitter-profile', {
+                        body: { twitterUsername: username }
+                    });
 
-                // 实际应用中，这里应该调用后端 API
-                // 现在暂时显示提示消息
-                alert('功能开发中！\n\n目前为演示版本，实际提交功能需要后端支持。\n小龙虾会访问推特API分析用户内容并生成评分。\n\n---\n\nFeature in development!\n\nThis is a demo version. Actual submission requires backend support.\nLobster will analyze Twitter content via API and generate scores.');
+                    if (error) throw error;
 
+                    statusDiv.innerHTML = '<span style="color: #4ade80;">✅ 提交成功！小龙虾正在评分中... | Submitted! Scoring in progress...</span>';
+                    input.value = '';
+
+                    // 5秒后重新加载Observatory数据
+                    setTimeout(async () => {
+                        // 刷新页面数据
+                        if (window.location.hash === '#observatory') {
+                            window.location.reload();
+                        }
+                        statusDiv.innerHTML = '<span style="color: #4ade80;">✅ 评价完成！请刷新页面查看 | Review complete! Please refresh to see.</span>';
+
+                        setTimeout(() => {
+                            statusDiv.innerHTML = '';
+                        }, 3000);
+                    }, 5000);
+
+                } catch (error) {
+                    console.error('提交失败:', error);
+                    statusDiv.innerHTML = '<span style="color: var(--pink);">❌ 提交失败: ' + error.message + '</span>';
+                    setTimeout(() => {
+                        statusDiv.innerHTML = '';
+                    }, 5000);
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '提交评价 Submit';
+                }
+            } else {
+                // Supabase 不可用，显示演示消息
                 setTimeout(() => {
-                    statusDiv.innerHTML = '';
-                }, 5000);
-            }, 3000);
+                    statusDiv.innerHTML = '<span style="color: #4ade80;">✅ 评价完成！已添加到列表 | Review complete! Added to the list.</span>';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '提交评价 Submit';
+                    input.value = '';
+
+                    alert('🚧 Demo Mode\n\n当前为演示模式。Supabase 连接失败。\n\n请检查：\n1. Supabase 配置是否正确\n2. Edge Function 是否已部署\n3. 浏览器控制台是否有错误信息');
+
+                    setTimeout(() => {
+                        statusDiv.innerHTML = '';
+                    }, 5000);
+                }, 3000);
+            }
         }
 
         window.submitProfile = submitProfile;
