@@ -81,15 +81,10 @@ serve(async (req) => {
     // 清理用户名（移除 @ 符号）
     const cleanUsername = twitterUsername.replace('@', '')
 
-    // 初始化 Supabase 客户端
+    // 初始化 Supabase 客户端（使用 SERVICE_ROLE_KEY 绕过 RLS）
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      {
-        global: {
-          headers: { Authorization: req.headers.get('Authorization')! },
-        },
-      }
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
     // 1. 检查是否已存在
@@ -97,7 +92,7 @@ serve(async (req) => {
       .from('observatory_profiles')
       .select('id, status')
       .eq('twitter_username', cleanUsername)
-      .single()
+      .maybeSingle()
 
     if (existing) {
       return new Response(
