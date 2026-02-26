@@ -2,6 +2,10 @@
 .openclaw/
 .github_token
 
+# 商业合同文件（敏感）
+docs/
+contracts/
+
 # Sugar Dating 项目文件（不属于 clawmatch）
 sugar-dating-website/
 sugar-info-site/
