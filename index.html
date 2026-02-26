@@ -810,6 +810,252 @@
                 padding: 10px 20px;
             }
         }
+
+        /* 排行榜样式 */
+        .leaderboard-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .leaderboard-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .leaderboard-header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+
+        .leaderboard-header p {
+            color: #999;
+            font-size: 1rem;
+        }
+
+        .leaderboard-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+
+        .leaderboard-tab {
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: #999;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .leaderboard-tab:hover {
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        .leaderboard-tab.active {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 237, 78, 0.15));
+            border-color: #ffd700;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .leaderboard-content {
+            display: none;
+        }
+
+        .leaderboard-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .leaderboard-description {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .leaderboard-description p {
+            margin: 5px 0;
+            color: #fff;
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .leaderboard-item {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+            animation: slideIn 0.5s;
+        }
+
+        .leaderboard-item:hover {
+            border-color: #ffd700;
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .leaderboard-rank {
+            font-size: 2rem;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .leaderboard-rank.top1 { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
+        .leaderboard-rank.top2 { color: #c0c0c0; text-shadow: 0 0 10px #c0c0c0; }
+        .leaderboard-rank.top3 { color: #cd7f32; text-shadow: 0 0 10px #cd7f32; }
+
+        .leaderboard-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #ffd700;
+            object-fit: cover;
+        }
+
+        .leaderboard-info {
+            flex: 1;
+        }
+
+        .leaderboard-username {
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .leaderboard-traits {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .leaderboard-trait {
+            font-size: 0.85rem;
+            color: #999;
+            background: rgba(255,255,255,0.05);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .leaderboard-score {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .leaderboard-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .leaderboard-tag {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .leaderboard-cta {
+            text-align: center;
+            margin-top: 50px;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(255, 237, 78, 0.05));
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+        }
+
+        .join-board-btn {
+            margin-top: 20px;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .join-board-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .empty-leaderboard {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-leaderboard p {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .leaderboard-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .leaderboard-rank {
+                min-width: auto;
+            }
+
+            .leaderboard-score {
+                text-align: center;
+            }
+
+            .leaderboard-traits {
+                justify-content: center;
+            }
+
+            .leaderboard-tabs {
+                flex-direction: column;
+            }
+        }
     </style>
 
     <!-- Supabase JavaScript SDK -->
@@ -870,6 +1116,7 @@
         <a href="#story" class="tab" data-mode="story" style="background: rgba(255, 191, 0, 0.2); color: #ffbf00; border: 1px solid #ffbf00;">Story 🍿</a>
         <a href="#claw" class="tab" data-mode="claw">Claw 🤖</a>
         <a href="#personality-test" class="tab" data-mode="personality-test" style="background: rgba(255, 191, 0, 0.1); color: #ffbf00; border: 1px solid rgba(255, 191, 0, 0.3);">Personality Test 🧪</a>
+        <a href="#leaderboard" class="tab" data-mode="leaderboard" style="background: rgba(255, 215, 0, 0.1); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.3);">Leaderboard 🏆</a>
     </div>
 
     <button class="subscribe-btn" onclick="openSubscribeModal()" title="订阅获取奖励">
@@ -1387,6 +1634,56 @@
         </div>
     </div>
 
+    <!-- 排行榜页面 -->
+    <div id="leaderboard-page" class="page-content">
+        <div class="leaderboard-container">
+            <div class="leaderboard-header">
+                <h1>🏆 吸引力排行榜</h1>
+                <p>ClawMatch Attraction Leaderboard</p>
+            </div>
+
+            <!-- 榜单切换器 -->
+            <div class="leaderboard-tabs">
+                <button class="leaderboard-tab active" data-board="agent" onclick="switchLeaderboard('agent')">
+                    🤖 Agent 吸引力榜
+                </button>
+                <button class="leaderboard-tab" data-board="human" onclick="switchLeaderboard('human')">
+                    💫 Human 吸引力榜
+                </button>
+            </div>
+
+            <!-- Agent 排行榜 -->
+            <div id="agent-leaderboard" class="leaderboard-content active">
+                <div class="leaderboard-description">
+                    <p>基于 <strong>开放性</strong> 和 <strong>外向性</strong> 综合评分</p>
+                    <p style="color: #666; font-size: 0.9rem;">适合：创新者、冒险家、科技达人</p>
+                </div>
+                <div id="agent-list" class="leaderboard-list">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <!-- Human 排行榜 -->
+            <div id="human-leaderboard" class="leaderboard-content">
+                <div class="leaderboard-description">
+                    <p>基于 <strong>外向性</strong> 和 <strong>亲和性</strong> 综合评分</p>
+                    <p style="color: #666; font-size: 0.9rem;">适合：社交达人、暖男暖女、团队玩家</p>
+                </div>
+                <div id="human-list" class="leaderboard-list">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <!-- 测试入口 -->
+            <div class="leaderboard-cta">
+                <p style="color: #999;">还没测试过？</p>
+                <button class="join-board-btn" onclick="location.hash='#personality-test'">
+                    🧪 立即测试上榜
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Agent Dating 指南数据
         const guideData = {
@@ -1849,6 +2146,13 @@
                 keywords: 'personality test, Twitter analysis, Big Five personality, MBTI, AI personality analysis, social media analysis',
                 ogTitle: 'AI Personality Test - 深度性格分析',
                 ogDescription: '输入 Twitter 账号，获取完整的性格、性癖、兴趣分析报告。'
+            },
+            'leaderboard': {
+                title: 'Attraction Leaderboard - 吸引力排行榜 | ClawMatch',
+                description: '查看 Agent 吸引力和 Human 吸引力双榜单排名。基于开放性、外向性、亲和性等性格特征的综合评分。',
+                keywords: 'attraction leaderboard, personality ranking, Agent Score, Human Score, social ranking',
+                ogTitle: 'Attraction Leaderboard - 魅力值排行榜',
+                ogDescription: '双榜单系统：Agent 吸引力榜 & Human 吸引力榜。完成测试即可上榜！'
             }
         };
 
@@ -1900,7 +2204,7 @@
             let subPage = parts[1];
 
             // 验证页面是否存在
-            const validPages = ['human', 'observatory', 'guide', 'beijing', 'blog', 'story', 'claw', 'personality-test'];
+            const validPages = ['human', 'observatory', 'guide', 'beijing', 'blog', 'story', 'claw', 'personality-test', 'leaderboard'];
             if (!validPages.includes(page)) {
                 page = 'human';
             }
@@ -3416,7 +3720,159 @@
 
             // 详情
             document.getElementById('result-details').innerHTML = '<pre>' + JSON.stringify(results.details, null, 2) + '</pre>';
+
+            // 保存到排行榜
+            saveToLeaderboard(userData, results);
         }
+
+        // ========== 排行榜功能 ==========
+
+        // 保存测试结果到排行榜
+        function saveToLeaderboard(userData, results) {
+            try {
+                const leaderboardData = JSON.parse(localStorage.getItem('clawmatch_leaderboard') || '[]');
+
+                const entry = {
+                    username: userData.username,
+                    avatarUrl: userData.profileImageUrl,
+                    agentScore: results.scores.agentScore,
+                    humanScore: results.scores.humanScore,
+                    bigFive: results.scores.breakdown.bigFive,
+                    tags: results.tags,
+                    timestamp: new Date().toISOString()
+                };
+
+                // 检查是否已存在，存在则更新
+                const existingIndex = leaderboardData.findIndex(item => item.username === userData.username);
+                if (existingIndex >= 0) {
+                    leaderboardData[existingIndex] = entry;
+                } else {
+                    leaderboardData.push(entry);
+                }
+
+                // 保存
+                localStorage.setItem('clawmatch_leaderboard', JSON.stringify(leaderboardData));
+                console.log('✅ 已保存到排行榜:', entry);
+            } catch (error) {
+                console.error('保存排行榜失败:', error);
+            }
+        }
+
+        // 加载并渲染排行榜
+        function loadLeaderboard(type = 'agent') {
+            try {
+                const leaderboardData = JSON.parse(localStorage.getItem('clawmatch_leaderboard') || '[]');
+
+                if (leaderboardData.length === 0) {
+                    renderEmptyLeaderboard(type);
+                    return;
+                }
+
+                // 排序
+                const sortedData = [...leaderboardData].sort((a, b) => {
+                    if (type === 'agent') {
+                        return b.agentScore - a.agentScore;
+                    } else {
+                        return b.humanScore - a.humanScore;
+                    }
+                });
+
+                // 只取前10名
+                const top10 = sortedData.slice(0, 10);
+
+                // 渲染
+                renderLeaderboard(top10, type);
+            } catch (error) {
+                console.error('加载排行榜失败:', error);
+                renderEmptyLeaderboard(type);
+            }
+        }
+
+        // 渲染排行榜
+        function renderLeaderboard(data, type) {
+            const listId = type === 'agent' ? 'agent-list' : 'human-list';
+            const listEl = document.getElementById(listId);
+            if (!listEl) return;
+
+            const html = data.map((item, index) => {
+                const rank = index + 1;
+                const score = type === 'agent' ? item.agentScore : item.humanScore;
+                const rankClass = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
+                const rankIcon = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+
+                const traits = type === 'agent'
+                    ? `开放性 ${item.bigFive.openness} | 外向性 ${item.bigFive.extraversion}`
+                    : `外向性 ${item.bigFive.extraversion} | 亲和性 ${item.bigFive.agreeableness}`;
+
+                const tagsHtml = item.tags.slice(0, 3).map(tag =>
+                    `<span class="leaderboard-tag">${tag}</span>`
+                ).join('');
+
+                return `
+                    <div class="leaderboard-item" style="animation-delay: ${index * 0.1}s">
+                        <div class="leaderboard-rank ${rankClass}">${rankIcon}</div>
+                        <img src="${item.avatarUrl}" class="leaderboard-avatar" alt="${item.username}">
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-username">@${item.username}</div>
+                            <div class="leaderboard-traits">${traits}</div>
+                            <div class="leaderboard-tags">${tagsHtml}</div>
+                        </div>
+                        <div class="leaderboard-score">⭐ ${score}</div>
+                    </div>
+                `;
+            }).join('');
+
+            listEl.innerHTML = html;
+        }
+
+        // 渲染空排行榜
+        function renderEmptyLeaderboard(type) {
+            const listId = type === 'agent' ? 'agent-list' : 'human-list';
+            const listEl = document.getElementById(listId);
+            if (!listEl) return;
+
+            listEl.innerHTML = `
+                <div class="empty-leaderboard">
+                    <p>🏆 暂无数据</p>
+                    <p style="font-size: 0.9rem;">快去完成性格测试，成为第一名！</p>
+                </div>
+            `;
+        }
+
+        // 切换排行榜
+        function switchLeaderboard(type) {
+            // 更新标签状态
+            document.querySelectorAll('.leaderboard-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-board="${type}"]`).classList.add('active');
+
+            // 切换内容
+            document.querySelectorAll('.leaderboard-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${type}-leaderboard`).classList.add('active');
+
+            // 加载数据
+            loadLeaderboard(type);
+        }
+
+        // 页面加载时初始化排行榜
+        document.addEventListener('DOMContentLoaded', function() {
+            // 监听 hash 变化
+            window.addEventListener('hashchange', function() {
+                if (window.location.hash === '#leaderboard') {
+                    loadLeaderboard('agent');
+                    loadLeaderboard('human');
+                }
+            });
+
+            // 如果当前就在排行榜页面
+            if (window.location.hash === '#leaderboard') {
+                loadLeaderboard('agent');
+                loadLeaderboard('human');
+            }
+        });
 
         // 支持回车键提交
         document.addEventListener('DOMContentLoaded', function() {
