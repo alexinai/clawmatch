@@ -4153,7 +4153,7 @@
 
         // 提交 Twitter 登记
         async function submitTwitterRegistration(eventId) {
-            const username = document.getElementById(`${eventId}-twitter-username`).value.trim();
+            let username = document.getElementById(`${eventId}-twitter-username`).value.trim();
             const selfIntro = document.getElementById(`${eventId}-self-intro`).value.trim();
 
             if (!username) {
@@ -4161,26 +4161,45 @@
                 return;
             }
 
-            try {
-                // 获取 Twitter 用户数据
-                const userData = await fetchTwitterUserData(username);
-                if (!userData) {
-                    alert('无法获取用户数据，请检查用户名是否正确');
-                    return;
-                }
+            // 提取用户名（支持完整 URL 或 @username 格式）
+            if (username.includes('x.com/') || username.includes('twitter.com/')) {
+                const match = username.match(/(?:x\.com|twitter\.com)\/([^\/\?]+)/);
+                if (match) username = match[1];
+            }
+            if (username.startsWith('@')) {
+                username = username.slice(1);
+            }
 
-                // 计算吸引力分数
-                const attractScore = calculateAttractScore(userData);
+            try {
+                // 使用 unavatar.io 服务获取 Twitter 头像（无需 API key）
+                const avatarUrl = `https://unavatar.io/twitter/${username}`;
+
+                // 如果有 Supabase Edge Function，调用它获取吸引力分数
+                let attractScore = 60; // 默认分数
+
+                if (supabaseClient) {
+                    try {
+                        const { data: scoreData } = await supabaseClient.functions.invoke('score-twitter-profile', {
+                            body: { twitterUsername: username }
+                        });
+                        if (scoreData && scoreData.agentScore) {
+                            attractScore = scoreData.agentScore;
+                        }
+                    } catch (scoreError) {
+                        console.log('使用默认分数:', scoreError);
+                        // 继续使用默认分数
+                    }
+                }
 
                 // 保存到 Supabase
                 const eventDate = eventId === 'bj228' ? '228' : '31';
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('bj_event_registrations')
                     .insert([{
                         event_date: eventDate,
                         registration_type: 'twitter',
                         twitter_username: username,
-                        twitter_avatar_url: userData.avatar || '',
+                        twitter_avatar_url: avatarUrl,
                         attract_score: attractScore,
                         self_intro: selfIntro || null
                     }])
@@ -4191,7 +4210,7 @@
                         alert('您已经登记过了，请勿重复提交');
                     } else {
                         console.error('提交失败:', error);
-                        alert('提交失败，请稍后重试');
+                        alert('提交失败：' + error.message);
                     }
                     return;
                 }
@@ -4200,11 +4219,12 @@
                 // 清空表单
                 document.getElementById(`${eventId}-twitter-username`).value = '';
                 document.getElementById(`${eventId}-self-intro`).value = '';
+                document.getElementById(`${eventId}-char-count`).textContent = '0';
                 // 重新加载列表
                 loadRegistrations(eventId, 1);
             } catch (err) {
                 console.error('提交错误:', err);
-                alert('提交失败，请稍后重试');
+                alert('提交失败：' + err.message);
             }
         }
 
@@ -4226,7 +4246,7 @@
 
             try {
                 const eventDate = eventId === 'bj228' ? '228' : '31';
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('bj_event_registrations')
                     .insert([{
                         event_date: eventDate,
@@ -4242,7 +4262,7 @@
                         alert('您已经登记过了，请勿重复提交');
                     } else {
                         console.error('提交失败:', error);
-                        alert('提交失败，请稍后重试');
+                        alert('提交失败：' + error.message);
                     }
                     return;
                 }
@@ -4251,6 +4271,7 @@
                 // 清空表单
                 document.getElementById(`${eventId}-wechat-id`).value = '';
                 document.getElementById(`${eventId}-self-intro`).value = '';
+                document.getElementById(`${eventId}-char-count`).textContent = '0';
                 registrationState[eventId].uploadedImage = null;
                 const container = document.getElementById(`${eventId}-registration-form`);
                 renderRegistrationForm(eventId, container);
@@ -4258,7 +4279,7 @@
                 loadRegistrations(eventId, 1);
             } catch (err) {
                 console.error('提交错误:', err);
-                alert('提交失败，请稍后重试');
+                alert('提交失败：' + err.message);
             }
         }
 
@@ -4267,8 +4288,13 @@
             try {
                 const eventDate = eventId === 'bj228' ? '228' : '31';
 
+                if (!supabaseClient) {
+                    console.warn('Supabase 未初始化');
+                    return;
+                }
+
                 // 获取总数
-                const { count } = await supabase
+                const { count } = await supabaseClient
                     .from('bj_event_registrations')
                     .select('*', { count: 'exact', head: true })
                     .eq('event_date', eventDate);
@@ -4280,7 +4306,7 @@
                 const from = (page - 1) * ITEMS_PER_PAGE;
                 const to = from + ITEMS_PER_PAGE - 1;
 
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('bj_event_registrations')
                     .select('*')
                     .eq('event_date', eventDate)
