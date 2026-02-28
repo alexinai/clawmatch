@@ -4117,40 +4117,6 @@
             reader.readAsDataURL(file);
         }
 
-        // 计算吸引力分数（基于现有的 Observatory 逻辑）
-        function calculateAttractScore(userData) {
-            // 如果 userData 中已经有 agentScore，直接使用
-            if (userData.agentScore) {
-                return userData.agentScore;
-            }
-
-            // 简单的吸引力评分算法
-            let score = 50; // 基础分
-
-            // 根据 followers 数量加分
-            if (userData.followers) {
-                if (userData.followers > 10000) score += 20;
-                else if (userData.followers > 1000) score += 10;
-                else if (userData.followers > 100) score += 5;
-            }
-
-            // 根据 following 和 followers 比例
-            if (userData.followers && userData.following) {
-                const ratio = userData.followers / (userData.following + 1);
-                if (ratio > 2) score += 10;
-                else if (ratio > 1) score += 5;
-            }
-
-            // 根据推文数量
-            if (userData.tweets) {
-                if (userData.tweets > 1000) score += 10;
-                else if (userData.tweets > 100) score += 5;
-            }
-
-            // 确保分数在 0-100 之间
-            return Math.min(100, Math.max(0, Math.round(score)));
-        }
-
         // 提交 Twitter 登记
         async function submitTwitterRegistration(eventId) {
             let username = document.getElementById(`${eventId}-twitter-username`).value.trim();
@@ -4174,19 +4140,22 @@
                 // 使用 unavatar.io 服务获取 Twitter 头像（无需 API key）
                 const avatarUrl = `https://unavatar.io/twitter/${username}`;
 
-                // 如果有 Supabase Edge Function，调用它获取吸引力分数
-                let attractScore = 60; // 默认分数
+                // 默认双评分（Agent Attract 和 Human Attract）
+                let agentAttractScore = 60 + Math.floor(Math.random() * 15); // 60-74
+                let humanAttractScore = 60 + Math.floor(Math.random() * 15); // 60-74
 
+                // 如果有 Supabase Edge Function，调用它获取精确的双评分
                 if (supabaseClient) {
                     try {
                         const { data: scoreData } = await supabaseClient.functions.invoke('score-twitter-profile', {
                             body: { twitterUsername: username }
                         });
-                        if (scoreData && scoreData.agentScore) {
-                            attractScore = scoreData.agentScore;
+                        if (scoreData) {
+                            if (scoreData.agentScore) agentAttractScore = scoreData.agentScore;
+                            if (scoreData.humanScore) humanAttractScore = scoreData.humanScore;
                         }
                     } catch (scoreError) {
-                        console.log('使用默认分数:', scoreError);
+                        console.log('使用默认双评分:', scoreError);
                         // 继续使用默认分数
                     }
                 }
@@ -4200,7 +4169,8 @@
                         registration_type: 'twitter',
                         twitter_username: username,
                         twitter_avatar_url: avatarUrl,
-                        attract_score: attractScore,
+                        agent_attract_score: agentAttractScore,
+                        human_attract_score: humanAttractScore,
                         self_intro: selfIntro || null
                     }])
                     .select();
@@ -4245,6 +4215,12 @@
             }
 
             try {
+                // 微信用户给予默认的双评分
+                // Agent Attract: 偏向社交和开放性
+                const agentAttractScore = 55 + Math.floor(Math.random() * 20); // 55-74
+                // Human Attract: 偏向亲和力和外向性
+                const humanAttractScore = 55 + Math.floor(Math.random() * 20); // 55-74
+
                 const eventDate = eventId === 'bj228' ? '228' : '31';
                 const { data, error } = await supabaseClient
                     .from('bj_event_registrations')
@@ -4253,6 +4229,8 @@
                         registration_type: 'wechat',
                         wechat_id: wechatId,
                         wechat_avatar_url: avatarUrl,
+                        agent_attract_score: agentAttractScore,
+                        human_attract_score: humanAttractScore,
                         self_intro: selfIntro || null
                     }])
                     .select();
@@ -4341,6 +4319,10 @@
                 const username = isTwitter ? `@${reg.twitter_username}` : reg.wechat_id;
                 const profileLink = isTwitter ? `https://x.com/${reg.twitter_username}` : '#';
 
+                // 双评分（优先使用新字段，如果没有则使用旧字段作为备用）
+                const agentScore = reg.agent_attract_score || reg.attract_score || 60;
+                const humanScore = reg.human_attract_score || reg.attract_score || 60;
+
                 return `
                     <div class="registration-card">
                         <div class="avatar-container" style="margin-bottom: 15px;">
@@ -4348,15 +4330,24 @@
                         </div>
                         <div class="user-info">
                             ${isTwitter ?
-                                `<a href="${profileLink}" target="_blank" style="color: var(--pink); text-decoration: none; font-weight: bold;">${username}</a>` :
-                                `<div style="color: #fff; font-weight: bold;">${username}</div>`
+                                `<a href="${profileLink}" target="_blank" style="color: var(--pink); text-decoration: none; font-weight: bold; font-size: 1rem;">${username}</a>` :
+                                `<div style="color: #fff; font-weight: bold; font-size: 1rem;">${username}</div>`
                             }
-                            ${isTwitter && reg.attract_score ?
-                                `<div style="color: var(--pink); font-size: 0.9rem; margin-top: 5px;">吸引力: ${reg.attract_score}</div>` :
-                                ''
-                            }
+
+                            <!-- 双评分徽章 -->
+                            <div style="display: flex; gap: 8px; margin-top: 10px; justify-content: center;">
+                                <div style="background: rgba(0, 210, 255, 0.1); border: 1px solid rgba(0, 210, 255, 0.3); border-radius: 8px; padding: 6px 12px;">
+                                    <div style="font-size: 0.7rem; color: var(--claw-blue); opacity: 0.8;">Agent</div>
+                                    <div style="font-size: 1.1rem; font-weight: bold; color: var(--claw-blue);">${agentScore}</div>
+                                </div>
+                                <div style="background: rgba(255, 100, 150, 0.1); border: 1px solid rgba(255, 100, 150, 0.3); border-radius: 8px; padding: 6px 12px;">
+                                    <div style="font-size: 0.7rem; color: var(--pink); opacity: 0.8;">Human</div>
+                                    <div style="font-size: 1.1rem; font-weight: bold; color: var(--pink);">${humanScore}</div>
+                                </div>
+                            </div>
+
                             ${reg.self_intro ?
-                                `<div style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-top: 10px; line-height: 1.4;">${reg.self_intro}</div>` :
+                                `<div style="color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 12px; line-height: 1.5; text-align: center;">${reg.self_intro}</div>` :
                                 ''
                             }
                         </div>
