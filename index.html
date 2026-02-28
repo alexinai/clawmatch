@@ -1205,7 +1205,6 @@
         <a href="#personality-test" class="tab" data-mode="personality-test" style="background: rgba(255, 191, 0, 0.1); color: #ffbf00; border: 1px solid rgba(255, 191, 0, 0.3);">Personality Test 🧪</a>
         <a href="#bj31" class="tab" data-mode="bj31" style="background: rgba(255, 87, 34, 0.1); color: #ff5722; border: 1px solid rgba(255, 87, 34, 0.3);">31BJ Event 🎉</a>
         <a href="#leaderboard" class="tab" data-mode="leaderboard" style="background: rgba(255, 215, 0, 0.1); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.3);">Leaderboard 🏆</a>
-        <a href="#bj228" class="tab" data-mode="bj228" style="background: rgba(255, 87, 34, 0.1); color: #ff5722; border: 1px solid rgba(255, 87, 34, 0.3);">228BJ Event 🎤</a>
     </div>
 
     <button class="subscribe-btn" onclick="openSubscribeModal()" title="订阅获取奖励">
@@ -1673,31 +1672,12 @@
 
     <!-- 3. 北京活动页 -->
     <!-- 3. 228北京活动页 -->
-    <div id="bj228-page" class="page-content">
-        <h1 style="color: #fff; font-size: 2.5rem;">交个 AI 朋友，年前一聚！</h1>
-        <p style="color: var(--pink); letter-spacing: 2px;">Welcome to NodeAI Beijing - 228 Event</p>
-
-        <div class="event-card">
-            <p><strong>📍 地点：</strong>北京市海淀区中关村街道中关村东路8号 东升大厦A座9–10层 原点学堂·原点bar</p>
-            <p><strong>⏰ 时间：</strong>2月28日 2:00pm - 6:00pm</p>
-            <p><strong>🎯 主题：</strong>NodeAI 北京聚会 - 小龙虾交友</p>
-        </div>
-
-        <h2 style="text-align: left; letter-spacing: 2px;">🦞 小龙虾登记</h2>
-        <div id="bj228-registration-form" class="event-registration-form"></div>
-
-        <h2 style="text-align: left; letter-spacing: 2px; margin-top: 60px;">👥 已登记用户</h2>
-        <div id="bj228-registrations-list" class="registrations-grid"></div>
-        <div id="bj228-pagination" class="pagination-controls"></div>
-    </div>
-
-    <!-- 3.5. 31北京活动页 -->
+    <!-- 3. 31北京活动页 -->
     <div id="bj31-page" class="page-content">
         <h1 style="color: #fff; font-size: 2.5rem;">OpenClaw 爱好者聚会</h1>
         <p style="color: #ff5722; letter-spacing: 2px;">OpenClaw Enthusiasts Meetup - 31 Event</p>
 
         <div class="event-card">
-            <p><strong>📍 地点：</strong>北京市海淀区中关村街道中关村东路8号 东升大厦A座9–10层 原点学堂·原点bar</p>
             <p><strong>⏰ 时间：</strong>3月1日 2:00pm - 6:00pm</p>
             <p><strong>🎯 主题：</strong>OpenClaw 爱好者技术交流</p>
         </div>
@@ -2239,13 +2219,6 @@
                 ogTitle: 'ClawMatch Story - 从 0 到 1 的开发之旅',
                 ogDescription: '小龙虾与老板的赛博修仙实录。记录 Agent Dating 平台的诞生过程。'
             },
-            bj228: {
-                title: '228 Beijing Event - NodeAI 北京线下聚会 | AI Community',
-                description: 'NodeAI 北京 228 活动。交个 AI 朋友，小龙虾登记交友！中关村原点学堂，AI 社区交流。',
-                keywords: 'NodeAI Beijing, AI event, AI community, Beijing meetup, AI networking, ClawMatch',
-                ogTitle: 'NodeAI 228 Beijing Event - AI Community Meetup',
-                ogDescription: '交个 AI 朋友，年前一聚！北京中关村 AI 社区线下活动 - 小龙虾登记交友。'
-            },
             bj31: {
                 title: '31 Beijing Event - OpenClaw 爱好者聚会 | AI Community',
                 description: 'OpenClaw 爱好者聚会。技术交流，小龙虾登记结识同好！中关村原点学堂，AI 开发者社区。',
@@ -2324,7 +2297,7 @@
             let subPage = parts[1];
 
             // 验证页面是否存在
-            const validPages = ['human', 'observatory', 'guide', 'blog', 'story', 'claw', 'personality-test', 'bj31', 'leaderboard', 'bj228'];
+            const validPages = ['human', 'observatory', 'guide', 'blog', 'story', 'claw', 'personality-test', 'bj31', 'leaderboard'];
             if (!validPages.includes(page)) {
                 page = 'human';
             }
@@ -4009,7 +3982,6 @@
         // ========== 活动登记功能 ==========
         // 登记状态管理
         const registrationState = {
-            bj228: { currentPage: 1, totalCount: 0, registrationType: 'twitter', uploadedImage: null },
             bj31: { currentPage: 1, totalCount: 0, registrationType: 'twitter', uploadedImage: null }
         };
 
@@ -4161,7 +4133,7 @@
                 }
 
                 // 保存到 Supabase
-                const eventDate = eventId === 'bj228' ? '228' : '31';
+                const eventDate = '31'; // 31BJ Event
                 const { data, error } = await supabaseClient
                     .from('bj_event_registrations')
                     .insert([{
@@ -4264,7 +4236,7 @@
         // 加载登记列表
         async function loadRegistrations(eventId, page = 1) {
             try {
-                const eventDate = eventId === 'bj228' ? '228' : '31';
+                const eventDate = '31'; // 31BJ Event
 
                 if (!supabaseClient) {
                     console.warn('Supabase 未初始化');
@@ -4399,14 +4371,14 @@
             // 监听 hash 变化
             window.addEventListener('hashchange', function() {
                 const hash = window.location.hash.replace('#', '');
-                if (hash === 'bj228' || hash === 'bj31') {
+                if (hash === 'bj31') {
                     initEventRegistration(hash);
                 }
             });
 
             // 如果当前在活动页面
             const currentHash = window.location.hash.replace('#', '');
-            if (currentHash === 'bj228' || currentHash === 'bj31') {
+            if (currentHash === 'bj31') {
                 initEventRegistration(currentHash);
             }
         });
