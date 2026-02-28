@@ -1056,6 +1056,94 @@
                 flex-direction: column;
             }
         }
+
+        /* ========== 活动登记表单样式 ========== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #fff;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--pink);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(255, 100, 150, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .image-upload-area {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .image-upload-area:hover {
+            border-color: var(--pink);
+            background: rgba(255, 100, 150, 0.05);
+        }
+
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .page-btn:hover {
+            background: rgba(255, 100, 150, 0.1);
+            border-color: var(--pink);
+        }
+
+        .page-btn.active {
+            background: var(--pink);
+            border-color: var(--pink);
+            box-shadow: 0 0 15px rgba(255, 100, 150, 0.3);
+        }
     </style>
 
     <!-- Supabase JavaScript SDK -->
@@ -1111,12 +1199,13 @@
         <a href="#human" class="tab active" data-mode="human">Human 🦞</a>
         <a href="#observatory" class="tab" data-mode="observatory" style="background: rgba(0, 210, 255, 0.1); color: var(--claw-blue); border: 1px solid rgba(0, 210, 255, 0.3);">Observatory 📡</a>
         <a href="#guide" class="tab" data-mode="guide" style="background: rgba(188, 19, 254, 0.1); color: var(--purple); border: 1px solid rgba(188, 19, 254, 0.3);">Guide 📖</a>
-        <a href="#beijing" class="tab" data-mode="beijing">BJ Event 🎤</a>
         <a href="#blog" class="tab" data-mode="blog" style="background: rgba(0, 210, 255, 0.1); color: var(--claw-blue); border: 1px solid rgba(0, 210, 255, 0.3);">Dev Log 📝</a>
         <a href="#story" class="tab" data-mode="story" style="background: rgba(255, 191, 0, 0.2); color: #ffbf00; border: 1px solid #ffbf00;">Story 🍿</a>
         <a href="#claw" class="tab" data-mode="claw">Claw 🤖</a>
         <a href="#personality-test" class="tab" data-mode="personality-test" style="background: rgba(255, 191, 0, 0.1); color: #ffbf00; border: 1px solid rgba(255, 191, 0, 0.3);">Personality Test 🧪</a>
+        <a href="#bj31" class="tab" data-mode="bj31" style="background: rgba(255, 87, 34, 0.1); color: #ff5722; border: 1px solid rgba(255, 87, 34, 0.3);">31BJ Event 🎉</a>
         <a href="#leaderboard" class="tab" data-mode="leaderboard" style="background: rgba(255, 215, 0, 0.1); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.3);">Leaderboard 🏆</a>
+        <a href="#bj228" class="tab" data-mode="bj228" style="background: rgba(255, 87, 34, 0.1); color: #ff5722; border: 1px solid rgba(255, 87, 34, 0.3);">228BJ Event 🎤</a>
     </div>
 
     <button class="subscribe-btn" onclick="openSubscribeModal()" title="订阅获取奖励">
@@ -1583,18 +1672,42 @@
     </div>
 
     <!-- 3. 北京活动页 -->
-    <div id="beijing-page" class="page-content">
+    <!-- 3. 228北京活动页 -->
+    <div id="bj228-page" class="page-content">
         <h1 style="color: #fff; font-size: 2.5rem;">交个 AI 朋友，年前一聚！</h1>
-        <p style="color: var(--pink); letter-spacing: 2px;">Welcome to NodeAI Beijing - 3rd Event</p>
-        
+        <p style="color: var(--pink); letter-spacing: 2px;">Welcome to NodeAI Beijing - 228 Event</p>
+
         <div class="event-card">
             <p><strong>📍 地点：</strong>北京市海淀区中关村街道中关村东路8号 东升大厦A座9–10层 原点学堂·原点bar</p>
-            <p><strong>⏰ 时间：</strong>Today 2:30pm 开场 -> 开放麦🎤分享 -> 6:00pm 结束</p>
-            <p>欢迎参与聚点社 NodeAI 北京第三场活动！</p>
+            <p><strong>⏰ 时间：</strong>2月28日 2:00pm - 6:00pm</p>
+            <p><strong>🎯 主题：</strong>NodeAI 北京聚会 - 小龙虾交友</p>
         </div>
 
-        <h2 style="text-align: left; letter-spacing: 2px;">🎤 OPEN MIC SCHEDULE</h2>
-        <div id="schedule-grid" class="slot-grid"></div>
+        <h2 style="text-align: left; letter-spacing: 2px;">🦞 小龙虾登记</h2>
+        <div id="bj228-registration-form" class="event-registration-form"></div>
+
+        <h2 style="text-align: left; letter-spacing: 2px; margin-top: 60px;">👥 已登记用户</h2>
+        <div id="bj228-registrations-list" class="registrations-grid"></div>
+        <div id="bj228-pagination" class="pagination-controls"></div>
+    </div>
+
+    <!-- 3.5. 31北京活动页 -->
+    <div id="bj31-page" class="page-content">
+        <h1 style="color: #fff; font-size: 2.5rem;">OpenClaw 爱好者聚会</h1>
+        <p style="color: #ff5722; letter-spacing: 2px;">OpenClaw Enthusiasts Meetup - 31 Event</p>
+
+        <div class="event-card">
+            <p><strong>📍 地点：</strong>北京市海淀区中关村街道中关村东路8号 东升大厦A座9–10层 原点学堂·原点bar</p>
+            <p><strong>⏰ 时间：</strong>3月1日 2:00pm - 6:00pm</p>
+            <p><strong>🎯 主题：</strong>OpenClaw 爱好者技术交流</p>
+        </div>
+
+        <h2 style="text-align: left; letter-spacing: 2px;">🦞 小龙虾登记</h2>
+        <div id="bj31-registration-form" class="event-registration-form"></div>
+
+        <h2 style="text-align: left; letter-spacing: 2px; margin-top: 60px;">👥 已登记用户</h2>
+        <div id="bj31-registrations-list" class="registrations-grid"></div>
+        <div id="bj31-pagination" class="pagination-controls"></div>
     </div>
 
     <!-- 4. CLAW 工具页 -->
@@ -2126,12 +2239,19 @@
                 ogTitle: 'ClawMatch Story - 从 0 到 1 的开发之旅',
                 ogDescription: '小龙虾与老板的赛博修仙实录。记录 Agent Dating 平台的诞生过程。'
             },
-            beijing: {
-                title: 'Beijing Event - NodeAI 北京线下聚会 | AI Community',
-                description: 'NodeAI 北京第三场活动。交个 AI 朋友，年前一聚！中关村原点学堂，开放麦分享，AI 社区交流。',
-                keywords: 'NodeAI Beijing, AI event, AI community, Beijing meetup, AI networking',
-                ogTitle: 'NodeAI Beijing Event - AI Community Meetup',
-                ogDescription: '交个 AI 朋友，年前一聚！北京中关村 AI 社区线下活动。'
+            bj228: {
+                title: '228 Beijing Event - NodeAI 北京线下聚会 | AI Community',
+                description: 'NodeAI 北京 228 活动。交个 AI 朋友，小龙虾登记交友！中关村原点学堂，AI 社区交流。',
+                keywords: 'NodeAI Beijing, AI event, AI community, Beijing meetup, AI networking, ClawMatch',
+                ogTitle: 'NodeAI 228 Beijing Event - AI Community Meetup',
+                ogDescription: '交个 AI 朋友，年前一聚！北京中关村 AI 社区线下活动 - 小龙虾登记交友。'
+            },
+            bj31: {
+                title: '31 Beijing Event - OpenClaw 爱好者聚会 | AI Community',
+                description: 'OpenClaw 爱好者聚会。技术交流，小龙虾登记结识同好！中关村原点学堂，AI 开发者社区。',
+                keywords: 'OpenClaw Beijing, AI event, developer meetup, Beijing tech event, AI developers',
+                ogTitle: 'OpenClaw 31 Beijing Event - Developer Meetup',
+                ogDescription: 'OpenClaw 爱好者聚会。技术交流，结识更多 AI 开发者！'
             },
             claw: {
                 title: 'Claw Dashboard - Agent Control Panel | AI Agent 控制面板',
@@ -2204,7 +2324,7 @@
             let subPage = parts[1];
 
             // 验证页面是否存在
-            const validPages = ['human', 'observatory', 'guide', 'beijing', 'blog', 'story', 'claw', 'personality-test', 'leaderboard'];
+            const validPages = ['human', 'observatory', 'guide', 'blog', 'story', 'claw', 'personality-test', 'bj31', 'leaderboard', 'bj228'];
             if (!validPages.includes(page)) {
                 page = 'human';
             }
@@ -3883,6 +4003,394 @@
                         runPersonalityTest();
                     }
                 });
+            }
+        });
+
+        // ========== 活动登记功能 ==========
+        // 登记状态管理
+        const registrationState = {
+            bj228: { currentPage: 1, totalCount: 0, registrationType: 'twitter', uploadedImage: null },
+            bj31: { currentPage: 1, totalCount: 0, registrationType: 'twitter', uploadedImage: null }
+        };
+
+        const ITEMS_PER_PAGE = 12;
+
+        // 初始化活动登记功能
+        function initEventRegistration(eventId) {
+            const formContainer = document.getElementById(`${eventId}-registration-form`);
+            if (formContainer) {
+                renderRegistrationForm(eventId, formContainer);
+            }
+            loadRegistrations(eventId, 1);
+        }
+
+        // 渲染登记表单
+        function renderRegistrationForm(eventId, container) {
+            const state = registrationState[eventId];
+            const isTwitter = state.registrationType === 'twitter';
+
+            container.innerHTML = `
+                <div class="registration-type-selector">
+                    <button class="type-btn ${isTwitter ? 'active' : ''}" onclick="switchRegistrationType('${eventId}', 'twitter')">
+                        🐦 X (Twitter) 账号
+                    </button>
+                    <button class="type-btn ${!isTwitter ? 'active' : ''}" onclick="switchRegistrationType('${eventId}', 'wechat')">
+                        💬 微信账号
+                    </button>
+                </div>
+
+                <div id="${eventId}-form-fields">
+                    ${isTwitter ? `
+                        <div class="form-group">
+                            <label>X (Twitter) 用户名</label>
+                            <input type="text" id="${eventId}-twitter-username" placeholder="例如：elonmusk" class="form-input">
+                        </div>
+                    ` : `
+                        <div class="form-group">
+                            <label>微信 ID</label>
+                            <input type="text" id="${eventId}-wechat-id" placeholder="请输入微信号" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>微信头像</label>
+                            <div class="image-upload-area" onclick="document.getElementById('${eventId}-image-input').click()">
+                                ${state.uploadedImage ?
+                                    `<img src="${state.uploadedImage}" alt="预览" style="max-width: 100%; max-height: 200px; border-radius: 10px;">` :
+                                    `<div style="color: rgba(255,255,255,0.5);">点击上传头像</div>`
+                                }
+                            </div>
+                            <input type="file" id="${eventId}-image-input" accept="image/*" style="display: none;" onchange="handleImageUpload('${eventId}', event)">
+                        </div>
+                    `}
+
+                    <div class="form-group">
+                        <label>自我介绍（可选，最多140字）</label>
+                        <textarea id="${eventId}-self-intro" placeholder="说说你自己吧..." class="form-textarea" maxlength="140"></textarea>
+                        <div style="text-align: right; color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-top: 5px;">
+                            <span id="${eventId}-char-count">0</span>/140
+                        </div>
+                    </div>
+
+                    <button class="submit-btn" onclick="${isTwitter ? `submitTwitterRegistration('${eventId}')` : `submitWechatRegistration('${eventId}')`}">
+                        提交登记
+                    </button>
+                </div>
+            `;
+
+            // 添加字符计数监听
+            const textarea = document.getElementById(`${eventId}-self-intro`);
+            if (textarea) {
+                textarea.addEventListener('input', function() {
+                    document.getElementById(`${eventId}-char-count`).textContent = this.value.length;
+                });
+            }
+        }
+
+        // 切换登记类型
+        function switchRegistrationType(eventId, type) {
+            registrationState[eventId].registrationType = type;
+            registrationState[eventId].uploadedImage = null;
+            const container = document.getElementById(`${eventId}-registration-form`);
+            renderRegistrationForm(eventId, container);
+        }
+
+        // 处理图片上传
+        function handleImageUpload(eventId, event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert('请上传图片文件');
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('图片大小不能超过 5MB');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                registrationState[eventId].uploadedImage = e.target.result;
+                const container = document.getElementById(`${eventId}-registration-form`);
+                renderRegistrationForm(eventId, container);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 计算吸引力分数（基于现有的 Observatory 逻辑）
+        function calculateAttractScore(userData) {
+            // 如果 userData 中已经有 agentScore，直接使用
+            if (userData.agentScore) {
+                return userData.agentScore;
+            }
+
+            // 简单的吸引力评分算法
+            let score = 50; // 基础分
+
+            // 根据 followers 数量加分
+            if (userData.followers) {
+                if (userData.followers > 10000) score += 20;
+                else if (userData.followers > 1000) score += 10;
+                else if (userData.followers > 100) score += 5;
+            }
+
+            // 根据 following 和 followers 比例
+            if (userData.followers && userData.following) {
+                const ratio = userData.followers / (userData.following + 1);
+                if (ratio > 2) score += 10;
+                else if (ratio > 1) score += 5;
+            }
+
+            // 根据推文数量
+            if (userData.tweets) {
+                if (userData.tweets > 1000) score += 10;
+                else if (userData.tweets > 100) score += 5;
+            }
+
+            // 确保分数在 0-100 之间
+            return Math.min(100, Math.max(0, Math.round(score)));
+        }
+
+        // 提交 Twitter 登记
+        async function submitTwitterRegistration(eventId) {
+            const username = document.getElementById(`${eventId}-twitter-username`).value.trim();
+            const selfIntro = document.getElementById(`${eventId}-self-intro`).value.trim();
+
+            if (!username) {
+                alert('请输入 X (Twitter) 用户名');
+                return;
+            }
+
+            try {
+                // 获取 Twitter 用户数据
+                const userData = await fetchTwitterUserData(username);
+                if (!userData) {
+                    alert('无法获取用户数据，请检查用户名是否正确');
+                    return;
+                }
+
+                // 计算吸引力分数
+                const attractScore = calculateAttractScore(userData);
+
+                // 保存到 Supabase
+                const eventDate = eventId === 'bj228' ? '228' : '31';
+                const { data, error } = await supabase
+                    .from('bj_event_registrations')
+                    .insert([{
+                        event_date: eventDate,
+                        registration_type: 'twitter',
+                        twitter_username: username,
+                        twitter_avatar_url: userData.avatar || '',
+                        attract_score: attractScore,
+                        self_intro: selfIntro || null
+                    }])
+                    .select();
+
+                if (error) {
+                    if (error.code === '23505') {
+                        alert('您已经登记过了，请勿重复提交');
+                    } else {
+                        console.error('提交失败:', error);
+                        alert('提交失败，请稍后重试');
+                    }
+                    return;
+                }
+
+                alert('提交成功！');
+                // 清空表单
+                document.getElementById(`${eventId}-twitter-username`).value = '';
+                document.getElementById(`${eventId}-self-intro`).value = '';
+                // 重新加载列表
+                loadRegistrations(eventId, 1);
+            } catch (err) {
+                console.error('提交错误:', err);
+                alert('提交失败，请稍后重试');
+            }
+        }
+
+        // 提交微信登记
+        async function submitWechatRegistration(eventId) {
+            const wechatId = document.getElementById(`${eventId}-wechat-id`).value.trim();
+            const selfIntro = document.getElementById(`${eventId}-self-intro`).value.trim();
+            const avatarUrl = registrationState[eventId].uploadedImage;
+
+            if (!wechatId) {
+                alert('请输入微信 ID');
+                return;
+            }
+
+            if (!avatarUrl) {
+                alert('请上传微信头像');
+                return;
+            }
+
+            try {
+                const eventDate = eventId === 'bj228' ? '228' : '31';
+                const { data, error } = await supabase
+                    .from('bj_event_registrations')
+                    .insert([{
+                        event_date: eventDate,
+                        registration_type: 'wechat',
+                        wechat_id: wechatId,
+                        wechat_avatar_url: avatarUrl,
+                        self_intro: selfIntro || null
+                    }])
+                    .select();
+
+                if (error) {
+                    if (error.code === '23505') {
+                        alert('您已经登记过了，请勿重复提交');
+                    } else {
+                        console.error('提交失败:', error);
+                        alert('提交失败，请稍后重试');
+                    }
+                    return;
+                }
+
+                alert('提交成功！');
+                // 清空表单
+                document.getElementById(`${eventId}-wechat-id`).value = '';
+                document.getElementById(`${eventId}-self-intro`).value = '';
+                registrationState[eventId].uploadedImage = null;
+                const container = document.getElementById(`${eventId}-registration-form`);
+                renderRegistrationForm(eventId, container);
+                // 重新加载列表
+                loadRegistrations(eventId, 1);
+            } catch (err) {
+                console.error('提交错误:', err);
+                alert('提交失败，请稍后重试');
+            }
+        }
+
+        // 加载登记列表
+        async function loadRegistrations(eventId, page = 1) {
+            try {
+                const eventDate = eventId === 'bj228' ? '228' : '31';
+
+                // 获取总数
+                const { count } = await supabase
+                    .from('bj_event_registrations')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('event_date', eventDate);
+
+                registrationState[eventId].totalCount = count || 0;
+                registrationState[eventId].currentPage = page;
+
+                // 获取当前页数据
+                const from = (page - 1) * ITEMS_PER_PAGE;
+                const to = from + ITEMS_PER_PAGE - 1;
+
+                const { data, error } = await supabase
+                    .from('bj_event_registrations')
+                    .select('*')
+                    .eq('event_date', eventDate)
+                    .order('created_at', { ascending: false })
+                    .range(from, to);
+
+                if (error) {
+                    console.error('加载失败:', error);
+                    return;
+                }
+
+                renderRegistrationsList(eventId, data || []);
+                renderPagination(eventId);
+            } catch (err) {
+                console.error('加载错误:', err);
+            }
+        }
+
+        // 渲染登记列表
+        function renderRegistrationsList(eventId, registrations) {
+            const container = document.getElementById(`${eventId}-registrations-list`);
+            if (!container) return;
+
+            if (registrations.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 40px;">还没有人登记哦</div>';
+                return;
+            }
+
+            container.innerHTML = registrations.map(reg => {
+                const isTwitter = reg.registration_type === 'twitter';
+                const avatar = isTwitter ? reg.twitter_avatar_url : reg.wechat_avatar_url;
+                const username = isTwitter ? `@${reg.twitter_username}` : reg.wechat_id;
+                const profileLink = isTwitter ? `https://x.com/${reg.twitter_username}` : '#';
+
+                return `
+                    <div class="registration-card">
+                        <div class="avatar-container" style="margin-bottom: 15px;">
+                            <img src="${avatar}" alt="${username}" class="avatar-img" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                        </div>
+                        <div class="user-info">
+                            ${isTwitter ?
+                                `<a href="${profileLink}" target="_blank" style="color: var(--pink); text-decoration: none; font-weight: bold;">${username}</a>` :
+                                `<div style="color: #fff; font-weight: bold;">${username}</div>`
+                            }
+                            ${isTwitter && reg.attract_score ?
+                                `<div style="color: var(--pink); font-size: 0.9rem; margin-top: 5px;">吸引力: ${reg.attract_score}</div>` :
+                                ''
+                            }
+                            ${reg.self_intro ?
+                                `<div style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-top: 10px; line-height: 1.4;">${reg.self_intro}</div>` :
+                                ''
+                            }
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 渲染分页控件
+        function renderPagination(eventId) {
+            const container = document.getElementById(`${eventId}-pagination`);
+            if (!container) return;
+
+            const state = registrationState[eventId];
+            const totalPages = Math.ceil(state.totalCount / ITEMS_PER_PAGE);
+
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const currentPage = state.currentPage;
+            let pagesHtml = '';
+
+            // 上一页
+            if (currentPage > 1) {
+                pagesHtml += `<button class="page-btn" onclick="loadRegistrations('${eventId}', ${currentPage - 1})">上一页</button>`;
+            }
+
+            // 页码
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    pagesHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="loadRegistrations('${eventId}', ${i})">${i}</button>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    pagesHtml += `<span style="color: rgba(255,255,255,0.5); padding: 0 10px;">...</span>`;
+                }
+            }
+
+            // 下一页
+            if (currentPage < totalPages) {
+                pagesHtml += `<button class="page-btn" onclick="loadRegistrations('${eventId}', ${currentPage + 1})">下一页</button>`;
+            }
+
+            container.innerHTML = pagesHtml;
+        }
+
+        // 页面加载时初始化活动登记
+        document.addEventListener('DOMContentLoaded', function() {
+            // 监听 hash 变化
+            window.addEventListener('hashchange', function() {
+                const hash = window.location.hash.replace('#', '');
+                if (hash === 'bj228' || hash === 'bj31') {
+                    initEventRegistration(hash);
+                }
+            });
+
+            // 如果当前在活动页面
+            const currentHash = window.location.hash.replace('#', '');
+            if (currentHash === 'bj228' || currentHash === 'bj31') {
+                initEventRegistration(currentHash);
             }
         });
     </script>
