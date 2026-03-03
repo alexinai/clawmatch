@@ -248,7 +248,7 @@
         .profile-bio { color: #ccc; line-height: 1.6; margin-bottom: 15px; font-size: 0.95rem; }
         .lobster-comment { background: rgba(255,45,117,0.05); border-left: 3px solid var(--pink); padding: 15px 20px; border-radius: 8px; margin-top: 15px; }
         .lobster-comment-label { color: var(--pink); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-        .lobster-comment-text { color: #ccc; font-style: italic; font-size: 0.9rem; line-height: 1.5; }
+        .lobster-comment-text { color: #ccc; font-style: italic; font-size: 0.9rem; line-height: 1.5; white-space: pre-line; }
         .loading-msg { text-align: center; color: #666; padding: 40px; font-size: 1.1rem; }
         .empty-msg { text-align: center; color: #666; padding: 60px 20px; }
         .empty-msg-icon { font-size: 4rem; margin-bottom: 20px; }
@@ -580,6 +580,7 @@
             font-style: italic;
             font-size: 1.05rem;
             line-height: 1.7;
+            white-space: pre-line;
         }
 
         .details-content {
@@ -2459,24 +2460,82 @@
         // 从 Supabase 加载数据
         let loadedProfiles = [];
         let isLoadingProfiles = false;
+        let currentPage = 0;
+        const PAGE_SIZE = 20; // 每页加载 20 条
+        let hasMoreProfiles = true;
 
-        async function loadProfilesFromSupabase() {
+        // 缓存配置
+        const CACHE_KEY = 'observatory_profiles_cache';
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 分钟缓存
+
+        // 从缓存读取
+        function getFromCache() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                if (!cached) return null;
+
+                const { data, timestamp } = JSON.parse(cached);
+                const now = Date.now();
+
+                // 检查缓存是否过期
+                if (now - timestamp > CACHE_DURATION) {
+                    localStorage.removeItem(CACHE_KEY);
+                    return null;
+                }
+
+                console.log('✅ 从缓存加载数据');
+                return data;
+            } catch (error) {
+                console.error('缓存读取失败:', error);
+                return null;
+            }
+        }
+
+        // 保存到缓存
+        function saveToCache(data) {
+            try {
+                const cacheData = {
+                    data: data,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+            } catch (error) {
+                console.error('缓存保存失败:', error);
+            }
+        }
+
+        async function loadProfilesFromSupabase(page = 0, useCache = true) {
             if (!supabaseClient) {
                 console.warn('Supabase 不可用，使用本地数据');
                 return observatoryProfiles;
             }
 
+            // 如果是第一页且允许使用缓存，先尝试从缓存读取
+            if (page === 0 && useCache) {
+                const cachedData = getFromCache();
+                if (cachedData && cachedData.length > 0) {
+                    return cachedData;
+                }
+            }
+
             try {
                 isLoadingProfiles = true;
-                console.log('🔄 正在从 Supabase 加载评价数据...');
+                console.log(`🔄 正在从 Supabase 加载第 ${page + 1} 页数据...`);
+
+                const from = page * PAGE_SIZE;
+                const to = from + PAGE_SIZE - 1;
 
                 const { data, error } = await supabaseClient
                     .from('observatory_profiles')
-                    .select('*')
+                    .select('id, twitter_username, twitter_name, profile_image_url, agent_score, human_score, tags, lobster_comment, created_at')
                     .eq('status', 'completed')
-                    .order('created_at', { ascending: false });
+                    .order('created_at', { ascending: false })
+                    .range(from, to);
 
                 if (error) throw error;
+
+                // 检查是否还有更多数据
+                hasMoreProfiles = data.length === PAGE_SIZE;
 
                 // 转换数据格式
                 const profiles = data.map(profile => ({
@@ -2484,22 +2543,26 @@
                     username: profile.twitter_username,
                     name: profile.twitter_name || profile.twitter_username,
                     url: `https://x.com/${profile.twitter_username}`,
-                    avatar: profile.profile_image_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.twitter_username}`,
+                    avatar: profile.profile_image_url || `https://unavatar.io/twitter/${profile.twitter_username}`,
                     agentScore: profile.agent_score,
                     humanScore: profile.human_score,
                     tags: profile.tags || [],
-                    bio: `${profile.details?.specialty || 'AI Enthusiast'} • ${profile.details?.followers || '0'} followers`,
-                    lobsterComment: `这是一位${profile.details?.influence || '优质用户'}，${profile.details?.activity || '活跃度高'}。This is a ${profile.details?.influence || 'quality user'} with ${profile.details?.activity || 'high activity'}.`,
-                    details: profile.details || {},
+                    lobsterComment: profile.lobster_comment || '暂无评论',
                     addedDate: profile.created_at
                 }));
 
-                console.log(`✅ 从 Supabase 加载了 ${profiles.length} 条评价`);
+                console.log(`✅ 加载了 ${profiles.length} 条评价`);
+
+                // 如果是第一页，保存到缓存
+                if (page === 0 && profiles.length > 0) {
+                    saveToCache(profiles);
+                }
+
                 return profiles;
 
             } catch (error) {
                 console.error('❌ 加载评价失败:', error);
-                return observatoryProfiles;
+                return page === 0 ? observatoryProfiles : [];
             } finally {
                 isLoadingProfiles = false;
             }
@@ -2517,8 +2580,57 @@
                 `;
             }
 
-            loadedProfiles = await loadProfilesFromSupabase();
+            // 重置分页状态
+            currentPage = 0;
+            hasMoreProfiles = true;
+            loadedProfiles = [];
+
+            // 加载第一页
+            const firstPageProfiles = await loadProfilesFromSupabase(0, true);
+            loadedProfiles = firstPageProfiles;
             renderObservatory();
+
+            // 添加滚动加载监听
+            setupInfiniteScroll();
+        }
+
+        // 无限滚动加载
+        function setupInfiniteScroll() {
+            const container = document.getElementById('profiles-list');
+            if (!container) return;
+
+            // 防抖函数
+            let scrollTimeout;
+            const handleScroll = () => {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const windowHeight = window.innerHeight;
+                    const documentHeight = document.documentElement.scrollHeight;
+
+                    // 距离底部 500px 时开始加载
+                    if (scrollTop + windowHeight >= documentHeight - 500) {
+                        loadMoreProfiles();
+                    }
+                }, 100);
+            };
+
+            window.removeEventListener('scroll', handleScroll);
+            window.addEventListener('scroll', handleScroll);
+        }
+
+        // 加载更多
+        async function loadMoreProfiles() {
+            if (isLoadingProfiles || !hasMoreProfiles) return;
+
+            console.log('📥 加载更多数据...');
+            currentPage++;
+            const moreProfiles = await loadProfilesFromSupabase(currentPage, false);
+
+            if (moreProfiles.length > 0) {
+                loadedProfiles = [...loadedProfiles, ...moreProfiles];
+                renderObservatory();
+            }
         }
 
         function renderObservatory() {
@@ -2627,6 +2739,24 @@
                     </div>
                 </div>
             `).join('');
+
+            // 添加加载状态提示
+            if (hasMoreProfiles || isLoadingProfiles) {
+                container.innerHTML += `
+                    <div style="text-align: center; padding: 40px 20px; color: #666;">
+                        ${isLoadingProfiles ?
+                            '<div class="loading-spinner">⏳ 正在加载更多...</div>' :
+                            '<div style="opacity: 0.6;">向下滚动加载更多 ↓</div>'
+                        }
+                    </div>
+                `;
+            } else if (loadedProfiles.length >= PAGE_SIZE) {
+                container.innerHTML += `
+                    <div style="text-align: center; padding: 40px 20px; color: #666; opacity: 0.6;">
+                        ✓ 已加载全部 ${loadedProfiles.length} 条评价
+                    </div>
+                `;
+            }
         }
 
         function toggleProfileDetails(profileId) {
@@ -2678,13 +2808,17 @@
             // 显示提交状态
             submitBtn.disabled = true;
             submitBtn.textContent = '小龙虾正在分析中... Analyzing...';
-            statusDiv.innerHTML = '<span style="color: var(--claw-blue);">🔍 小龙虾正在浏览 @' + username + ' 的推特... | Lobster is analyzing the profile...</span>';
+            statusDiv.innerHTML = '<span style="color: var(--claw-blue);">🤖 AI 小龙虾正在使用 DeepSeek 分析 @' + username + '... | AI Lobster is analyzing with DeepSeek...</span>';
 
             // 如果 Supabase 可用，调用 Edge Function
             if (supabaseClient) {
                 try {
                     const { data, error } = await supabaseClient.functions.invoke('score-twitter-profile', {
-                        body: { twitterUsername: username }
+                        body: {
+                            twitterUsername: username,
+                            twitterName: username.charAt(0).toUpperCase() + username.slice(1), // 显示名
+                            profileImageUrl: `https://unavatar.io/twitter/${username}` // 头像URL
+                        }
                     });
 
                     if (error) throw error;
@@ -3727,7 +3861,7 @@
             return keywords.slice(0, 8);
         }
 
-        // 主测试函数
+        // 主测试函数（已接入 DeepSeek LLM）
         async function runPersonalityTest() {
             const input = document.getElementById('test-username-input');
             const status = document.getElementById('test-status');
@@ -3746,21 +3880,59 @@
             results.style.display = 'none';
 
             try {
-                // 模拟获取用户数据（实际应该调用 Twitter API）
                 const userData = {
                     username: username,
                     name: username.charAt(0).toUpperCase() + username.slice(1),
-                    bio: '',
+                    bio: `Twitter user @${username}`,
                     profileImageUrl: `https://unavatar.io/twitter/${username}`
                 };
 
-                status.innerHTML = '<span style="color: var(--claw-blue);">🧪 正在分析性格特征...</span>';
+                status.innerHTML = '<span style="color: var(--claw-blue);">🧪 正在使用 AI 分析性格特征...</span>';
 
-                // 执行分析
-                const analysisResults = analyzePersonality(userData);
+                // 调用 Supabase Edge Function（使用 DeepSeek LLM）
+                const { data, error } = await supabaseClient.functions.invoke('personality-analysis', {
+                    body: {
+                        username: username,
+                        bio: userData.bio
+                    }
+                });
 
-                // 显示结果
-                displayResults(userData, analysisResults);
+                if (error) {
+                    console.error('Edge Function 错误:', error);
+                    // 如果 Edge Function 失败，回退到 mock 数据
+                    console.warn('⚠️ LLM 调用失败，使用备用分析');
+                    const analysisResults = analyzePersonality(userData);
+                    displayResults(userData, analysisResults);
+                } else if (data && data.success) {
+                    console.log('✅ LLM 分析成功:', data.data);
+                    // 转换 LLM 返回的数据格式
+                    const analysisResults = {
+                        scores: {
+                            agentScore: data.data.agentScore || 50,
+                            humanScore: data.data.humanScore || 50,
+                            breakdown: {
+                                bigFive: data.data.bigFive || {
+                                    openness: 50,
+                                    conscientiousness: 50,
+                                    extraversion: 50,
+                                    agreeableness: 50,
+                                    neuroticism: 50
+                                }
+                            }
+                        },
+                        tags: data.data.tags || [],
+                        lobsterComment: data.data.lobsterComment || '暂无点评',
+                        intimacyAnalysis: {
+                            style: data.data.intimacyStyle || 'Unknown',
+                            description: data.data.intimacyDescription || '暂无分析',
+                            matePreference: data.data.matePreference || '暂无数据',
+                            interests: data.data.interests || '暂无数据'
+                        }
+                    };
+                    displayResults(userData, analysisResults);
+                } else {
+                    throw new Error('LLM 返回数据格式错误');
+                }
 
                 status.innerHTML = '<span style="color: #4ade80;">✅ 分析完成！</span>';
                 results.style.display = 'block';
@@ -3771,6 +3943,7 @@
                 }, 100);
 
             } catch (error) {
+                console.error('性格分析错误:', error);
                 status.innerHTML = '<span style="color: var(--pink);">❌ 分析失败: ' + error.message + '</span>';
             }
         }
@@ -4120,7 +4293,11 @@
                 if (supabaseClient) {
                     try {
                         const { data: scoreData } = await supabaseClient.functions.invoke('score-twitter-profile', {
-                            body: { twitterUsername: username }
+                            body: {
+                                twitterUsername: username,
+                                twitterName: username.charAt(0).toUpperCase() + username.slice(1),
+                                profileImageUrl: `https://unavatar.io/twitter/${username}`
+                            }
                         });
                         if (scoreData) {
                             if (scoreData.agentScore) agentAttractScore = scoreData.agentScore;
