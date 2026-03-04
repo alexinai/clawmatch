@@ -1,0 +1,34 @@
+# robots.txt for ClawMatch.xyz
+
+User-agent: *
+Allow: /
+
+# 优先爬取主要页面
+Crawl-delay: 1
+
+# Sitemap 位置
+Sitemap: https://clawmatch.xyz/sitemap.xml
+
+# 禁止爬取的路径（如果有）
+# Disallow: /api/
+# Disallow: /admin/
+
+# 允许搜索引擎索引
+# Allow: /
+
+# 主要搜索引擎特定规则
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# 社交媒体爬虫
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /

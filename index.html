@@ -2471,7 +2471,9 @@
 
         // 缓存配置
         const CACHE_KEY = 'observatory_profiles_cache';
-        const CACHE_DURATION = 5 * 60 * 1000; // 5 分钟缓存
+        const CACHE_DURATION = 15 * 60 * 1000; // 15 分钟缓存（优化：从 5 分钟延长）
+        const PROFILE_CACHE_KEY_PREFIX = 'profile_';
+        const PROFILE_CACHE_DURATION = 60 * 60 * 1000; // 1 小时缓存（个人评价）
 
         // 从缓存读取
         function getFromCache() {
@@ -2506,6 +2508,80 @@
                 localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
             } catch (error) {
                 console.error('缓存保存失败:', error);
+            }
+        }
+
+        // 个人评价缓存函数
+        function getProfileFromCache(username) {
+            try {
+                const cacheKey = PROFILE_CACHE_KEY_PREFIX + username.toLowerCase();
+                const cached = localStorage.getItem(cacheKey);
+                if (!cached) return null;
+
+                const { data, timestamp } = JSON.parse(cached);
+                const now = Date.now();
+
+                // 检查缓存是否过期（1小时）
+                if (now - timestamp > PROFILE_CACHE_DURATION) {
+                    localStorage.removeItem(cacheKey);
+                    return null;
+                }
+
+                console.log('✅ 从缓存加载个人评价:', username);
+                return data;
+            } catch (error) {
+                console.error('个人评价缓存读取失败:', error);
+                return null;
+            }
+        }
+
+        function saveProfileToCache(username, profileData) {
+            try {
+                const cacheKey = PROFILE_CACHE_KEY_PREFIX + username.toLowerCase();
+                const cacheData = {
+                    data: profileData,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+                console.log('💾 个人评价已缓存:', username);
+            } catch (error) {
+                console.error('个人评价缓存保存失败:', error);
+            }
+        }
+
+        // 清理过期缓存
+        function cleanExpiredCache() {
+            try {
+                const now = Date.now();
+                const keys = Object.keys(localStorage);
+                let cleanedCount = 0;
+
+                keys.forEach(key => {
+                    if (key.startsWith(PROFILE_CACHE_KEY_PREFIX) || key === CACHE_KEY) {
+                        try {
+                            const cached = localStorage.getItem(key);
+                            if (cached) {
+                                const { timestamp } = JSON.parse(cached);
+                                const maxAge = key === CACHE_KEY ? CACHE_DURATION : PROFILE_CACHE_DURATION;
+
+                                if (now - timestamp > maxAge) {
+                                    localStorage.removeItem(key);
+                                    cleanedCount++;
+                                }
+                            }
+                        } catch (e) {
+                            // 无效的缓存数据，直接删除
+                            localStorage.removeItem(key);
+                            cleanedCount++;
+                        }
+                    }
+                });
+
+                if (cleanedCount > 0) {
+                    console.log(`🧹 已清理 ${cleanedCount} 个过期缓存`);
+                }
+            } catch (error) {
+                console.error('清理缓存失败:', error);
             }
         }
 
@@ -2574,6 +2650,9 @@
         }
 
         async function initObservatory() {
+            // 清理过期缓存
+            cleanExpiredCache();
+
             const container = document.getElementById('profiles-list');
             if (container) {
                 container.innerHTML = `
@@ -2810,6 +2889,16 @@
                 return;
             }
 
+            // 检查缓存（1小时内评价过的用户）
+            const cachedProfile = getProfileFromCache(username);
+            if (cachedProfile) {
+                statusDiv.innerHTML = '<span style="color: #4ade80;">✅ 从缓存加载评价结果 | Loaded from cache</span>';
+                setTimeout(() => {
+                    statusDiv.innerHTML = '';
+                }, 3000);
+                return;
+            }
+
             // 显示提交状态
             submitBtn.disabled = true;
             submitBtn.textContent = '小龙虾正在分析中... Analyzing...';
@@ -2827,6 +2916,11 @@
                     });
 
                     if (error) throw error;
+
+                    // 保存评价结果到缓存（1小时）
+                    if (data && data.success) {
+                        saveProfileToCache(username, data);
+                    }
 
                     statusDiv.innerHTML = '<span style="color: #4ade80;">✅ 提交成功！小龙虾正在评分中... | Submitted! Scoring in progress...</span>';
                     input.value = '';
