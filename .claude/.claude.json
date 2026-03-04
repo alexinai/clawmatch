@@ -1,0 +1,72 @@
+{
+  "$schema": "https://api.claude.ai/schemas/claude-config.json",
+  "description": "ClawMatch 项目 Claude Code 配置",
+
+  "disabledMcpServers": [
+    "@modelcontextprotocol/server-brave-search",
+    "@modelcontextprotocol/server-everything",
+    "@modelcontextprotocol/server-memory",
+    "@modelcontextprotocol/server-postgres",
+    "@modelcontextprotocol/server-puppeteer",
+    "@modelcontextprotocol/server-sequential-thinking",
+    "@modelcontextprotocol/server-slack",
+    "@modelcontextprotocol/server-sqlite",
+    "@anthropic-ai/claude-mcp"
+  ],
+
+  "defaultContext": "dev",
+
+  "agents": {
+    "planner": {
+      "model": "claude-sonnet-4",
+      "maxTokens": 4096,
+      "description": "规划新功能和任务分解"
+    },
+    "code-reviewer": {
+      "model": "claude-sonnet-4",
+      "maxTokens": 8192,
+      "description": "代码审查和质量检查"
+    },
+    "deploy-helper": {
+      "model": "claude-haiku-4",
+      "maxTokens": 2048,
+      "description": "部署辅助和配置检查"
+    }
+  },
+
+  "rules": [
+    "single-file-architecture",
+    "cost-control",
+    "performance",
+    "security"
+  ],
+
+  "autoCompact": {
+    "enabled": true,
+    "threshold": 150000,
+    "strategy": "smart"
+  },
+
+  "hooks": {
+    "enabled": false,
+    "config": ".claude/hooks/hooks.json"
+  },
+
+  "preferences": {
+    "codeStyle": {
+      "indentation": "spaces",
+      "indentSize": 4,
+      "quotes": "single",
+      "semicolons": true
+    },
+    "git": {
+      "commitStyle": "conventional",
+      "autoStage": false,
+      "runTestsBeforeCommit": false
+    },
+    "deployment": {
+      "platform": "github-pages",
+      "autoDeploy": true
+    }
+  }
+}
