@@ -2466,7 +2466,7 @@
         let loadedProfiles = [];
         let isLoadingProfiles = false;
         let currentPage = 0;
-        const PAGE_SIZE = 20; // 每页加载 20 条
+        const PAGE_SIZE = 10; // 每页加载 10 条（优化：减少首次加载量，提升速度）
         let hasMoreProfiles = true;
 
         // 缓存配置
@@ -2755,7 +2755,13 @@
 
             container.innerHTML = sortedProfiles.map(profile => `
                 <div class="profile-item" onclick="toggleProfileDetails(${profile.id})">
-                    <img src="${profile.avatar}" alt="${profile.name}" class="profile-avatar">
+                    <img
+                        data-src="${profile.avatar}"
+                        alt="${profile.name}"
+                        class="profile-avatar lazy-load"
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%23222' width='100' height='100'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23666' font-size='40'%3E${profile.name.charAt(0)}%3C/text%3E%3C/svg%3E"
+                        onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23222%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2240%22%3E${profile.name.charAt(0)}%3C/text%3E%3C/svg%3E'"
+                    >
                     <div class="profile-info">
                         <div class="profile-header">
                             <div>
@@ -2788,31 +2794,31 @@
                                 <h4>📊 详细数据 | Detailed Analytics</h4>
                                 <div class="detail-item">
                                     <span class="detail-label">关注者 Followers</span>
-                                    <span class="detail-value">${profile.details.followers}</span>
+                                    <span class="detail-value">${profile.details?.followers || 'N/A'}</span>
                                 </div>
                                 <div class="detail-item">
                                     <span class="detail-label">推文数 Tweets</span>
-                                    <span class="detail-value">${profile.details.tweets}</span>
+                                    <span class="detail-value">${profile.details?.tweets || 'N/A'}</span>
                                 </div>
                                 <div class="detail-item">
                                     <span class="detail-label">影响力 Influence</span>
-                                    <span class="detail-value">${profile.details.influence}</span>
+                                    <span class="detail-value">${profile.details?.influence || 'N/A'}</span>
                                 </div>
                                 <div class="detail-item">
                                     <span class="detail-label">专长领域 Specialty</span>
-                                    <span class="detail-value">${profile.details.specialty}</span>
+                                    <span class="detail-value">${profile.details?.specialty || 'N/A'}</span>
                                 </div>
                                 <div class="detail-item">
                                     <span class="detail-label">活跃度 Activity</span>
-                                    <span class="detail-value">${profile.details.activity}</span>
+                                    <span class="detail-value">${profile.details?.activity || 'N/A'}</span>
                                 </div>
                                 <div class="detail-item">
                                     <span class="detail-label">内容质量 Content</span>
-                                    <span class="detail-value">${profile.details.contentQuality}</span>
+                                    <span class="detail-value">${profile.details?.contentQuality || 'N/A'}</span>
                                 </div>
                                 <div class="detail-item">
                                     <span class="detail-label">互动率 Engagement</span>
-                                    <span class="detail-value">${profile.details.engagement}</span>
+                                    <span class="detail-value">${profile.details?.engagement || 'N/A'}</span>
                                 </div>
                             </div>
                         </div>
@@ -2840,6 +2846,40 @@
                         ✓ 已加载全部 ${loadedProfiles.length} 条评价
                     </div>
                 `;
+            }
+
+            // 启动图片懒加载
+            setTimeout(() => lazyLoadImages(), 100);
+        }
+
+        // 图片懒加载（优化性能）
+        function lazyLoadImages() {
+            const lazyImages = document.querySelectorAll('img.lazy-load');
+
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            const realSrc = img.getAttribute('data-src');
+                            if (realSrc) {
+                                img.src = realSrc;
+                                img.classList.remove('lazy-load');
+                                imageObserver.unobserve(img);
+                            }
+                        }
+                    });
+                });
+
+                lazyImages.forEach(img => imageObserver.observe(img));
+            } else {
+                // 不支持 IntersectionObserver，直接加载
+                lazyImages.forEach(img => {
+                    const realSrc = img.getAttribute('data-src');
+                    if (realSrc) {
+                        img.src = realSrc;
+                    }
+                });
             }
         }
 
