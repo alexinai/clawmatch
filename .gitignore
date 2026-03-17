@@ -61,3 +61,71 @@ backup-*/
 TOKEN_*.md
 OPTIMIZATION_*.md
 SYSTEM_NOTES.md
+*-security-report.md
+*_REPORT.md
+
+# Agent 工作区文档（本地运营用，不上传）
+AGENTS.md
+SOUL.md
+IDENTITY.md
+IDENTITY.md.deprecated
+USER.md
+USER.md.deprecated
+HEARTBEAT.md
+HEALTH_CHECK.md
+MEMORY.md
+memory/
+
+# 本地计划/分析文档
+WEBSITE_PROJECT_PLAN.md
+SUBSCRIBE_FEATURE_PLAN.md
+TWITTER_BIO_GENDER_PLAN.md
+CLAWMATCH_USAGE_OVERVIEW.md
+CLAWMATCH_MAINTENANCE_PLAN.md
+OBSERVATORY_STATUS_REPORT.md
+OBSERVATORY_PERFORMANCE_OPTIMIZATION.md
+SUPER_CLAUDE_FETCH_ANALYSIS.md
+CLAUDE_BEST_PRACTICES_SKILL_INSTALLED.md
+LDT_*.md
+IDENTITY*.md
+DEPLOYMENT_SUMMARY.md
+MANUAL_DEPLOYMENT_GUIDE.md
+REDEPLOY_GUIDE.md
+DEEPSEEK_LLM_DEPLOYMENT_GUIDE.md
+GIT_SAFETY_RULES.md
+TOOLS.md
+BRAVE_SEARCH_CONFIG.md
+OPENROUTER_CONFIG.md
+SUPABASE_CONFIG.md
+
+# 敏感数据文件
+active_targets.json
+LOBSTER_LEDGER.json
+targets/
+inbox/
+outbox/
+
+# Shell 脚本（本地工具，不上传）
+*.sh
+verify-skill.sh
+llm-proxy-server.js
+
+# SQL 迁移脚本（本地管理）
+create-observatory-table.sql
+fix-observatory-table.sql
+supabase_*.sql
+supabase-setup/
+
+# HTML 备份和测试版本
+index_*.html
+index.html.backup-*
+test-*.html
+
+# 本地开发依赖
+package.json
+package-lock.json
+
+# 视频/素材子项目（各自独立维护）
+clawmatch-video/
+clawmatch-promo/
+clawmatch-remotion/
