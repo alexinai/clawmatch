@@ -4662,9 +4662,7 @@
         }
 
         // ── Crypto 钱包实力榜 ──────────────────────────────────
-
-        const SUPABASE_URL = 'https://yrbmpkqybdtocbhbpvwg.supabase.co'
-        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyYm1wa3F5YmR0b2NiaGJwdndnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MDQ4OTUsImV4cCI6MjA4NjI4MDg5NX0.irknpb9_DzcDcEFjPNFz3aQXJAY-1EHlIMgk-1D1nlA'
+        // 注：SUPABASE_URL 和 SUPABASE_ANON_KEY 已在上方定义
 
         function truncateAddress(addr) {
             if (!addr) return ''
@@ -4694,7 +4692,7 @@
                 // 1. 先查 Supabase 缓存（24h内）
                 const cacheRes = await fetch(
                     `${SUPABASE_URL}/rest/v1/wallet_rankings?address=eq.${encodeURIComponent(address)}&select=*`,
-                    { headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` } }
+                    { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
                 )
                 const cacheData = await cacheRes.json()
 
@@ -4726,7 +4724,7 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${SUPABASE_ANON}`
+                                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
                             },
                             body: JSON.stringify({ address })
                         }
@@ -4809,8 +4807,8 @@
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/wallet_rankings`, {
                     method: 'POST',
                     headers: {
-                        'apikey': SUPABASE_ANON,
-                        'Authorization': `Bearer ${SUPABASE_ANON}`,
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
                         'Content-Type': 'application/json',
                         'Prefer': 'resolution=merge-duplicates'
                     },
@@ -4840,11 +4838,9 @@
             try {
                 const res = await fetch(
                     `${SUPABASE_URL}/rest/v1/wallet_rankings?select=address,total_usd,asset_level,asset_title,holdings&order=total_usd.desc&limit=1000`,
-                    { headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` } }
+                    { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
                 )
                 const rows = await res.json()
-
-                if (!rows?.length) {
                     listEl.innerHTML = `
                         <div class="empty-leaderboard">
                             <p>💰 暂无数据</p>
