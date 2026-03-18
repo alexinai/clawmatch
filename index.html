@@ -1135,6 +1135,230 @@
             .binance-power { display: none; }
         }
 
+        /* Crypto 钱包实力榜样式 */
+        .crypto-query-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,215,0,0.15);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 8px;
+        }
+
+        .crypto-query-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #eee;
+            margin-bottom: 6px;
+        }
+
+        .crypto-query-desc {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .crypto-input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .crypto-address-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.2s;
+            font-family: monospace;
+        }
+
+        .crypto-address-input:focus {
+            border-color: #f3ba2f;
+            background: rgba(243,186,47,0.05);
+        }
+
+        .crypto-query-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #f3ba2f, #f08000);
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+
+        .crypto-query-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        .crypto-query-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .crypto-query-result {
+            margin-top: 20px;
+        }
+
+        .crypto-result-card {
+            background: linear-gradient(135deg, rgba(243,186,47,0.08), rgba(240,128,0,0.05));
+            border: 1px solid rgba(243,186,47,0.3);
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .crypto-result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .crypto-result-address {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .crypto-result-level {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .crypto-level-emoji { font-size: 2rem; }
+
+        .crypto-level-info { }
+
+        .crypto-level-badge {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #f3ba2f;
+        }
+
+        .crypto-level-title {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .crypto-total-usd {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0ecb81;
+        }
+
+        .crypto-holdings-title {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .crypto-holding-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.88rem;
+        }
+
+        .crypto-holding-item:last-child { border-bottom: none; }
+
+        .crypto-holding-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .crypto-holding-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(243,186,47,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #f3ba2f;
+            flex-shrink: 0;
+        }
+
+        .crypto-holding-symbol { font-weight: 600; color: #eee; }
+        .crypto-holding-chain { font-size: 0.75rem; color: #888; margin-left: 4px; }
+        .crypto-holding-usd { font-weight: 600; color: #0ecb81; }
+
+        .crypto-submit-btn {
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px;
+            background: rgba(14,203,129,0.1);
+            border: 1px solid rgba(14,203,129,0.4);
+            border-radius: 10px;
+            color: #0ecb81;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .crypto-submit-btn:hover { background: rgba(14,203,129,0.2); }
+        .crypto-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* 排行榜条目 */
+        .crypto-rank-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: 0.2s;
+        }
+
+        .crypto-rank-item:hover {
+            background: rgba(243,186,47,0.05);
+            border-color: rgba(243,186,47,0.2);
+        }
+
+        .crypto-rank-emoji { font-size: 1.4rem; flex-shrink: 0; }
+
+        .crypto-rank-info { flex: 1; min-width: 0; }
+
+        .crypto-rank-address {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        .crypto-rank-meta {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .crypto-rank-right { text-align: right; flex-shrink: 0; }
+
+        .crypto-rank-usd {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #0ecb81;
+        }
+
+        .crypto-rank-level {
+            font-size: 0.78rem;
+            color: #f3ba2f;
+            margin-top: 2px;
+        }
+
+        @media (max-width: 600px) {
+            .crypto-input-row { flex-direction: column; }
+            .crypto-query-btn { width: 100%; }
+        }
+
         .empty-leaderboard {
             text-align: center;
             padding: 60px 20px;
@@ -1869,6 +2093,9 @@
                 <button class="leaderboard-tab" data-board="binance" onclick="switchLeaderboard('binance')">
                     🟡 Binance 实力榜
                 </button>
+                <button class="leaderboard-tab" data-board="crypto" onclick="switchLeaderboard('crypto')">
+                    💰 Crypto钱包实力榜
+                </button>
             </div>
 
             <!-- Agent 排行榜 -->
@@ -1915,6 +2142,38 @@
                 <button class="join-board-btn" onclick="location.hash='#personality-test'">
                     🧪 立即测试上榜
                 </button>
+            </div>
+
+            <!-- Crypto 钱包实力榜 -->
+            <div id="crypto-leaderboard" class="leaderboard-content">
+                <!-- 查询区 -->
+                <div class="crypto-query-box">
+                    <div class="crypto-query-title">🔍 查询钱包资产</div>
+                    <p class="crypto-query-desc">支持 BSC (0x...) 和 Solana 地址，自动识别链并计算总资产</p>
+                    <div class="crypto-input-row">
+                        <input
+                            id="crypto-address-input"
+                            type="text"
+                            placeholder="输入钱包地址，如 0x... 或 Solana 地址"
+                            class="crypto-address-input"
+                            onkeydown="if(event.key==='Enter') queryCryptoWallet()"
+                        />
+                        <button class="crypto-query-btn" onclick="queryCryptoWallet()">查询</button>
+                    </div>
+                    <div id="crypto-query-result" class="crypto-query-result" style="display:none"></div>
+                </div>
+
+                <!-- 排行榜 -->
+                <div class="leaderboard-description" style="margin-top:24px">
+                    <p>链上钱包综合实力排行 · 实时数据 · <strong>前 1000 名</strong></p>
+                    <p style="color:#666;font-size:0.9rem">BSC & Solana 持仓总资产（USD）</p>
+                </div>
+                <div id="crypto-list" class="leaderboard-list">
+                    <div class="empty-leaderboard">
+                        <p>💰 暂无数据</p>
+                        <p style="font-size:0.9rem">查询你的钱包地址，成为第一名！</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -4382,23 +4641,237 @@
 
         // 切换排行榜
         function switchLeaderboard(type) {
-            // 更新标签状态
-            document.querySelectorAll('.leaderboard-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelector(`[data-board="${type}"]`).classList.add('active');
+            document.querySelectorAll('.leaderboard-tab').forEach(tab => tab.classList.remove('active'))
+            document.querySelector(`[data-board="${type}"]`).classList.add('active')
+            document.querySelectorAll('.leaderboard-content').forEach(c => c.classList.remove('active'))
+            document.getElementById(`${type}-leaderboard`).classList.add('active')
 
-            // 切换内容
-            document.querySelectorAll('.leaderboard-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.getElementById(`${type}-leaderboard`).classList.add('active');
-
-            // 加载数据
             if (type === 'binance') {
-                loadBinanceLeaderboard('weekly');
+                loadBinanceLeaderboard('weekly')
+            } else if (type === 'crypto') {
+                loadCryptoLeaderboard()
             } else {
-                loadLeaderboard(type);
+                loadLeaderboard(type)
+            }
+        }
+
+        // ── Crypto 钱包实力榜 ──────────────────────────────────
+
+        const SUPABASE_URL = 'https://yrbmpkqybdtocbhbpvwg.supabase.co'
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyYm1wa3F5YmR0b2NiaGJwdndnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MDQ4OTUsImV4cCI6MjA4NjI4MDg5NX0.irknpb9_DzcDcEFjPNFz3aQXJAY-1EHlIMgk-1D1nlA'
+
+        function truncateAddress(addr) {
+            if (!addr) return ''
+            if (addr.length <= 12) return addr
+            return addr.slice(0, 6) + '...' + addr.slice(-4)
+        }
+
+        // 查询钱包（主入口）
+        async function queryCryptoWallet() {
+            const input = document.getElementById('crypto-address-input')
+            const btn = document.querySelector('.crypto-query-btn')
+            const resultEl = document.getElementById('crypto-query-result')
+            const address = input.value.trim()
+
+            if (!address || address.length < 10) {
+                resultEl.style.display = 'block'
+                resultEl.innerHTML = '<p style="color:#f6465d;font-size:0.9rem">⚠️ 请输入有效的钱包地址</p>'
+                return
+            }
+
+            btn.disabled = true
+            btn.textContent = '查询中...'
+            resultEl.style.display = 'block'
+            resultEl.innerHTML = '<p style="color:#888;font-size:0.9rem">⏳ 正在查询链上资产，请稍候...</p>'
+
+            try {
+                // 1. 先查 Supabase 缓存（24h内）
+                const cacheRes = await fetch(
+                    `${SUPABASE_URL}/rest/v1/wallet_rankings?address=eq.${encodeURIComponent(address)}&select=*`,
+                    { headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` } }
+                )
+                const cacheData = await cacheRes.json()
+
+                let data = null
+                const now = Date.now()
+
+                if (cacheData?.length > 0) {
+                    const cached = cacheData[0]
+                    const age = now - new Date(cached.queried_at).getTime()
+                    if (age < 24 * 60 * 60 * 1000) {
+                        // 缓存有效，直接用
+                        data = {
+                            address: cached.address,
+                            total_usd: cached.total_usd,
+                            asset_level: cached.asset_level,
+                            asset_title: cached.asset_title,
+                            asset_emoji: cached.asset_level === 'S' ? '🐋' : cached.asset_level === 'A+' ? '🦈' : cached.asset_level === 'A' ? '🐬' : cached.asset_level === 'B' ? '🦞' : cached.asset_level === 'C' ? '🦐' : '🥚',
+                            holdings: cached.holdings || [],
+                            fromCache: true
+                        }
+                    }
+                }
+
+                // 2. 无缓存或已过期 → 调 Edge Function
+                if (!data) {
+                    const fnRes = await fetch(
+                        `${SUPABASE_URL}/functions/v1/query-wallet-assets`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${SUPABASE_ANON}`
+                            },
+                            body: JSON.stringify({ address })
+                        }
+                    )
+                    data = await fnRes.json()
+                    if (data.error) throw new Error(data.error)
+                }
+
+                // 3. 渲染结果
+                renderCryptoResult(data)
+
+            } catch (err) {
+                resultEl.innerHTML = `<p style="color:#f6465d;font-size:0.9rem">❌ 查询失败：${err.message}</p>`
+            } finally {
+                btn.disabled = false
+                btn.textContent = '查询'
+            }
+        }
+
+        // 渲染查询结果卡片
+        function renderCryptoResult(data) {
+            const resultEl = document.getElementById('crypto-query-result')
+            const holdings = data.holdings || []
+            const topHoldings = holdings.slice(0, 5)
+            const holdingsHtml = topHoldings.length > 0
+                ? topHoldings.map(h => `
+                    <div class="crypto-holding-item">
+                        <div class="crypto-holding-left">
+                            <div class="crypto-holding-icon">${h.symbol ? h.symbol.slice(0,3) : '?'}</div>
+                            <span class="crypto-holding-symbol">${h.symbol}</span>
+                            <span class="crypto-holding-chain">${h.chain}</span>
+                        </div>
+                        <span class="crypto-holding-usd">$${h.usd.toLocaleString('en-US', {maximumFractionDigits: 2})}</span>
+                    </div>`).join('')
+                : '<p style="color:#888;font-size:0.85rem;text-align:center;padding:12px 0">该地址暂无持仓记录</p>'
+
+            const cacheNote = data.fromCache ? '<span style="color:#888;font-size:0.75rem"> · 缓存数据</span>' : ''
+
+            resultEl.style.display = 'block'
+            resultEl.innerHTML = `
+                <div class="crypto-result-card">
+                    <div class="crypto-result-header">
+                        <div>
+                            <div class="crypto-result-address">${truncateAddress(data.address)}${cacheNote}</div>
+                            <div class="crypto-total-usd">$${Number(data.total_usd).toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
+                        </div>
+                        <div class="crypto-result-level">
+                            <div class="crypto-level-emoji">${data.asset_emoji}</div>
+                            <div class="crypto-level-info">
+                                <div class="crypto-level-badge">${data.asset_level}</div>
+                                <div class="crypto-level-title">${data.asset_title}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crypto-holdings-title">持仓明细（Top ${topHoldings.length}）</div>
+                    ${holdingsHtml}
+                    <button class="crypto-submit-btn" onclick="submitCryptoRanking(${JSON.stringify(data).replace(/"/g, '&quot;')})">
+                        🏆 提交上榜
+                    </button>
+                </div>`
+        }
+
+        // 提交上榜
+        async function submitCryptoRanking(data) {
+            const btn = event.target
+            btn.disabled = true
+            btn.textContent = '提交中...'
+
+            try {
+                const payload = {
+                    address: data.address,
+                    total_usd: data.total_usd,
+                    asset_level: data.asset_level,
+                    asset_title: data.asset_title,
+                    holdings: data.holdings,
+                    queried_at: data.queried_at || new Date().toISOString()
+                }
+
+                // upsert（存在则更新，不存在则插入）
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/wallet_rankings`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON,
+                        'Authorization': `Bearer ${SUPABASE_ANON}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'resolution=merge-duplicates'
+                    },
+                    body: JSON.stringify(payload)
+                })
+
+                if (res.ok || res.status === 201) {
+                    btn.textContent = '✅ 已上榜！'
+                    btn.style.color = '#0ecb81'
+                    loadCryptoLeaderboard()
+                } else {
+                    throw new Error('提交失败')
+                }
+            } catch (err) {
+                btn.disabled = false
+                btn.textContent = '❌ 提交失败，重试'
+            }
+        }
+
+        // 加载排行榜（前1000名）
+        async function loadCryptoLeaderboard() {
+            const listEl = document.getElementById('crypto-list')
+            if (!listEl) return
+
+            listEl.innerHTML = '<p style="color:#888;text-align:center;padding:20px">加载中...</p>'
+
+            try {
+                const res = await fetch(
+                    `${SUPABASE_URL}/rest/v1/wallet_rankings?select=address,total_usd,asset_level,asset_title,holdings&order=total_usd.desc&limit=1000`,
+                    { headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` } }
+                )
+                const rows = await res.json()
+
+                if (!rows?.length) {
+                    listEl.innerHTML = `
+                        <div class="empty-leaderboard">
+                            <p>💰 暂无数据</p>
+                            <p style="font-size:0.9rem">查询你的钱包地址，成为第一名！</p>
+                        </div>`
+                    return
+                }
+
+                listEl.innerHTML = rows.map((row, i) => {
+                    const rank = i + 1
+                    const emoji = row.asset_level === 'S' ? '🐋' : row.asset_level === 'A+' ? '🦈' : row.asset_level === 'A' ? '🐬' : row.asset_level === 'B' ? '🦞' : row.asset_level === 'C' ? '🦐' : '🥚'
+                    const rankIcon = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank
+                    const rankClass = rank <= 3 ? `top${rank}` : ''
+                    const holdings = row.holdings || []
+                    const topSymbols = holdings.slice(0, 3).map(h => h.symbol).join(' · ') || '—'
+
+                    return `
+                        <div class="crypto-rank-item">
+                            <div class="leaderboard-rank ${rankClass}" style="min-width:32px;text-align:center">${rankIcon}</div>
+                            <div class="crypto-rank-emoji">${emoji}</div>
+                            <div class="crypto-rank-info">
+                                <div class="crypto-rank-address">${truncateAddress(row.address)}</div>
+                                <div class="crypto-rank-meta">${topSymbols}</div>
+                            </div>
+                            <div class="crypto-rank-right">
+                                <div class="crypto-rank-usd">$${Number(row.total_usd).toLocaleString('en-US', {maximumFractionDigits: 0})}</div>
+                                <div class="crypto-rank-level">${row.asset_level} ${row.asset_title}</div>
+                            </div>
+                        </div>`
+                }).join('')
+
+            } catch (err) {
+                listEl.innerHTML = '<p style="color:#f6465d;text-align:center;padding:20px">加载失败，请刷新重试</p>'
             }
         }
 
