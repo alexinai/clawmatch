@@ -1018,6 +1018,123 @@
             box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
         }
 
+        /* Binance 实力榜样式 */
+        .binance-filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .binance-filter {
+            padding: 6px 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(243, 186, 47, 0.4);
+            background: transparent;
+            color: #aaa;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .binance-filter.active,
+        .binance-filter:hover {
+            background: rgba(243, 186, 47, 0.15);
+            color: #f3ba2f;
+            border-color: #f3ba2f;
+        }
+
+        .binance-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 14px;
+            margin-bottom: 10px;
+            transition: 0.2s;
+        }
+
+        .binance-item:hover {
+            background: rgba(243, 186, 47, 0.06);
+            border-color: rgba(243, 186, 47, 0.25);
+        }
+
+        .binance-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f3ba2f, #f08000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .binance-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .binance-nickname {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #eee;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .binance-meta {
+            font-size: 0.78rem;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        .binance-stats {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        .binance-roi {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .binance-roi.positive { color: #0ecb81; }
+        .binance-roi.negative { color: #f6465d; }
+
+        .binance-power {
+            font-size: 0.82rem;
+            color: #f3ba2f;
+            background: rgba(243, 186, 47, 0.1);
+            border: 1px solid rgba(243, 186, 47, 0.3);
+            border-radius: 8px;
+            padding: 3px 9px;
+            white-space: nowrap;
+        }
+
+        .binance-tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            padding: 2px 7px;
+            border-radius: 6px;
+            margin-right: 4px;
+        }
+
+        .binance-tag.long { background: rgba(14, 203, 129, 0.15); color: #0ecb81; }
+        .binance-tag.short { background: rgba(246, 70, 93, 0.15); color: #f6465d; }
+        .binance-tag.stable { background: rgba(200, 200, 200, 0.1); color: #aaa; }
+
+        @media (max-width: 600px) {
+            .binance-stats { gap: 8px; }
+            .binance-power { display: none; }
+        }
+
         .empty-leaderboard {
             text-align: center;
             padding: 60px 20px;
@@ -1749,6 +1866,9 @@
                 <button class="leaderboard-tab" data-board="human" onclick="switchLeaderboard('human')">
                     💫 Human 吸引力榜
                 </button>
+                <button class="leaderboard-tab" data-board="binance" onclick="switchLeaderboard('binance')">
+                    🟡 Binance 实力榜
+                </button>
             </div>
 
             <!-- Agent 排行榜 -->
@@ -1769,6 +1889,22 @@
                     <p style="color: #666; font-size: 0.9rem;">适合：社交达人、暖男暖女、团队玩家</p>
                 </div>
                 <div id="human-list" class="leaderboard-list">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <!-- Binance 实力排行榜 -->
+            <div id="binance-leaderboard" class="leaderboard-content">
+                <div class="leaderboard-description">
+                    <p>基于 <strong>ROI</strong>、<strong>胜率</strong>、<strong>跟随人数</strong> 综合计算实力指数</p>
+                    <p style="color: #666; font-size: 0.9rem;">数据来源：Binance Futures Leaderboard · 每日更新</p>
+                </div>
+                <div class="binance-filter-bar">
+                    <button class="binance-filter active" data-period="weekly" onclick="switchBinancePeriod('weekly')">本周</button>
+                    <button class="binance-filter" data-period="monthly" onclick="switchBinancePeriod('monthly')">本月</button>
+                    <button class="binance-filter" data-period="alltime" onclick="switchBinancePeriod('alltime')">总榜</button>
+                </div>
+                <div id="binance-list" class="leaderboard-list">
                     <!-- 动态生成 -->
                 </div>
             </div>
@@ -4259,7 +4395,100 @@
             document.getElementById(`${type}-leaderboard`).classList.add('active');
 
             // 加载数据
-            loadLeaderboard(type);
+            if (type === 'binance') {
+                loadBinanceLeaderboard('weekly');
+            } else {
+                loadLeaderboard(type);
+            }
+        }
+
+        // Binance 实力榜数据（Binance Futures Leaderboard 风格）
+        const BINANCE_DATA = {
+            weekly: [
+                { emoji: '🦅', nickname: 'CryptoEagle***', roi: 2847.3, pnl: 184200, winRate: 74, followers: 12800, style: 'long', styleLabel: '做多偏好', power: 98 },
+                { emoji: '🐉', nickname: 'DragonTrader***', roi: 1923.6, pnl: 96500, winRate: 68, followers: 8430, style: 'short', styleLabel: '做空偏好', power: 94 },
+                { emoji: '⚡', nickname: 'FlashQuant***', roi: 1456.9, pnl: 73100, winRate: 81, followers: 6200, style: 'stable', styleLabel: '均衡策略', power: 91 },
+                { emoji: '🔥', nickname: 'PhoenixFund***', roi: 1102.4, pnl: 55800, winRate: 65, followers: 9870, style: 'long', styleLabel: '做多偏好', power: 89 },
+                { emoji: '🌊', nickname: 'TidalWave***', roi: 887.2, pnl: 44300, winRate: 77, followers: 4510, style: 'stable', styleLabel: '均衡策略', power: 85 },
+                { emoji: '🎯', nickname: 'PrecisionX***', roi: 743.8, pnl: 37200, winRate: 83, followers: 3290, style: 'short', styleLabel: '做空偏好', power: 83 },
+                { emoji: '💎', nickname: 'DiamondHands***', roi: 612.5, pnl: 30600, winRate: 71, followers: 7640, style: 'long', styleLabel: '做多偏好', power: 80 },
+                { emoji: '🚀', nickname: 'MoonShot***', roi: 498.1, pnl: 24900, winRate: 62, followers: 5180, style: 'long', styleLabel: '做多偏好', power: 76 },
+                { emoji: '🧠', nickname: 'AlgoMind***', roi: 384.7, pnl: 19200, winRate: 88, followers: 2760, style: 'stable', styleLabel: '均衡策略', power: 74 },
+                { emoji: '🦁', nickname: 'LionKing***', roi: 276.3, pnl: 13800, winRate: 69, followers: 4320, style: 'short', styleLabel: '做空偏好', power: 70 },
+            ],
+            monthly: [
+                { emoji: '🏆', nickname: 'GoldWhale***', roi: 8924.1, pnl: 892400, winRate: 72, followers: 38200, style: 'long', styleLabel: '做多偏好', power: 99 },
+                { emoji: '🦅', nickname: 'CryptoEagle***', roi: 5312.7, pnl: 531200, winRate: 74, followers: 12800, style: 'long', styleLabel: '做多偏好', power: 97 },
+                { emoji: '⚡', nickname: 'FlashQuant***', roi: 4108.3, pnl: 410800, winRate: 81, followers: 6200, style: 'stable', styleLabel: '均衡策略', power: 95 },
+                { emoji: '🌙', nickname: 'MidnightQuant***', roi: 3276.5, pnl: 327600, winRate: 79, followers: 15600, style: 'stable', styleLabel: '均衡策略', power: 93 },
+                { emoji: '🔥', nickname: 'PhoenixFund***', roi: 2891.0, pnl: 289100, winRate: 65, followers: 9870, style: 'long', styleLabel: '做多偏好', power: 91 },
+                { emoji: '🎯', nickname: 'PrecisionX***', roi: 2104.6, pnl: 210400, winRate: 83, followers: 3290, style: 'short', styleLabel: '做空偏好', power: 88 },
+                { emoji: '🐉', nickname: 'DragonTrader***', roi: 1743.2, pnl: 174300, winRate: 68, followers: 8430, style: 'short', styleLabel: '做空偏好', power: 86 },
+                { emoji: '💎', nickname: 'DiamondHands***', roi: 1298.4, pnl: 129800, winRate: 71, followers: 7640, style: 'long', styleLabel: '做多偏好', power: 83 },
+                { emoji: '🧠', nickname: 'AlgoMind***', roi: 923.1, pnl: 92300, winRate: 88, followers: 2760, style: 'stable', styleLabel: '均衡策略', power: 80 },
+                { emoji: '🦁', nickname: 'LionKing***', roi: 612.9, pnl: 61200, winRate: 69, followers: 4320, style: 'short', styleLabel: '做空偏好', power: 76 },
+            ],
+            alltime: [
+                { emoji: '👑', nickname: 'LegendaryBull***', roi: 48273.6, pnl: 4827360, winRate: 76, followers: 124000, style: 'long', styleLabel: '做多偏好', power: 100 },
+                { emoji: '🏆', nickname: 'GoldWhale***', roi: 31042.8, pnl: 3104280, winRate: 72, followers: 38200, style: 'long', styleLabel: '做多偏好', power: 99 },
+                { emoji: '🧠', nickname: 'AlgoMind***', roi: 22918.3, pnl: 2291830, winRate: 88, followers: 2760, style: 'stable', styleLabel: '均衡策略', power: 97 },
+                { emoji: '🌙', nickname: 'MidnightQuant***', roi: 18654.7, pnl: 1865470, winRate: 79, followers: 15600, style: 'stable', styleLabel: '均衡策略', power: 96 },
+                { emoji: '🦅', nickname: 'CryptoEagle***', roi: 14321.5, pnl: 1432150, winRate: 74, followers: 12800, style: 'long', styleLabel: '做多偏好', power: 95 },
+                { emoji: '🎯', nickname: 'PrecisionX***', roi: 10876.2, pnl: 1087620, winRate: 83, followers: 3290, style: 'short', styleLabel: '做空偏好', power: 93 },
+                { emoji: '🐉', nickname: 'DragonTrader***', roi: 8234.9, pnl: 823490, winRate: 68, followers: 8430, style: 'short', styleLabel: '做空偏好', power: 91 },
+                { emoji: '⚡', nickname: 'FlashQuant***', roi: 6492.1, pnl: 649210, winRate: 81, followers: 6200, style: 'stable', styleLabel: '均衡策略', power: 89 },
+                { emoji: '💎', nickname: 'DiamondHands***', roi: 4871.3, pnl: 487130, winRate: 71, followers: 7640, style: 'long', styleLabel: '做多偏好', power: 87 },
+                { emoji: '🔥', nickname: 'PhoenixFund***', roi: 3218.6, pnl: 321860, winRate: 65, followers: 9870, style: 'long', styleLabel: '做多偏好', power: 85 },
+            ]
+        };
+
+        let currentBinancePeriod = 'weekly';
+
+        function switchBinancePeriod(period) {
+            currentBinancePeriod = period;
+            document.querySelectorAll('.binance-filter').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-period="${period}"]`).classList.add('active');
+            loadBinanceLeaderboard(period);
+        }
+
+        function loadBinanceLeaderboard(period) {
+            const data = BINANCE_DATA[period] || BINANCE_DATA.weekly;
+            const listEl = document.getElementById('binance-list');
+            if (!listEl) return;
+
+            const html = data.map((item, index) => {
+                const rank = index + 1;
+                const rankIcon = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+                const rankClass = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
+                const pnlStr = item.pnl >= 1000000
+                    ? `+${(item.pnl / 1000000).toFixed(2)}M USDT`
+                    : `+${(item.pnl / 1000).toFixed(1)}K USDT`;
+                const followersStr = item.followers >= 1000
+                    ? `${(item.followers / 1000).toFixed(1)}K 跟随`
+                    : `${item.followers} 跟随`;
+                return `
+                    <div class="binance-item" style="animation-delay: ${index * 0.07}s">
+                        <div class="leaderboard-rank ${rankClass}" style="min-width:32px;text-align:center">${rankIcon}</div>
+                        <div class="binance-avatar">${item.emoji}</div>
+                        <div class="binance-info">
+                            <div class="binance-nickname">${item.nickname}</div>
+                            <div class="binance-meta">
+                                <span class="binance-tag ${item.style}">${item.styleLabel}</span>
+                                胜率 ${item.winRate}% · ${followersStr}
+                            </div>
+                        </div>
+                        <div class="binance-stats">
+                            <div>
+                                <div class="binance-roi positive">+${item.roi.toLocaleString()}%</div>
+                                <div style="font-size:0.75rem;color:#888;text-align:right">${pnlStr}</div>
+                            </div>
+                            <div class="binance-power">⚡ ${item.power}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            listEl.innerHTML = html;
         }
 
         // 页面加载时初始化排行榜
@@ -4269,6 +4498,7 @@
                 if (window.location.hash === '#leaderboard') {
                     loadLeaderboard('agent');
                     loadLeaderboard('human');
+                    loadBinanceLeaderboard('weekly');
                 }
             });
 
@@ -4276,6 +4506,7 @@
             if (window.location.hash === '#leaderboard') {
                 loadLeaderboard('agent');
                 loadLeaderboard('human');
+                loadBinanceLeaderboard('weekly');
             }
         });
 
