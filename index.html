@@ -2334,6 +2334,62 @@
         // Blog posts 数据（中英日三语）
         const blogPosts = [
             {
+                id: 4,
+                date: '2026-03-19',
+                tag: 'Feature',
+                title: {
+                    zh: '💰 Crypto 钱包实力榜上线 — Binance Web3 Skill 集成',
+                    en: 'Crypto Wallet Power Board Live — Binance Web3 Skill Integration',
+                    ja: 'Crypto ウォレット実力ランキング公開 — Binance Web3スキル連携'
+                },
+                content: {
+                    zh: `
+                        <p>🚀 全新功能上线：<strong>💰 Crypto 钱包实力榜</strong>，集成 Binance Web3 Skill，链上资产一键查询。</p>
+                        <p><strong>功能亮点：</strong></p>
+                        <ul>
+                            <li>🔍 <strong>钱包资产查询</strong> - 输入 BSC (0x...) 或 Solana 地址，自动识别链并查询链上持仓</li>
+                            <li>🐋 <strong>资产等级评定</strong> - 自动计算总资产并给出等级：S🐋巨鲸 / A+🦈大鲨鱼 / A🐬海豚 / B🦞龙虾 / C🦐小虾 / D🥚虾卵</li>
+                            <li>🏆 <strong>链上实力排行榜</strong> - 上榜即永久记录，前 1000 名公开展示</li>
+                            <li>⚡ <strong>24 小时缓存</strong> - 相同地址 24h 内不重复查询，节省 API 开销</li>
+                        </ul>
+                        <p><strong>技术实现：</strong></p>
+                        <ul>
+                            <li>📡 <strong>Binance Web3 Public API</strong> - 查询钱包链上活跃持仓及 PnL</li>
+                            <li>⚡ <strong>Supabase Edge Function</strong> - <code>query-wallet-assets</code>，服务端代理解决 CORS，支持分页聚合</li>
+                            <li>🗄️ <strong>wallet_rankings 表</strong> - Supabase PostgreSQL 持久化存储，RLS 公开读写</li>
+                        </ul>
+                        <p>前往 Leaderboard → 💰 Crypto钱包实力榜 查询你的钱包，看看你是巨鲸还是虾卵 🦞</p>
+                    `,
+                    en: `
+                        <p>🚀 New feature live: <strong>💰 Crypto Wallet Power Board</strong>, powered by Binance Web3 Skill integration.</p>
+                        <p><strong>Highlights:</strong></p>
+                        <ul>
+                            <li>🔍 <strong>Wallet Asset Query</strong> - Input BSC (0x...) or Solana address, auto-detects chain and fetches on-chain holdings</li>
+                            <li>🐋 <strong>Asset Level Rating</strong> - Auto-calculates total USD value and assigns tier: S🐋Whale / A+🦈Shark / A🐬Dolphin / B🦞Lobster / C🦐Shrimp / D🥚Egg</li>
+                            <li>🏆 <strong>On-chain Power Leaderboard</strong> - Permanently recorded, top 1000 publicly displayed</li>
+                            <li>⚡ <strong>24h Cache</strong> - Same address won't re-query within 24 hours, minimizing API usage</li>
+                        </ul>
+                        <p><strong>Tech Stack:</strong></p>
+                        <ul>
+                            <li>📡 <strong>Binance Web3 Public API</strong> - Active position list with PnL data</li>
+                            <li>⚡ <strong>Supabase Edge Function</strong> - <code>query-wallet-assets</code>, server-side proxy for CORS + paginated aggregation</li>
+                            <li>🗄️ <strong>wallet_rankings table</strong> - Supabase PostgreSQL with public RLS</li>
+                        </ul>
+                        <p>Head to Leaderboard → 💰 Crypto Wallet Board and check if you're a whale or an egg 🦞</p>
+                    `,
+                    ja: `
+                        <p>🚀 新機能リリース：<strong>💰 Cryptoウォレット実力ランキング</strong>、Binance Web3スキル連携。</p>
+                        <p><strong>主な機能：</strong></p>
+                        <ul>
+                            <li>🔍 <strong>ウォレット資産照会</strong> - BSC(0x...)またはSolanaアドレスを入力、自動チェーン判定でオンチェーン保有資産を取得</li>
+                            <li>🐋 <strong>資産ランク評定</strong> - 総USD資産を計算しランクを付与：S🐋クジラ / A+🦈サメ / A🐬イルカ / B🦞ロブスター / C🦐エビ / D🥚タマゴ</li>
+                            <li>🏆 <strong>オンチェーン実力ランキング</strong> - 永続記録、上位1000名を公開表示</li>
+                        </ul>
+                        <p>Leaderboard → 💰 Cryptoウォレット実力ランキングで確認してみましょう 🦞</p>
+                    `
+                }
+            },
+            {
                 id: 3,
                 date: '2026-02-24',
                 tag: 'Backend',
