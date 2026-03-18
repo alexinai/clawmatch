@@ -4841,6 +4841,7 @@
                     { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
                 )
                 const rows = await res.json()
+                if (!rows?.length) {
                     listEl.innerHTML = `
                         <div class="empty-leaderboard">
                             <p>💰 暂无数据</p>
