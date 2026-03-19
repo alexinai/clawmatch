@@ -4589,61 +4589,88 @@
 
         // ========== 排行榜功能 ==========
 
-        // 保存测试结果到排行榜
+        // 保存测试结果到排行榜（localStorage + Supabase）
         function saveToLeaderboard(userData, results) {
+            const entry = {
+                username:   userData.username,
+                avatarUrl:  userData.profileImageUrl,
+                agentScore: results.scores.agentScore,
+                humanScore: results.scores.humanScore,
+                bigFive:    results.scores.breakdown.bigFive,
+                tags:       results.tags,
+                timestamp:  new Date().toISOString()
+            };
+
+            // 1. localStorage（本地 fallback）
             try {
                 const leaderboardData = JSON.parse(localStorage.getItem('clawmatch_leaderboard') || '[]');
-
-                const entry = {
-                    username: userData.username,
-                    avatarUrl: userData.profileImageUrl,
-                    agentScore: results.scores.agentScore,
-                    humanScore: results.scores.humanScore,
-                    bigFive: results.scores.breakdown.bigFive,
-                    tags: results.tags,
-                    timestamp: new Date().toISOString()
-                };
-
-                // 检查是否已存在，存在则更新
-                const existingIndex = leaderboardData.findIndex(item => item.username === userData.username);
-                if (existingIndex >= 0) {
-                    leaderboardData[existingIndex] = entry;
-                } else {
-                    leaderboardData.push(entry);
-                }
-
-                // 保存
+                const idx = leaderboardData.findIndex(item => item.username === userData.username);
+                if (idx >= 0) leaderboardData[idx] = entry; else leaderboardData.push(entry);
                 localStorage.setItem('clawmatch_leaderboard', JSON.stringify(leaderboardData));
-                console.log('✅ 已保存到排行榜:', entry);
-            } catch (error) {
-                console.error('保存排行榜失败:', error);
-            }
+            } catch (e) { console.warn('localStorage save failed:', e); }
+
+            // 2. Supabase attraction_rankings（全局排行榜）
+            fetch(`${SUPABASE_URL}/rest/v1/attraction_rankings`, {
+                method: 'POST',
+                headers: {
+                    'apikey':        SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    'Content-Type':  'application/json',
+                    'Prefer':        'resolution=merge-duplicates',
+                },
+                body: JSON.stringify({
+                    username:    userData.username,
+                    avatar_url:  userData.profileImageUrl,
+                    agent_score: results.scores.agentScore,
+                    human_score: results.scores.humanScore,
+                    big_five:    results.scores.breakdown.bigFive,
+                    tags:        results.tags,
+                    tested_at:   new Date().toISOString(),
+                }),
+            }).catch(err => console.warn('⚠️ Supabase attraction upsert failed:', err));
+
+            console.log('✅ 已保存到排行榜:', entry);
         }
 
-        // 加载并渲染排行榜
-        function loadLeaderboard(type = 'agent') {
-            try {
-                const leaderboardData = JSON.parse(localStorage.getItem('clawmatch_leaderboard') || '[]');
+        // 加载并渲染排行榜（优先 Supabase，fallback localStorage）
+        async function loadLeaderboard(type = 'agent') {
+            const listId = type === 'agent' ? 'agent-list' : 'human-list';
+            const listEl = document.getElementById(listId);
+            if (!listEl) return;
 
-                if (leaderboardData.length === 0) {
-                    renderEmptyLeaderboard(type);
+            listEl.innerHTML = '<p style="color:#888;text-align:center;padding:20px">加载中...</p>';
+
+            // 1. 尝试从 Supabase 读取
+            try {
+                const orderCol = type === 'agent' ? 'agent_score' : 'human_score';
+                const res = await fetch(
+                    `${SUPABASE_URL}/rest/v1/attraction_rankings?select=username,avatar_url,agent_score,human_score,big_five,tags&order=${orderCol}.desc&limit=50`,
+                    { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+                );
+                const rows = await res.json();
+                if (rows?.length > 0) {
+                    renderLeaderboard(rows.map(r => ({
+                        username:   r.username,
+                        avatarUrl:  r.avatar_url,
+                        agentScore: r.agent_score,
+                        humanScore: r.human_score,
+                        bigFive:    r.big_five || {},
+                        tags:       r.tags || [],
+                    })), type);
                     return;
                 }
+            } catch (err) {
+                console.warn('Supabase attraction load failed, fallback to localStorage:', err);
+            }
 
-                // 排序
-                const sortedData = [...leaderboardData].sort((a, b) => {
-                    if (type === 'agent') {
-                        return b.agentScore - a.agentScore;
-                    } else {
-                        return b.humanScore - a.humanScore;
-                    }
-                });
-
-                // 只取前10名
-                const top10 = sortedData.slice(0, 10);
-
-                // 渲染
-                renderLeaderboard(top10, type);
+            // 2. Fallback：localStorage
+            try {
+                const leaderboardData = JSON.parse(localStorage.getItem('clawmatch_leaderboard') || '[]');
+                if (leaderboardData.length === 0) { renderEmptyLeaderboard(type); return; }
+                const sorted = [...leaderboardData].sort((a, b) =>
+                    type === 'agent' ? b.agentScore - a.agentScore : b.humanScore - a.humanScore
+                );
+                renderLeaderboard(sorted.slice(0, 10), type);
             } catch (error) {
                 console.error('加载排行榜失败:', error);
                 renderEmptyLeaderboard(type);
@@ -4983,14 +5010,45 @@
             loadBinanceLeaderboard(period);
         }
 
-        function loadBinanceLeaderboard(period) {
+        const BINANCE_EMOJIS = ['🏆','🦅','⚡','🔥','🌊','🎯','💎','🚀','🧠','🦁','🌙','🐉','🦊','🐯','🦋','🌟','💫','🔱','🎪','🎭'];
+
+        // 渲染 DB 数据
+        function renderBinanceFromDB(rows) {
+            const listEl = document.getElementById('binance-list');
+            const updatedAt = rows[0]?.updated_at ? new Date(rows[0].updated_at).toLocaleString('zh-CN') : '';
+            listEl.innerHTML = rows.map((row, i) => {
+                const rank = i + 1;
+                const rankIcon  = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+                const rankClass = rank <= 3 ? `top${rank}` : '';
+                const emoji = BINANCE_EMOJIS[i % BINANCE_EMOJIS.length];
+                const roiStr = `+${Number(row.roi).toLocaleString()}%`;
+                const followersStr = row.followers >= 1000
+                    ? `${(row.followers / 1000).toFixed(1)}K 跟随`
+                    : `${row.followers} 跟随`;
+                return `
+                    <div class="binance-item" style="animation-delay: ${i * 0.07}s">
+                        <div class="leaderboard-rank ${rankClass}" style="min-width:32px;text-align:center">${rankIcon}</div>
+                        <div class="binance-avatar">${emoji}</div>
+                        <div class="binance-info">
+                            <div class="binance-nickname">${row.nickname}</div>
+                            <div class="binance-meta">${followersStr}</div>
+                        </div>
+                        <div class="binance-stats">
+                            <div class="binance-roi positive">${roiStr}</div>
+                            <div class="binance-power">⚡ ${Math.round(row.score)}</div>
+                        </div>
+                    </div>`;
+            }).join('') + (updatedAt ? `<p style="color:#555;font-size:0.75rem;text-align:center;margin-top:16px">数据更新于 ${updatedAt}</p>` : '');
+        }
+
+        // 渲染 mock 数据（fallback）
+        function renderBinanceMock(period) {
             const data = BINANCE_DATA[period] || BINANCE_DATA.weekly;
             const listEl = document.getElementById('binance-list');
             if (!listEl) return;
-
-            const html = data.map((item, index) => {
+            listEl.innerHTML = data.map((item, index) => {
                 const rank = index + 1;
-                const rankIcon = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+                const rankIcon  = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
                 const rankClass = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
                 const pnlStr = item.pnl >= 1000000
                     ? `+${(item.pnl / 1000000).toFixed(2)}M USDT`
@@ -5016,11 +5074,60 @@
                             </div>
                             <div class="binance-power">⚡ ${item.power}</div>
                         </div>
-                    </div>
-                `;
-            }).join('');
+                    </div>`;
+            }).join('') + `<p style="color:#555;font-size:0.75rem;text-align:center;margin-top:16px">演示数据 · 正在同步真实数据</p>`;
+        }
 
-            listEl.innerHTML = html;
+        // 加载 Binance 排行榜（DB 优先，超 24h 自动触发 Edge Function 刷新）
+        async function loadBinanceLeaderboard(period) {
+            const listEl = document.getElementById('binance-list');
+            if (!listEl) return;
+
+            listEl.innerHTML = '<p style="color:#888;text-align:center;padding:20px">加载中...</p>';
+
+            try {
+                // 1. 从 DB 读
+                const res = await fetch(
+                    `${SUPABASE_URL}/rest/v1/binance_rankings?period=eq.${period}&order=score.desc&limit=20`,
+                    { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+                );
+                let rows = await res.json();
+
+                // 2. 判断是否需要刷新（空数据 或 超过 24h）
+                const isStale = !rows?.length || (
+                    rows[0]?.updated_at &&
+                    Date.now() - new Date(rows[0].updated_at).getTime() > 24 * 60 * 60 * 1000
+                );
+
+                if (isStale) {
+                    listEl.innerHTML = '<p style="color:#888;text-align:center;padding:20px">🔄 正在从 Binance 同步最新数据...</p>';
+                    try {
+                        const refreshRes = await fetch(
+                            `${SUPABASE_URL}/functions/v1/refresh-binance-rankings`,
+                            { method: 'POST', headers: { 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+                        );
+                        if (refreshRes.ok) {
+                            // 重新读取
+                            const res2 = await fetch(
+                                `${SUPABASE_URL}/rest/v1/binance_rankings?period=eq.${period}&order=score.desc&limit=20`,
+                                { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+                            );
+                            rows = await res2.json();
+                        }
+                    } catch (refreshErr) {
+                        console.warn('Binance refresh failed:', refreshErr);
+                    }
+                }
+
+                if (rows?.length > 0) {
+                    renderBinanceFromDB(rows);
+                } else {
+                    renderBinanceMock(period); // 最终 fallback
+                }
+            } catch (err) {
+                console.warn('Binance load failed, using mock:', err);
+                renderBinanceMock(period);
+            }
         }
 
         // 页面加载时初始化排行榜
