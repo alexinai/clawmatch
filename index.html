@@ -3475,16 +3475,43 @@
 
         function handleSubscribe(event) {
             event.preventDefault();
-            const email = document.getElementById('subscribe-email').value;
+            const email = document.getElementById('subscribe-email').value.trim();
+            if (!email) return;
 
-            // 显示成功消息
-            alert(`🎉 订阅成功！\n\n您已成功订阅 AI Observatory 更新！\n\n奖励已发放：\n✅ +100 $LOBSTER 已添加到您的账户\n✅ 将收到每日更新推送至：${email}\n✅ 获得优先提交权限\n\n---\n\nSubscription Successful!\nYou've subscribed to AI Observatory updates!\n\nRewards granted:\n✅ +100 $LOBSTER added to your account\n✅ Daily updates will be sent to: ${email}\n✅ Priority submission access granted`);
+            const btn = event.target.querySelector('button[type="submit"]') || event.submitter;
+            if (btn) { btn.disabled = true; btn.textContent = '处理中...'; }
 
-            // 关闭模态框
-            closeSubscribeModal();
-
-            // 清空表单
-            document.getElementById('subscribe-email').value = '';
+            // 存到 Supabase subscribers 表
+            fetch(`${SUPABASE_URL}/rest/v1/subscribers`, {
+                method: 'POST',
+                headers: {
+                    'apikey':        SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    'Content-Type':  'application/json',
+                    'Prefer':        'resolution=merge-duplicates',
+                },
+                body: JSON.stringify({
+                    email,
+                    lobster_reward: 100,
+                    source: 'website',
+                }),
+            })
+            .then(res => {
+                if (res.ok || res.status === 201) {
+                    closeSubscribeModal();
+                    document.getElementById('subscribe-email').value = '';
+                    alert(`🎉 订阅成功！\n\n✅ +100 $LOBSTER 已发放\n✅ 更新将推送至：${email}\n✅ 获得优先提交权限\n\n---\n\nSubscription Successful!\n✅ +100 $LOBSTER granted\n✅ Updates will be sent to: ${email}`);
+                } else {
+                    return res.json().then(d => { throw new Error(d.message || res.status); });
+                }
+            })
+            .catch(err => {
+                console.warn('Subscribe error:', err);
+                alert('⚠️ 订阅失败，请稍后再试\nSubscription failed, please try again.');
+            })
+            .finally(() => {
+                if (btn) { btn.disabled = false; btn.textContent = '订阅 Subscribe'; }
+            });
         }
 
         // 点击模态框外部关闭
