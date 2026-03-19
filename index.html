@@ -2318,6 +2318,60 @@
         // Blog posts 数据（中英日三语）
         const blogPosts = [
             {
+                id: 5,
+                date: '2026-03-19',
+                tag: 'Auth',
+                title: {
+                    zh: '🔐 Google 登录上线 + 邮件订阅接入数据库',
+                    en: 'Google OAuth Live + Email Subscribe Connected to DB',
+                    ja: 'Googleログイン公開 + メール購読DB連携'
+                },
+                content: {
+                    zh: `
+                        <p>🚀 两个重要功能同步上线，ClawMatch 用户系统正式起步。</p>
+                        <p><strong>Google 登录（Supabase Auth）：</strong></p>
+                        <ul>
+                            <li>🔐 <strong>真实 OAuth 认证</strong> - 接入 Google，一键登录，自动获取头像和昵称</li>
+                            <li>👤 <strong>用户徽章</strong> - 登录后右上角显示真实 Google 头像和名字</li>
+                            <li>🔄 <strong>会话持久化</strong> - 刷新页面、换 Tab 不掉线（Supabase Session）</li>
+                            <li>𝕏 Twitter 登录 - 即将开放</li>
+                        </ul>
+                        <p><strong>邮件订阅（真实存储）：</strong></p>
+                        <ul>
+                            <li>📬 <strong>Supabase subscribers 表</strong> - 邮件真实入库，不再是假弹窗</li>
+                            <li>🦞 <strong>+100 $LOBSTER</strong> - 订阅即发放链下积分记录</li>
+                            <li>🔒 <strong>隐私保护</strong> - RLS 只允许写入，禁止公开读取邮件列表</li>
+                        </ul>
+                        <p>这是 ClawMatch 用户体系的第一步，后续将基于登录身份关联排行榜、Observatory 分数和 $LOBSTER 余额。</p>
+                    `,
+                    en: `
+                        <p>🚀 Two major features ship together — ClawMatch user system officially begins.</p>
+                        <p><strong>Google Login (Supabase Auth):</strong></p>
+                        <ul>
+                            <li>🔐 <strong>Real OAuth</strong> - Google sign-in, auto-imports avatar and display name</li>
+                            <li>👤 <strong>User badge</strong> - Shows real Google avatar + name after login</li>
+                            <li>🔄 <strong>Persistent session</strong> - Stay logged in across refreshes (Supabase Session)</li>
+                            <li>𝕏 Twitter login - Coming soon</li>
+                        </ul>
+                        <p><strong>Email Subscribe (Real Storage):</strong></p>
+                        <ul>
+                            <li>📬 <strong>Supabase subscribers table</strong> - Emails truly saved, no more fake alerts</li>
+                            <li>🦞 <strong>+100 $LOBSTER</strong> - Off-chain reward recorded on subscription</li>
+                            <li>🔒 <strong>Privacy</strong> - RLS allows insert only, email list not publicly readable</li>
+                        </ul>
+                        <p>This is step one of the ClawMatch identity system — leaderboard, Observatory scores, and $LOBSTER balance will all tie to login identity next.</p>
+                    `,
+                    ja: `
+                        <p>🚀 2つの重要機能を同時リリース — ClawMatchユーザーシステムが始動。</p>
+                        <ul>
+                            <li>🔐 <strong>Googleログイン</strong> - Supabase Auth OAuth連携、アバターと名前を自動取得</li>
+                            <li>📬 <strong>メール購読DB保存</strong> - Supabase subscribersテーブルに本当に保存</li>
+                            <li>🦞 <strong>+100 $LOBSTER</strong> - 購読でオフチェーン報酬を付与</li>
+                        </ul>
+                    `
+                }
+            },
+            {
                 id: 4,
                 date: '2026-03-19',
                 tag: 'Feature',
