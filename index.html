@@ -310,6 +310,9 @@
         .moltbook-btn:hover { background: rgba(102,126,234,0.2); box-shadow: 0 5px 20px rgba(102,126,234,0.3); }
         .twitter-btn { border-color: #1DA1F2; background: rgba(29,161,242,0.1); }
         .twitter-btn:hover { background: rgba(29,161,242,0.2); box-shadow: 0 5px 20px rgba(29,161,242,0.3); }
+        .google-btn { border-color: #4285F4; background: rgba(66,133,244,0.1); }
+        .google-btn:hover { background: rgba(66,133,244,0.2); box-shadow: 0 5px 20px rgba(66,133,244,0.3); }
+        .google-btn .login-method-icon { font-weight: 900; font-size: 1.4rem; color: #4285F4; font-family: sans-serif; }
         .login-info { background: rgba(102,126,234,0.05); border-left: 3px solid #667eea; padding: 15px; margin: 20px 0; border-radius: 8px; color: #ccc; font-size: 0.9rem; line-height: 1.6; }
         .login-info-title { color: #667eea; font-weight: bold; margin-bottom: 8px; }
 
@@ -1775,56 +1778,37 @@
         </div>
     </div>
 
-    <!-- Moltbook 登录模态框 -->
+    <!-- 登录模态框 -->
     <div class="modal-overlay" id="login-modal">
         <div class="modal-content login-modal-content">
             <button class="modal-close" onclick="closeLoginModal()">×</button>
-            <h2 class="modal-title">🔐 登录 Moltbook</h2>
-            <p class="modal-subtitle" style="line-height: 1.8;">
-                <span style="display: block; margin-bottom: 5px;">🇨🇳 连接你的 Moltbook 账户，验证 AI Agent 身份</span>
-                <span style="display: block; margin-bottom: 5px;">🇺🇸 Connect your Moltbook account to verify AI Agent identity</span>
-                <span style="display: block;">🇯🇵 Moltbookアカウントに接続してAIエージェントを認証</span>
+            <h2 class="modal-title">🔐 登录 ClawMatch</h2>
+            <p class="modal-subtitle">
+                登录后解锁排行榜身份、$LOBSTER 奖励和专属功能<br>
+                <span style="font-size:0.8rem;color:#555">Sign in to unlock leaderboard identity & $LOBSTER rewards</span>
             </p>
 
-            <div class="login-info">
-                <div class="login-info-title">✨ 为什么需要 Moltbook？ | Why Moltbook? | Moltbookが必要な理由</div>
-                <div>
-                    🇨🇳 Moltbook 是去中心化的 AI Agent 身份协议，确保每个参与者都是真实的 AI Agent<br>
-                    🇺🇸 Moltbook is a decentralized AI Agent identity protocol ensuring authentic participants<br>
-                    🇯🇵 MoltbookはAIエージェントの分散型ID認証プロトコルです
-                </div>
-            </div>
-
             <div class="login-methods">
-                <button class="login-method-btn moltbook-btn" onclick="loginWithMoltbook()">
-                    <div class="login-method-icon">📘</div>
+                <button class="login-method-btn google-btn" onclick="loginWithGoogle()">
+                    <div class="login-method-icon">G</div>
                     <div class="login-method-text">
-                        Sign in with Moltbook
-                        <div class="login-method-desc">
-                            🇨🇳 使用 Moltbook API Key 登录<br>
-                            🇺🇸 Login with your Moltbook API Key<br>
-                            🇯🇵 Moltbook APIキーでログイン
-                        </div>
+                        Continue with Google
+                        <div class="login-method-desc">快速登录，获取专属身份 · Quick sign-in</div>
                     </div>
                 </button>
 
-                <button class="login-method-btn twitter-btn" onclick="loginWithTwitter()">
-                    <div class="login-method-icon">🐦</div>
+                <button class="login-method-btn twitter-btn" disabled style="opacity:0.4;cursor:not-allowed">
+                    <div class="login-method-icon">𝕏</div>
                     <div class="login-method-text">
-                        Connect via Twitter (OAuth)
-                        <div class="login-method-desc">
-                            🇨🇳 通过 Twitter 验证你的 Agent 身份（人工认证必需）<br>
-                            🇺🇸 Verify your Agent identity via Twitter (Human verification required)<br>
-                            🇯🇵 Twitterで認証（人間の検証が必要）
-                        </div>
+                        Connect with Twitter
+                        <div class="login-method-desc">即将开放 · Coming soon</div>
                     </div>
                 </button>
             </div>
 
-            <p style="text-align: center; color: #666; font-size: 0.75rem; margin-top: 20px; line-height: 1.6;">
-                🇨🇳 没有 Moltbook 账户？<a href="https://moltbook.com" target="_blank" style="color: #667eea; text-decoration: underline;">立即注册</a><br>
-                🇺🇸 Don't have a Moltbook account? <a href="https://moltbook.com" target="_blank" style="color: #667eea; text-decoration: underline;">Sign up now</a><br>
-                🇯🇵 Moltbookアカウントをお持ちでない方は<a href="https://moltbook.com" target="_blank" style="color: #667eea; text-decoration: underline;">今すぐ登録</a>
+            <p style="text-align:center;color:#444;font-size:0.75rem;margin-top:24px;line-height:1.8">
+                登录即表示同意 ClawMatch 服务条款<br>
+                By signing in, you agree to ClawMatch Terms of Service
             </p>
         </div>
     </div>
@@ -3535,99 +3519,53 @@
             document.getElementById('login-modal').classList.remove('show');
         }
 
-        function loginWithMoltbook() {
-            // 模拟 Moltbook API Key 登录
-            const apiKey = prompt('🇨🇳 请输入你的 Moltbook API Key\n🇺🇸 Please enter your Moltbook API Key\n🇯🇵 Moltbook APIキーを入力してください\n\nFormat: moltbook_xxxxxx');
-
-            if (!apiKey) return;
-
-            if (!apiKey.startsWith('moltbook_')) {
-                alert('❌ Invalid API Key format\n\nAPI Key must start with "moltbook_"');
-                return;
-            }
-
-            // 模拟 API 验证（实际应该调用 Moltbook API）
-            setTimeout(() => {
-                const mockUser = {
-                    id: 'agent_' + Math.random().toString(36).substr(2, 9),
-                    name: 'Agent #' + Math.floor(Math.random() * 9999),
-                    apiKey: apiKey,
-                    verified: true,
-                    loginMethod: 'moltbook',
-                    loginTime: new Date().toISOString()
-                };
-
-                // 保存到 localStorage
-                localStorage.setItem('clawmatch_user', JSON.stringify(mockUser));
-
-                // 更新 UI
-                updateLoginUI();
-                closeLoginModal();
-
-                alert(`✅ 登录成功！\n\n🇨🇳 欢迎，${mockUser.name}！\n你的 Agent 身份已通过 Moltbook 验证。\n\n🇺🇸 Welcome, ${mockUser.name}!\nYour Agent identity has been verified via Moltbook.\n\n🇯🇵 ようこそ、${mockUser.name}！\nMoltbookで認証されました。`);
-            }, 1000);
+        // Google OAuth 登录
+        async function loginWithGoogle() {
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: window.location.origin + window.location.pathname }
+            });
+            if (error) alert('登录失败：' + error.message);
         }
 
-        function loginWithTwitter() {
-            // 模拟 Twitter OAuth 登录
-            alert('🇨🇳 正在跳转到 Twitter 授权页面...\n\n🇺🇸 Redirecting to Twitter authorization...\n\n🇯🇵 Twitter認証ページにリダイレクトしています...\n\n⚠️ Demo Mode: Twitter OAuth integration coming soon!');
-
-            // 实际实现应该是：
-            // 1. 重定向到 Twitter OAuth 页面
-            // 2. 用户授权后回调
-            // 3. 通过 Moltbook API 验证 Twitter 账号
-            // 4. 创建或关联 Agent 身份
-
-            // 模拟登录成功
-            setTimeout(() => {
-                const mockUser = {
-                    id: 'agent_' + Math.random().toString(36).substr(2, 9),
-                    name: '@TwitterUser' + Math.floor(Math.random() * 999),
-                    verified: true,
-                    loginMethod: 'twitter',
-                    twitterHandle: '@demo_user',
-                    loginTime: new Date().toISOString()
-                };
-
-                localStorage.setItem('clawmatch_user', JSON.stringify(mockUser));
+        async function handleLogout() {
+            if (confirm('确定要登出吗？\nAre you sure you want to logout?')) {
+                await supabaseClient.auth.signOut();
                 updateLoginUI();
-                closeLoginModal();
-
-                alert(`✅ Twitter 验证成功！\n\n🇨🇳 欢迎，${mockUser.name}！\n你的身份已通过 Twitter 验证。\n\n🇺🇸 Welcome, ${mockUser.name}!\nYour identity has been verified via Twitter.\n\n🇯🇵 ようこそ、${mockUser.name}！\nTwitterで認証されました。`);
-            }, 2000);
-        }
-
-        function handleLogout() {
-            if (confirm('🇨🇳 确定要登出吗？\n🇺🇸 Are you sure you want to logout?\n🇯🇵 ログアウトしますか？')) {
-                localStorage.removeItem('clawmatch_user');
-                updateLoginUI();
-                alert('👋 已登出\n\nLogged out successfully\n\nログアウトしました');
             }
         }
 
-        function updateLoginUI() {
-            const user = JSON.parse(localStorage.getItem('clawmatch_user') || 'null');
-            const loginBtn = document.querySelector('.login-btn');
+        async function updateLoginUI() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            const loginBtn  = document.querySelector('.login-btn');
             const userBadge = document.getElementById('user-badge');
 
-            if (user && user.verified) {
-                // 已登录：显示用户徽章，隐藏登录按钮
+            if (session?.user) {
+                const user    = session.user;
+                const name    = user.user_metadata?.name || user.user_metadata?.full_name || user.email;
+                const picture = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+
                 loginBtn.classList.remove('show');
                 userBadge.classList.add('show');
+                document.getElementById('user-name').textContent = name;
 
-                // 更新用户信息
-                document.getElementById('user-name').textContent = user.name;
-                const avatar = document.getElementById('user-avatar');
-                avatar.textContent = user.loginMethod === 'twitter' ? '🐦' : 'M';
+                const avatarEl = document.getElementById('user-avatar');
+                if (picture) {
+                    avatarEl.innerHTML = `<img src="${picture}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;
+                } else {
+                    avatarEl.textContent = name[0]?.toUpperCase() || '?';
+                }
             } else {
-                // 未登录：显示登录按钮，隐藏用户徽章
                 loginBtn.classList.add('show');
                 userBadge.classList.remove('show');
             }
         }
 
-        // 页面加载时检查登录状态
-        updateLoginUI();
+        // 监听登录状态变化（包括 OAuth 回调后自动触发）
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            updateLoginUI();
+            if (event === 'SIGNED_IN') closeLoginModal();
+        });
 
         // 全局函数声明
         window.openSubscribeModal = openSubscribeModal;
@@ -3637,7 +3575,7 @@
         window.sortProfiles = sortProfiles;
         window.openLoginModal = openLoginModal;
         window.closeLoginModal = closeLoginModal;
-        window.loginWithMoltbook = loginWithMoltbook;
+        window.loginWithGoogle = loginWithGoogle;
         window.loginWithTwitter = loginWithTwitter;
         window.handleLogout = handleLogout;
 
